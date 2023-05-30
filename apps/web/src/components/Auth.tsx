@@ -1,28 +1,38 @@
 "use client"
-import { Button, Center, Stack, Text, Image } from "@chakra-ui/react"
+import {
+  Button,
+  Center,
+  Stack,
+  Text,
+  Image,
+  useColorModeValue,
+} from "@chakra-ui/react"
 import React from "react"
 
 type Props = {}
 
 const Auth = ({}: Props) => {
+  const bg = useColorModeValue("gray.100", "brand.darkGray")
+  const color = useColorModeValue("brand.darkGray", "brand.white")
+  const buttonBg = useColorModeValue("white", "whiteAlpha.400")
+  const logo = useColorModeValue("brand.green", "brand.darkGreen")
+
   return (
-    <Center height="100vh" bg="brand.white">
+    <Center height="100vh" bg={bg}>
       <Stack spacing={6} alignItems={"center"}>
         <Center gap={2}>
-          <Text fontSize={"3xl"} display={"flex"}>
+          <Text fontSize={"3xl"} display={"flex"} color={color}>
             Welcome to
           </Text>
-          <Text
-            fontSize={"3xl"}
-            fontWeight={"semibold"}
-            textColor={"green.500"}
-          >
+          <Text fontSize={"3xl"} fontWeight={"semibold"} textColor={logo}>
             Your-Chat
           </Text>
         </Center>
         <Button
-          bg={"white"}
-          textColor={"gray.900"}
+          bg={buttonBg}
+          textColor={color}
+          _hover={{ bg: buttonBg }}
+          className="scale"
           shadow={"lg"}
           leftIcon={
             <Image src="/images/google.png" height="20px" alt="google" />

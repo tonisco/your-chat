@@ -1,4 +1,4 @@
-import ChakraProvider from "./Provider"
+import ChakraProvider from "../chakra/Provider"
 import "./globals.css"
 
 export const metadata = {
