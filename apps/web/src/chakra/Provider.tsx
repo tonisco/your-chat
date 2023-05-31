@@ -14,7 +14,10 @@ function Provider({ children }: Props) {
       <ChakraProvider theme={theme}>
         <ThemeToggle />
         {children}
-        <ColorModeScript initialColorMode={"light"} />
+        <ColorModeScript
+          initialColorMode={theme.config.initialColorMode}
+          type="localStorage"
+        />
       </ChakraProvider>
     </CacheProvider>
   )

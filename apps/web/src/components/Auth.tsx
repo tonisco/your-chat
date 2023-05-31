@@ -8,10 +8,14 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react"
 import React from "react"
+import { signIn } from "next-auth/react"
+import { Session } from "next-auth"
 
-type Props = {}
+type Props = {
+  session: Session | null
+}
 
-const Auth = ({}: Props) => {
+const Auth = ({ session }: Props) => {
   const bg = useColorModeValue("gray.100", "brand.darkGray")
   const color = useColorModeValue("brand.darkGray", "brand.white")
   const buttonBg = useColorModeValue("white", "whiteAlpha.400")
@@ -29,6 +33,7 @@ const Auth = ({}: Props) => {
           </Text>
         </Center>
         <Button
+          onClick={() => signIn("google")}
           bg={buttonBg}
           textColor={color}
           _hover={{ bg: buttonBg }}
