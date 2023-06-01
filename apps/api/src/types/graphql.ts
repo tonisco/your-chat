@@ -17,13 +17,18 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Message = {
+  __typename?: 'Message';
+  message: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createUserName?: Maybe<Scalars['String']['output']>;
+  createUsername: Message;
 };
 
 
-export type MutationCreateUserNameArgs = {
+export type MutationCreateUsernameArgs = {
   username: Scalars['String']['input'];
 };
 
@@ -112,6 +117,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -122,6 +128,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   DateTime: Scalars['DateTime']['output'];
+  Message: Message;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -132,8 +139,13 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUserName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateUserNameArgs, 'username'>>;
+  createUsername?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -149,6 +161,7 @@ export type UserDetailsResolvers<ContextType = any, ParentType extends Resolvers
 
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
+  Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UserDetails?: UserDetailsResolvers<ContextType>;

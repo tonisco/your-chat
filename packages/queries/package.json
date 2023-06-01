@@ -1,0 +1,27 @@
+{
+  "name": "queries",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "@apollo/client": "^3.7.15",
+    "graphql": "^16.6.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/client-preset": "4.0.0",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.4",
+    "prisma": "^4.15.0",
+    "typescript": "5.0.4"
+  },
+  "scripts": {
+    "codegen": "graphql-codegen --config codegen.ts"
+  }
+}
