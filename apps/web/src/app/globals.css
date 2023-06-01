@@ -2,10 +2,10 @@
   transition: all 0.3s ease-out;
 }
 
-.scale:hover {
+.scale:hover:not(:disabled) {
   scale: 1.05;
 }
 
-.scale:active {
+.scale:active:not(:disabled) {
   scale: 0.95;
 }

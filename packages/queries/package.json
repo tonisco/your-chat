@@ -22,6 +22,6 @@
     "typescript": "5.0.4"
   },
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config src/types/codegen.ts"
   }
 }

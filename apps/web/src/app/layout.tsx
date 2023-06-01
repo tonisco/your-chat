@@ -1,3 +1,4 @@
+import ApolloWrapper from "@/lib/ApolloProvider"
 import ChakraProvider from "../chakra/Provider"
 import "./globals.css"
 
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ChakraProvider>{children}</ChakraProvider>
+        <ApolloWrapper>
+          <ChakraProvider>{children}</ChakraProvider>
+        </ApolloWrapper>
       </body>
     </html>
   )
