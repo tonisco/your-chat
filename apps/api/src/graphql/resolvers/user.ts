@@ -1,17 +1,16 @@
 import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 
 type Resolvers = {
-  Query: Pick<QueryResolvers, "getUser" | "deleteUser">
-  Mutation: Pick<MutationResolvers, "editUser">
+  Query: Pick<QueryResolvers, "getUser">
+  Mutation: Pick<MutationResolvers, "createUserName">
 }
 
 const resolvers: Resolvers = {
-  Query: {
-    getUser: () => ({ id: "1", email: "test@mail.com", username: "test" }),
-    deleteUser: () => true,
-  },
+  Query: {},
   Mutation: {
-    editUser: () => "yes",
+    createUserName: (_, { username }) => {
+      return "username created"
+    },
   },
 }
 

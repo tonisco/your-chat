@@ -11,16 +11,8 @@ const typeDefs = gql`
     username: String!
   }
 
-  type Query {
-    saveUser: Boolean!
-  }
-
-  type Query {
-    deleteUser: Boolean!
-  }
-
   type Mutation {
-    editUser(something: String!): String!
+    createUserName(username: String!): String
   }
 `
 

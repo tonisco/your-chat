@@ -18,19 +18,17 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  editUser: Scalars['String']['output'];
+  createUserName?: Maybe<Scalars['String']['output']>;
 };
 
 
-export type MutationEditUserArgs = {
-  something: Scalars['String']['input'];
+export type MutationCreateUserNameArgs = {
+  username: Scalars['String']['input'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  deleteUser: Scalars['Boolean']['output'];
   getUser: UserDetails;
-  saveUser: Scalars['Boolean']['output'];
 };
 
 export type UserDetails = {
@@ -128,13 +126,11 @@ export type ResolversParentTypes = {
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  editUser?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationEditUserArgs, 'something'>>;
+  createUserName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateUserNameArgs, 'username'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   getUser?: Resolver<ResolversTypes['UserDetails'], ParentType, ContextType>;
-  saveUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type UserDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserDetails'] = ResolversParentTypes['UserDetails']> = {
