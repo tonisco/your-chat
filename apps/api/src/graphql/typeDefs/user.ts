@@ -1,13 +1,27 @@
-const typeDefs = `#graphql
-    type Query {
-        getUser: UserDetails
-    }
+import gql from "graphql-tag"
 
-    type UserDetails {
-        id: String
-        email: String
-        username: String
-    }    
+const typeDefs = gql`
+  type Query {
+    getUser: UserDetails!
+  }
+
+  type UserDetails {
+    id: String!
+    email: String!
+    username: String!
+  }
+
+  type Query {
+    saveUser: Boolean!
+  }
+
+  type Query {
+    deleteUser: Boolean!
+  }
+
+  type Mutation {
+    editUser(something: String!): String!
+  }
 `
 
 export default typeDefs
