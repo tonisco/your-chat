@@ -8,6 +8,7 @@
     "codegen": "graphql-codegen --config ./src/graphql/codegen.ts",
     "dev": "concurrently  \"yarn server\" \"yarn codegen --watch\"",
     "db:migrate": "dotenv -e ../../.env -- prisma migrate dev --schema ./src/prisma/schema.prisma",
+    "db:studio": "dotenv -e ../../.env -- prisma studio --schema ./src/prisma/schema.prisma",
     "postinstall": "prisma generate --schema ./src/prisma/schema.prisma"
   },
   "devDependencies": {
@@ -41,8 +42,9 @@
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "lodash.merge": "^4.6.2",
-    "next-auth": "^4.22.1",
-    "prisma": "^4.15.0"
+    "next-auth": "4.19.2",
+    "prisma": "^4.15.0",
+    "zod": "^3.21.4"
   },
   "private": true
 }
