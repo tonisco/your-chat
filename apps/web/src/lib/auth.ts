@@ -9,7 +9,7 @@ const prisma = new PrismaClient()
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
   providers: [
     GoogleProvider({
@@ -20,7 +20,6 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   callbacks: {
     session({ session, user }) {
-      console.log("auth")
       return { ...session, user: { ...session.user, ...user } }
     },
   },

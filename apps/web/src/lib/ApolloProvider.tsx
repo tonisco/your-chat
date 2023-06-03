@@ -11,9 +11,13 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr"
+import { env } from "../env"
 
 const makeClient = () => {
-  const httpLink = new HttpLink({ uri: "http://localhost:3000" })
+  const httpLink = new HttpLink({
+    uri: env.API_URL,
+    credentials: "include",
+  })
 
   return new ApolloClient({
     cache: new NextSSRInMemoryCache(),

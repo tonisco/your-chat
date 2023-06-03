@@ -18,7 +18,7 @@ const resolvers: Resolvers = {
         await prisma.user.update({
           where: { email: session.user.email },
           data: {
-            username,
+            username: username.toLocaleLowerCase(),
           },
         })
       } catch (error) {

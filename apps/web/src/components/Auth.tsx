@@ -11,23 +11,43 @@ import {
 import React, { useState } from "react"
 import { signIn } from "next-auth/react"
 import { Session } from "next-auth"
+import { useMutation } from "@apollo/client"
+import { createUsername } from "queries"
+import toast from "react-hot-toast"
 
 type Props = {
   session: Session | null
+  // updateSession: () => Promise<Session | null>
 }
 
 const Auth = ({ session }: Props) => {
   const [username, setUsername] = useState("")
+
+  // const { update } = useSession()
 
   const bg = useColorModeValue("gray.600", "brand.darkGray")
   const color = useColorModeValue("brand.darkGray", "brand.white")
   const buttonBg = useColorModeValue("white", "whiteAlpha.400")
   const buttonBg1 = useColorModeValue("gray.900", "whiteAlpha.400")
   const logo = useColorModeValue("brand.green", "brand.darkGreen")
-  console.log(session)
 
-  const click = () => {
-    console.log("clicked")
+  const [create, { loading }] = useMutation(createUsername, {
+    onError(error) {
+      toast.error(error.message)
+    },
+    onCompleted(data) {
+      toast.success(data.createUsername.message)
+      // update()
+
+      // used due to session not updating
+      location.reload()
+    },
+  })
+
+  const click = async () => {
+    if (username.length <= 2) return
+
+    return await create({ variables: { username } })
   }
 
   if (!session)
@@ -78,6 +98,7 @@ const Auth = ({ session }: Props) => {
           shadow={"lg"}
           isDisabled={username.length <= 2}
           onClick={click}
+          isLoading={loading}
         >
           Create
         </Button>
