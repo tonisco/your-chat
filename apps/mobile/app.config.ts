@@ -1,0 +1,51 @@
+import { ConfigContext, ExpoConfig } from "expo/config"
+import * as dotenv from "dotenv"
+import path from "path"
+
+dotenv.config({ path: path.join(__dirname, "../../.env") })
+
+const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
+  name: "YourChat Mobile",
+  slug: "yourchat-mobile",
+  version: "1.0.0",
+  scheme: "com.tonisco.yourchat-mobile",
+  currentFullName: "tonisco/yourchat-mobile",
+  originalFullName: "tonisco/yourchat-mobile",
+  orientation: "portrait",
+  icon: "./assets/icon.png",
+  userInterfaceStyle: "light",
+  splash: {
+    image: "./assets/splash.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+  // updates: {
+  //   fallbackToCacheTimeout: 0,
+  //   url: `https://u.expo.dev/${process.env.FOOD_PROJECT_ID as string}`,
+  // },
+  // runtimeVersion: {
+  //   policy: "sdkVersion",
+  // },
+  assetBundlePatterns: ["**/*"],
+  ios: {
+    supportsTablet: true,
+  },
+  android: {
+    package: "com.tonisco.yourchat_mobile",
+    versionCode: 1,
+    adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#ffffff",
+    },
+  },
+  web: {
+    favicon: "./assets/favicon.png",
+  },
+  extra: {
+    eas: {
+      projectId: process.env.MOBILE_PROJECT_ID,
+    },
+  },
+})
+
+export default defineConfig
