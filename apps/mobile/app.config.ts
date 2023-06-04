@@ -1,5 +1,5 @@
-import { ConfigContext, ExpoConfig } from "expo/config"
 import * as dotenv from "dotenv"
+import { ConfigContext, ExpoConfig } from "expo/config"
 import path from "path"
 
 dotenv.config({ path: path.join(__dirname, "../../.env") })
@@ -13,7 +13,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   originalFullName: "tonisco/yourchat-mobile",
   orientation: "portrait",
   icon: "./assets/icon.png",
-  userInterfaceStyle: "light",
+  userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
     resizeMode: "contain",

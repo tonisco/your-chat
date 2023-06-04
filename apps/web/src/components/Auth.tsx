@@ -25,11 +25,11 @@ const Auth = ({ session }: Props) => {
 
   // const { update } = useSession()
 
-  const bg = useColorModeValue("gray.600", "brand.darkGray")
-  const color = useColorModeValue("brand.darkGray", "brand.white")
+  const bg = useColorModeValue("gray.bg", "brand.bgDark")
+  const color = useColorModeValue("brand.text", "brand.textDark")
   const buttonBg = useColorModeValue("white", "whiteAlpha.400")
   const buttonBg1 = useColorModeValue("gray.900", "whiteAlpha.400")
-  const logo = useColorModeValue("brand.green", "brand.darkGreen")
+  const logo = useColorModeValue("brand.green", "brand.greenDark")
 
   const [create, { loading }] = useMutation(createUsername, {
     onError(error) {
