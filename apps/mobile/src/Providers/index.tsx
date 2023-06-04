@@ -1,13 +1,13 @@
 import React from "react"
 
-import PaperProvider from "./PaperProvider"
+import NativeBaseProvider from "./NativeBaseProvider"
 
 type Props = {
   children: React.ReactNode
 }
 
 const Providers = ({ children }: Props) => {
-  return <PaperProvider>{children}</PaperProvider>
+  return <NativeBaseProvider>{children}</NativeBaseProvider>
 }
 
 export default Providers
