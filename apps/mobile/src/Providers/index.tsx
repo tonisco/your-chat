@@ -1,5 +1,6 @@
 import React from "react"
 
+import ApolloProvider from "./ApolloProvider"
 import NativeBaseProvider from "./NativeBaseProvider"
 
 type Props = {
@@ -7,7 +8,11 @@ type Props = {
 }
 
 const Providers = ({ children }: Props) => {
-  return <NativeBaseProvider>{children}</NativeBaseProvider>
+  return (
+    <ApolloProvider>
+      <NativeBaseProvider>{children}</NativeBaseProvider>
+    </ApolloProvider>
+  )
 }
 
 export default Providers

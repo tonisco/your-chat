@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client"
 import { makeRedirectUri } from "expo-auth-session"
 import * as Google from "expo-auth-session/providers/google"
 import * as WebBrowser from "expo-web-browser"
@@ -11,6 +12,7 @@ import {
 } from "native-base"
 import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet, Image as Img, Alert } from "react-native"
+import { loginUser } from "queries"
 
 import { env } from "../../Utils/env"
 
@@ -31,6 +33,17 @@ const GoogleLogin = () => {
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
   const color = useColorModeValue("brand.text", "brand.textDark")
   const logo = useColorModeValue("brand.green", "brand.greenDark")
+
+  const [userLogin] = useMutation(loginUser, {
+    onCompleted(data) {
+      console.log(data.loginUser)
+      setLoading(false)
+    },
+    onError(err) {
+      Alert.alert("Login Error", err.message)
+      setLoading(false)
+    },
+  })
 
   const [loading, setLoading] = useState(false)
 
@@ -63,8 +76,9 @@ const GoogleLogin = () => {
       )
 
       const user = (await response.json()) as GetInfoResponse
+      const { email, name, picture } = user
 
-      console.log(JSON.stringify(user))
+      await userLogin({ variables: { email, image: picture, name } })
     } catch (err) {
       Alert.alert("Login Failed", "Failed to fetch user info")
     }

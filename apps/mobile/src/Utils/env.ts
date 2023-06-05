@@ -3,6 +3,7 @@ import * as z from "zod"
 
 const variables = z.object({
   MOBILE_CLIENT_ID: z.string(),
+  API_URL: z.string(),
 })
 
 const extra = Constants.manifest?.extra
