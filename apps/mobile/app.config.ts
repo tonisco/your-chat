@@ -29,7 +29,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
   },
   android: {
-    package: "com.tonisco.yourchat_mobile",
+    package: "com.tonisco.yourchat-mobile",
     versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
@@ -43,6 +43,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: process.env.MOBILE_PROJECT_ID,
     },
+    MOBILE_CLIENT_ID: process.env.MOBILE_CLIENT_ID,
   },
 })
 

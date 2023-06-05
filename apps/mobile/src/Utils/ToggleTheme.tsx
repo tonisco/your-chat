@@ -11,7 +11,7 @@ const ToggleTheme = () => {
         shadow={2}
         placement="top-right"
         size="sm"
-        bgColor={"brand.liteBgDark"}
+        bgColor="brand.liteBgDark"
         icon={<SunIcon color="yellow.300" size="sm" />}
         onPress={toggleColorMode}
       >
@@ -25,7 +25,7 @@ const ToggleTheme = () => {
       shadow={2}
       placement="top-right"
       size="sm"
-      bgColor={"white"}
+      bgColor="white"
       icon={<MoonIcon color="brand.bgDark" size="sm" />}
       onPress={toggleColorMode}
     >
