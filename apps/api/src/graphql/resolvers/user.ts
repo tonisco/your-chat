@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql"
 import { Context } from "../../types/context"
 import { MutationResolvers, QueryResolvers } from "../../types/graphql"
+import { createToken } from "../../utils/jwt"
 
 type Resolvers = {
   Query: Pick<QueryResolvers<Context>, "getUser">
@@ -34,14 +35,18 @@ const resolvers: Resolvers = {
 
       const user = await prisma.user.findUnique({ where: { email } })
 
-      if (user) return user
+      if (user) {
+        const token = createToken(user.id)
+        return { ...user, token }
+      }
 
       try {
         const newUser = await prisma.user.create({
           data: { email, image, name, username },
         })
+        const token = createToken(newUser.id)
 
-        return newUser
+        return { ...newUser, token }
       } catch (error) {
         throw new GraphQLError("Failed to create account")
       }

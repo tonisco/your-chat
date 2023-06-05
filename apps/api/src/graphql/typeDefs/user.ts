@@ -26,6 +26,7 @@ const typeDefs = gql`
     username: String
     name: String
     image: String
+    token: String!
   }
 
   type Message {
