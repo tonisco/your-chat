@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tonisco.yourchat_mobile">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tonisco.yourchat.mobile">
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -27,7 +27,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.tonisco.yourchat-mobile"/>
-        <data android:scheme="com.tonisco.yourchat_mobile"/>
+        <data android:scheme="com.tonisco.yourchat.mobile"/>
         <data android:scheme="exp+yourchat-mobile"/>
       </intent-filter>
     </activity>

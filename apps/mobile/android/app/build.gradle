@@ -113,9 +113,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.tonisco.yourchat_mobile'
+    namespace 'com.tonisco.yourchat.mobile'
     defaultConfig {
-        applicationId 'com.tonisco.yourchat_mobile'
+        applicationId 'com.tonisco.yourchat.mobile'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -11,7 +11,7 @@ type Props = {
   children: React.ReactNode
 }
 const client = new ApolloClient({
-  uri: env.API_URL,
+  uri: env.SERVER_URL,
   cache: new InMemoryCache(),
 })
 

@@ -1,4 +1,4 @@
-package com.tonisco.yourchat_mobile;
+package com.tonisco.yourchat.mobile;
 
 import android.os.Build;
 import android.os.Bundle;
