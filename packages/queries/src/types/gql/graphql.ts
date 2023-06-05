@@ -25,6 +25,7 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUsername: Message;
+  loginUser: User;
 };
 
 
@@ -32,16 +33,26 @@ export type MutationCreateUsernameArgs = {
   username: Scalars['String']['input'];
 };
 
-export type Query = {
-  __typename?: 'Query';
-  getUser: UserDetails;
+
+export type MutationLoginUserArgs = {
+  email: Scalars['String']['input'];
+  image: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UserDetails = {
-  __typename?: 'UserDetails';
-  email: Scalars['String']['output'];
+export type Query = {
+  __typename?: 'Query';
+  getUser: User;
+};
+
+export type User = {
+  __typename?: 'User';
+  email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  username: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type CreateUsernameMutationVariables = Exact<{
@@ -51,5 +62,16 @@ export type CreateUsernameMutationVariables = Exact<{
 
 export type CreateUsernameMutation = { __typename?: 'Mutation', createUsername: { __typename?: 'Message', message: string } };
 
+export type LoginUserMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  image: Scalars['String']['input'];
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'User', id: string, email?: string | null, username?: string | null, name?: string | null, image?: string | null } };
+
 
 export const CreateUsernameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUsername"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUsername"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<CreateUsernameMutation, CreateUsernameMutationVariables>;
+export const LoginUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"loginUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"image"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"image"},"value":{"kind":"Variable","name":{"kind":"Name","value":"image"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}}]}}]} as unknown as DocumentNode<LoginUserMutation, LoginUserMutationVariables>;

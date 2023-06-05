@@ -8,3 +8,20 @@ export const createUsername = graphql(/* GraphQL */ `
     }
   }
 `)
+
+export const loginUser = graphql(/* GraphQL */ `
+  mutation loginUser(
+    $email: String!
+    $username: String
+    $name: String!
+    $image: String!
+  ) {
+    loginUser(email: $email, username: $username, name: $name, image: $image) {
+      id
+      email
+      username
+      name
+      image
+    }
+  }
+`)
