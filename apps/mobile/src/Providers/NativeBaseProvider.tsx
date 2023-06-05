@@ -5,7 +5,7 @@ import {
 } from "native-base"
 import React from "react"
 
-const theme: ITheme = extendTheme({
+const customTheme: ITheme = extendTheme({
   config: {
     initialColorMode: "light",
     useSystemColorMode: true,
@@ -30,12 +30,14 @@ const theme: ITheme = extendTheme({
   },
 })
 
+export type CustomThemeType = typeof customTheme
+
 type Props = {
   children: React.ReactNode
 }
 
 const NativeBaseProvider = ({ children }: Props) => {
-  return <Provider theme={theme}>{children}</Provider>
+  return <Provider theme={customTheme}>{children}</Provider>
 }
 
 export default NativeBaseProvider

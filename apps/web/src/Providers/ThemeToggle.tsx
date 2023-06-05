@@ -30,7 +30,7 @@ const ThemeToggle = () => {
       cursor={"pointer"}
       onClick={toggleColorMode}
     >
-      <Icon as={FaMoon} w={6} h={6} color={"brand.darkGray"} />
+      <Icon as={FaMoon} w={6} h={6} color={"brand.bgDark"} />
     </Button>
   )
 }

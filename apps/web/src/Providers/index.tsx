@@ -7,8 +7,6 @@ type Props = {
   children: React.ReactNode
 }
 
-// TODO: provider file
-
 function Provider({ children }: Props) {
   return (
     <SessionProvider>

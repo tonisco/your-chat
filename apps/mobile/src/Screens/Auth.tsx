@@ -12,7 +12,6 @@ import { StyleSheet, Image as Img } from "react-native"
 const Auth = () => {
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
   const color = useColorModeValue("brand.text", "brand.textDark")
-  const buttonBg = useColorModeValue("white", "brand.bgDark")
   const logo = useColorModeValue("brand.green", "brand.greenDark")
 
   return (
