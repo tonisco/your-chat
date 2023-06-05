@@ -4,9 +4,7 @@ import { Button, Icon, useColorMode } from "@chakra-ui/react"
 import React from "react"
 import { FaSun, FaMoon } from "react-icons/fa"
 
-type Props = {}
-
-const ThemeToggle = (props: Props) => {
+const ThemeToggle = () => {
   const { colorMode, toggleColorMode } = useColorMode()
 
   if (colorMode === "dark")

@@ -1,5 +1,5 @@
 import ApolloWrapper from "@/lib/ApolloProvider"
-import ChakraProvider from "../chakra/Provider"
+import ChakraProvider from "../Providers"
 import "./globals.css"
 
 export const metadata = {
