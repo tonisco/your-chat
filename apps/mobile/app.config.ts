@@ -9,8 +9,6 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   slug: "yourchat-mobile",
   version: "1.0.0",
   scheme: "com.tonisco.yourchat-mobile",
-  currentFullName: "tonisco/yourchat-mobile",
-  originalFullName: "tonisco/yourchat-mobile",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
