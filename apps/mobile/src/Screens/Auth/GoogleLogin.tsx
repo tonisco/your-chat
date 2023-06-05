@@ -10,10 +10,11 @@ import {
   HStack,
   Button,
 } from "native-base"
+import { loginUser } from "queries"
 import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet, Image as Img, Alert } from "react-native"
-import { loginUser } from "queries"
 
+import { useAuthContext } from "../../Providers/AuthProvider"
 import { env } from "../../Utils/env"
 
 type GetInfoResponse = {
@@ -34,9 +35,19 @@ const GoogleLogin = () => {
   const color = useColorModeValue("brand.text", "brand.textDark")
   const logo = useColorModeValue("brand.green", "brand.greenDark")
 
+  const { saveUser } = useAuthContext()
+
   const [userLogin] = useMutation(loginUser, {
-    onCompleted(data) {
-      console.log(data.loginUser)
+    async onCompleted(data) {
+      const { id, email, image, name, username, token } = data.loginUser
+      await saveUser({
+        id,
+        token,
+        email: email ?? null,
+        image: image ?? null,
+        name: name ?? null,
+        username: username ?? null,
+      })
       setLoading(false)
     },
     onError(err) {
@@ -77,8 +88,8 @@ const GoogleLogin = () => {
 
       const user = (await response.json()) as GetInfoResponse
       const { email, name, picture } = user
-
       await userLogin({ variables: { email, image: picture, name } })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       Alert.alert("Login Failed", "Failed to fetch user info")
     }

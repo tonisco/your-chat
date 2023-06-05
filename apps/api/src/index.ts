@@ -7,6 +7,7 @@ import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
 import express from "express"
+import morgan from "morgan"
 import cors from "cors"
 import http from "http"
 import typeDefs from "./graphql/typeDefs"
@@ -18,6 +19,8 @@ import { env } from "./env"
 
 const main = async () => {
   const app = express()
+
+  if (process.env.NODE_ENV !== "production") app.use(morgan("dev"))
 
   const httpServer = http.createServer(app)
 

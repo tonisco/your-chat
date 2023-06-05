@@ -22,6 +22,7 @@ export const loginUser = graphql(/* GraphQL */ `
       username
       name
       image
+      token
     }
   }
 `)
