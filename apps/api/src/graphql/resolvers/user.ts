@@ -4,7 +4,7 @@ import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 
 type Resolvers = {
   Query: Pick<QueryResolvers<Context>, "getUser">
-  Mutation: Pick<MutationResolvers<Context>, "createUsername">
+  Mutation: Pick<MutationResolvers<Context>, "createUsername" | "loginUser">
 }
 
 const resolvers: Resolvers = {
@@ -26,6 +26,25 @@ const resolvers: Resolvers = {
       }
 
       return { message: "username created" }
+    },
+
+    loginUser: async (_, data, ctx) => {
+      const { email, image, name, username } = data
+      const { prisma } = ctx
+
+      const user = await prisma.user.findUnique({ where: { email } })
+
+      if (user) return user
+
+      try {
+        const newUser = await prisma.user.create({
+          data: { email, image, name, username },
+        })
+
+        return newUser
+      } catch (error) {
+        throw new GraphQLError("Failed to create account")
+      }
     },
   },
 }

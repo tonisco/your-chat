@@ -4,17 +4,28 @@ const typeDefs = gql`
   scalar DateTime
 
   type Query {
-    getUser: UserDetails!
+    getUser: User!
   }
 
   type Mutation {
     createUsername(username: String!): Message!
   }
 
-  type UserDetails {
+  type Mutation {
+    loginUser(
+      email: String!
+      username: String
+      name: String!
+      image: String!
+    ): User!
+  }
+
+  type User {
     id: String!
-    email: String!
-    username: String!
+    email: String
+    username: String
+    name: String
+    image: String
   }
 
   type Message {
