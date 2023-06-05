@@ -12,10 +12,9 @@ import cors from "cors"
 import http from "http"
 import typeDefs from "./graphql/typeDefs"
 import resolvers from "./graphql/resolvers"
-import { PrismaClient } from "@prisma/client"
 import { Context } from "./types/context"
-import { getSession } from "next-auth/react"
 import { env } from "./env"
+import context from "./utils/context"
 
 const main = async () => {
   const app = express()
@@ -24,9 +23,7 @@ const main = async () => {
 
   const httpServer = http.createServer(app)
 
-  console.log(process.env.NEXTAUTH_URL)
-
-  const prisma = new PrismaClient()
+  app.use(context)
 
   const server = new ApolloServer({
     typeDefs,
@@ -41,11 +38,7 @@ const main = async () => {
     cors({ credentials: true, origin: env.CLIENT_URL }),
     express.json(),
     expressMiddleware(server, {
-      context: async ({ req }): Promise<Context> => {
-        const session = await getSession({ req })
-
-        return { prisma, session }
-      },
+      context: async ({ req }): Promise<Context> => context(req),
     }),
   )
 
