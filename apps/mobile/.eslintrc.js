@@ -1,7 +1,12 @@
 /** @type {import('eslint').Linter.Config} */
 
 module.exports = {
-  extends: ["universe/native", "universe/shared/typescript-analysis"],
+  extends: [
+    "universe/native",
+    "universe/shared/typescript-analysis",
+    "turbo",
+    "prettier",
+  ],
   parser: "@typescript-eslint/parser", // should be already existing
   parserOptions: {
     // add this object

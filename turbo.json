@@ -1,7 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": [
+    "NODE_ENV",
+    "SERVER_URL",
+    "MOBILE_CLIENT_ID",
+    "MOBILE_PROJECT_ID"
+  ],
   "globalDotEnv": [".env"],
   "pipeline": {
     "build": {

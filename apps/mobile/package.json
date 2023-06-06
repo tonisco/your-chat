@@ -6,7 +6,10 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint . --ext ts,tsx --fix",
+    "lint": "yarn run eslint && yarn run check-types"
   },
   "dependencies": {
     "@apollo/client": "^3.7.15",
@@ -36,6 +39,7 @@
     "@babel/preset-env": "^7.1.6",
     "@types/react": "~18.0.14",
     "eslint": "^8.41.0",
+    "eslint-config-turbo": "^1.10.1",
     "eslint-config-universe": "^11.2.0",
     "prettier": "^2.8.8",
     "typescript": "^4.9.4"
