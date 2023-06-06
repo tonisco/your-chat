@@ -5,10 +5,14 @@ import {
 } from "native-base"
 import React from "react"
 
+import { useMode } from "./ModeProvider"
+
+// TODO: look for fix, mode not using default or previous value
+
 const customTheme: ITheme = extendTheme({
   config: {
-    initialColorMode: "light",
-    useSystemColorMode: true,
+    initialColorMode: "dark",
+    useSystemColorMode: false,
   },
   colors: {
     brand: {
@@ -37,7 +41,16 @@ type Props = {
 }
 
 const NativeBaseProvider = ({ children }: Props) => {
-  return <Provider theme={customTheme}>{children}</Provider>
+  const { mode } = useMode()
+
+  console.log(mode)
+
+  const theme: ITheme = {
+    ...customTheme,
+    config: { ...customTheme.config, initialColorMode: mode },
+  }
+
+  return <Provider theme={theme}>{children}</Provider>
 }
 
 export default NativeBaseProvider

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 
 import Providers from "./Providers"
 import AuthProvider, { useAuthContext } from "./Providers/AuthProvider"
+import ModeProvider from "./Providers/ModeProvider"
 import Auth from "./Screens/Auth"
 import ToggleTheme from "./Utils/ToggleTheme"
 
@@ -46,7 +47,9 @@ export const App = () => {
 export default function () {
   return (
     <AuthProvider>
-      <App />
+      <ModeProvider>
+        <App />
+      </ModeProvider>
     </AuthProvider>
   )
 }
