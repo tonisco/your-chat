@@ -9,7 +9,7 @@ const Auth = () => {
 
   if (!user) return <GoogleLogin />
 
-  return <CreateUsername user={user} />
+  return <CreateUsername />
 }
 
 export default Auth

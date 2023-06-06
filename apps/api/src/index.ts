@@ -23,8 +23,6 @@ const main = async () => {
 
   const httpServer = http.createServer(app)
 
-  app.use(context)
-
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -38,7 +36,7 @@ const main = async () => {
     cors({ credentials: true, origin: env.CLIENT_URL }),
     express.json(),
     expressMiddleware(server, {
-      context: async ({ req }): Promise<Context> => context(req),
+      context: async ({ req }): Promise<Context> => await context(req),
     }),
   )
 

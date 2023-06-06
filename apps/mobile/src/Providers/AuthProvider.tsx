@@ -14,12 +14,14 @@ type UserContext = {
   user: User | null
   saveUser: (user: User) => Promise<void>
   getUser: () => Promise<void>
+  updateUsername: (username: string) => Promise<void>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 const UserContext = createContext<UserContext>({
   getUser: async () => {},
   saveUser: async () => {},
+  updateUsername: async () => {},
   user: null,
 })
 
@@ -40,8 +42,15 @@ const AuthProvider = ({ children }: Props) => {
     if (state) setUser(JSON.parse(state))
   }
 
+  const updateUsername = async (username: string) => {
+    if (user) {
+      await AsyncStorage.setItem("user", JSON.stringify({ ...user, username }))
+      setUser({ ...user, username })
+    }
+  }
+
   return (
-    <UserContext.Provider value={{ getUser, saveUser, user }}>
+    <UserContext.Provider value={{ getUser, saveUser, updateUsername, user }}>
       {children}
     </UserContext.Provider>
   )
