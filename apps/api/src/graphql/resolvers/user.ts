@@ -1,4 +1,5 @@
 import { GraphQLError } from "graphql"
+
 import { Context } from "../../types/context"
 import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 import { createToken } from "../../utils/jwt"

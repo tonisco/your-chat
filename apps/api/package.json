@@ -9,7 +9,10 @@
     "dev": "concurrently  \"yarn server\" \"yarn codegen --watch\"",
     "db:migrate": "dotenv -e ../../.env -- prisma migrate dev --schema ./src/prisma/schema.prisma",
     "db:studio": "dotenv -e ../../.env -- prisma studio --schema ./src/prisma/schema.prisma",
-    "postinstall": "prisma generate --schema ./src/prisma/schema.prisma"
+    "postinstall": "prisma generate --schema ./src/prisma/schema.prisma",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint . --ext ts,tsx --fix",
+    "lint": "yarn run eslint && yarn run check-types"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "4.0.0",
@@ -27,10 +30,12 @@
     "concurrently": "^8.1.0",
     "dotenv-cli": "^7.2.1",
     "eslint": "^8.0.1",
-    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-turbo": "^1.10.1",
     "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0",
-    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "nodemon": "^2.0.22",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.4"
