@@ -11,6 +11,7 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr"
+
 import { env } from "../env"
 
 const makeClient = () => {

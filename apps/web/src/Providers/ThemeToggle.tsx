@@ -1,8 +1,9 @@
 "use client"
 
-import { Button, Icon, useColorMode } from "@chakra-ui/react"
 import React from "react"
-import { FaSun, FaMoon } from "react-icons/fa"
+import { FaMoon, FaSun } from "react-icons/fa"
+
+import { Button, Icon, useColorMode } from "@chakra-ui/react"
 
 const ThemeToggle = () => {
   const { colorMode, toggleColorMode } = useColorMode()

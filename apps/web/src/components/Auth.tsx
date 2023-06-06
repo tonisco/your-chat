@@ -1,19 +1,20 @@
 "use client"
+import React, { useState } from "react"
+import { Session } from "next-auth"
+import { signIn } from "next-auth/react"
+import { createUsername } from "queries"
+import toast from "react-hot-toast"
+
+import { useMutation } from "@apollo/client"
 import {
   Button,
   Center,
+  Image,
+  Input,
   Stack,
   Text,
-  Image,
   useColorModeValue,
-  Input,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { signIn } from "next-auth/react"
-import { Session } from "next-auth"
-import { useMutation } from "@apollo/client"
-import { createUsername } from "queries"
-import toast from "react-hot-toast"
 
 type Props = {
   session: Session | null
