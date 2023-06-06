@@ -1,9 +1,10 @@
-import React from "react"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { ChatNavigatorScreen } from "../../types/screen"
-import Home from "./Home"
+import React from "react"
+
 import Details from "./Details"
+import Home from "./Home"
+import { ChatNavigatorScreen } from "../../types/screen"
 
 const Navigator = createStackNavigator<ChatNavigatorScreen>()
 

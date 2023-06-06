@@ -6,8 +6,8 @@ import Providers from "./Providers"
 import AuthProvider, { useAuthContext } from "./Providers/AuthProvider"
 import ModeProvider from "./Providers/ModeProvider"
 import Auth from "./Screens/Auth"
-import ToggleTheme from "./Utils/ToggleTheme"
 import ChatNavigator from "./Screens/Chat/Navigator"
+import ToggleTheme from "./Utils/ToggleTheme"
 
 export const App = () => {
   const [appIsReady, setAppIsReady] = useState(false)

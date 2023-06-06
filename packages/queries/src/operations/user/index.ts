@@ -26,3 +26,12 @@ export const loginUser = graphql(/* GraphQL */ `
     }
   }
 `)
+
+export const findUsers = gql`
+  query findUsers($username: String!) {
+    findUsers(username: $username) {
+      id
+      username
+    }
+  }
+`

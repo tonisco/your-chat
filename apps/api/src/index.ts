@@ -1,9 +1,13 @@
-import cors from "cors"
+/* eslint-disable import/first */
 import dotenv from "dotenv"
+import path from "path"
+
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") })
+
+import cors from "cors"
 import express from "express"
 import http from "http"
 import morgan from "morgan"
-import path from "path"
 
 import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
@@ -14,8 +18,6 @@ import typeDefs from "./graphql/typeDefs"
 import { Context } from "./types/context"
 import context from "./utils/context"
 import { env } from "./env"
-
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") })
 
 const main = async () => {
   const app = express()

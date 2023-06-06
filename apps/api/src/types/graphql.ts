@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -16,6 +15,12 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+};
+
+export type FoundUsers = {
+  __typename?: 'FoundUsers';
+  id: Scalars['String']['output'];
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type Message = {
@@ -44,7 +49,12 @@ export type MutationLoginUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getUser: User;
+  findUsers?: Maybe<Array<Maybe<FoundUsers>>>;
+};
+
+
+export type QueryFindUsersArgs = {
+  username: Scalars['String']['input'];
 };
 
 export type User = {
@@ -130,6 +140,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  FoundUsers: ResolverTypeWrapper<FoundUsers>;
   Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -141,6 +152,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   DateTime: Scalars['DateTime']['output'];
+  FoundUsers: FoundUsers;
   Message: Message;
   Mutation: {};
   Query: {};
@@ -151,6 +163,12 @@ export type ResolversParentTypes = {
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type FoundUsersResolvers<ContextType = any, ParentType extends ResolversParentTypes['FoundUsers'] = ResolversParentTypes['FoundUsers']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -163,7 +181,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  findUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['FoundUsers']>>>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -178,6 +196,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
+  FoundUsers?: FoundUsersResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

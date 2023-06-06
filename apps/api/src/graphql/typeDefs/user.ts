@@ -4,7 +4,7 @@ const typeDefs = gql`
   scalar DateTime
 
   type Query {
-    getUser: User!
+    findUsers(username: String!): [FoundUsers]
   }
 
   type Mutation {
@@ -18,6 +18,11 @@ const typeDefs = gql`
       name: String!
       image: String!
     ): User!
+  }
+
+  type FoundUsers {
+    id: String!
+    username: String
   }
 
   type User {

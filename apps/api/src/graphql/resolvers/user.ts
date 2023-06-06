@@ -5,12 +5,35 @@ import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 import { createToken } from "../../utils/jwt"
 
 type Resolvers = {
-  Query: Pick<QueryResolvers<Context>, "getUser">
+  Query: Pick<QueryResolvers<Context>, "findUsers">
   Mutation: Pick<MutationResolvers<Context>, "createUsername" | "loginUser">
 }
 
 const resolvers: Resolvers = {
-  Query: {},
+  Query: {
+    findUsers: async (_, { username }, ctx) => {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      try {
+        const users = await prisma.user.findMany({
+          where: {
+            username: {
+              contains: username,
+              not: session.user.name,
+              mode: "insensitive",
+            },
+          },
+          select: { id: true, username: true },
+        })
+
+        return users
+      } catch (error) {
+        throw new GraphQLError("Failed to find users")
+      }
+    },
+  },
   Mutation: {
     createUsername: async (_, { username }, ctx) => {
       const { prisma, session } = ctx
