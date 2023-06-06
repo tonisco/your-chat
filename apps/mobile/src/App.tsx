@@ -7,11 +7,12 @@ import AuthProvider, { useAuthContext } from "./Providers/AuthProvider"
 import ModeProvider from "./Providers/ModeProvider"
 import Auth from "./Screens/Auth"
 import ToggleTheme from "./Utils/ToggleTheme"
+import ChatNavigator from "./Screens/Chat/Navigator"
 
 export const App = () => {
   const [appIsReady, setAppIsReady] = useState(false)
 
-  const { getUser } = useAuthContext()
+  const { getUser, user } = useAuthContext()
 
   useEffect(() => {
     const getAppReady = async () => {
@@ -34,11 +35,13 @@ export const App = () => {
     return null
   }
 
+  console.log(JSON.stringify(user))
+
   return (
     <Providers>
       <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <ToggleTheme />
-        <Auth />
+        {user?.username ? <ChatNavigator /> : <Auth />}
       </View>
     </Providers>
   )

@@ -43,8 +43,6 @@ type Props = {
 const NativeBaseProvider = ({ children }: Props) => {
   const { mode } = useMode()
 
-  console.log(mode)
-
   const theme: ITheme = {
     ...customTheme,
     config: { ...customTheme.config, initialColorMode: mode },
