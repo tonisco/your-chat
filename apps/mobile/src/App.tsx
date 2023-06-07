@@ -35,8 +35,6 @@ export const App = () => {
     return null
   }
 
-  console.log(JSON.stringify(user))
-
   return (
     <Providers>
       <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
