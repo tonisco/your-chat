@@ -21,8 +21,10 @@ const resolvers: Resolvers = {
           where: {
             username: {
               contains: username,
-              not: session.user.name,
               mode: "insensitive",
+            },
+            NOT: {
+              name: session.user.name,
             },
           },
           select: { id: true, username: true, image: true },

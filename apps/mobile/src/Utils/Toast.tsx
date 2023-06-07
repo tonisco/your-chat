@@ -5,7 +5,7 @@ type Props = {
   message: string
 }
 
-const Toast = ({ message }: Props) => {
+export const ToastSuccess = ({ message }: Props) => {
   const green = useColorModeValue("brand.green", "brand.greenDark")
 
   return (
@@ -26,4 +26,21 @@ const Toast = ({ message }: Props) => {
   )
 }
 
-export default Toast
+export const ToastError = ({ message }: Props) => {
+  return (
+    <Box
+      bg="red.600"
+      px="4"
+      py="2"
+      rounded="sm"
+      mb={5}
+      _text={{
+        fontSize: "md",
+        color: "brand.textDark",
+        textTransform: "capitalize",
+      }}
+    >
+      {message}
+    </Box>
+  )
+}

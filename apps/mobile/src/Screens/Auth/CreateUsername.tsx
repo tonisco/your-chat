@@ -13,7 +13,7 @@ import React, { useState } from "react"
 import { Alert, ScrollView } from "react-native"
 
 import { useAuthContext } from "../../Providers/AuthProvider"
-import Toast from "../../Utils/Toast"
+import { ToastSuccess } from "../../Utils/Toast"
 
 const CreateUsername = () => {
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
@@ -30,7 +30,7 @@ const CreateUsername = () => {
     async onCompleted(data) {
       await updateUsername(username)
       toast.show({
-        render: () => <Toast message={data.createUsername.message} />,
+        render: () => <ToastSuccess message={data.createUsername.message} />,
         placement: "top",
       })
     },
