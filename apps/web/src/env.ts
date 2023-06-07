@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import path from "path"
 import * as z from "zod"
 
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") })
+// dotenv.config({ path: path.resolve(__dirname, "../../../.env") })
 
 export const formatErrors = (
   errors: z.ZodFormattedError<Map<string, string>, string>,
@@ -21,7 +21,7 @@ const variables = z.object({
   CLIENT_SECRET: z.string(),
   CLIENT_ID: z.string(),
   NEXTAUTH_SECRET: z.string(),
-  API_URL: z.string(),
+  NEXT_PUBLIC_API_URL: z.string(),
 })
 
 const getVariables = variables.safeParse(process.env)

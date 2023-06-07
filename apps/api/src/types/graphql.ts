@@ -20,6 +20,7 @@ export type Scalars = {
 export type FoundUsers = {
   __typename?: 'FoundUsers';
   id: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -166,6 +167,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 
 export type FoundUsersResolvers<ContextType = any, ParentType extends ResolversParentTypes['FoundUsers'] = ResolversParentTypes['FoundUsers']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

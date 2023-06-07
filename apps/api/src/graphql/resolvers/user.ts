@@ -25,7 +25,7 @@ const resolvers: Resolvers = {
               mode: "insensitive",
             },
           },
-          select: { id: true, username: true },
+          select: { id: true, username: true, image: true },
         })
 
         return users

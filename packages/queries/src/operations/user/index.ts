@@ -32,6 +32,7 @@ export const findUsers = gql`
     findUsers(username: $username) {
       id
       username
+      image
     }
   }
 `

@@ -20,6 +20,7 @@ export type Scalars = {
 export type FoundUsers = {
   __typename?: 'FoundUsers';
   id: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;
 };
 

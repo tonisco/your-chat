@@ -16,7 +16,7 @@ import { env } from "../env"
 
 const makeClient = () => {
   const httpLink = new HttpLink({
-    uri: env.API_URL,
+    uri: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
   })
 

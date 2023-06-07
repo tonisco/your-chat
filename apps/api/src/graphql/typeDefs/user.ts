@@ -23,6 +23,7 @@ const typeDefs = gql`
   type FoundUsers {
     id: String!
     username: String
+    image: String
   }
 
   type User {
