@@ -9,7 +9,7 @@
     "dev": "concurrently  \"yarn server\" \"yarn codegen --watch\"",
     "db:migrate": "dotenv -e ../../.env -- prisma migrate dev --schema ./src/prisma/schema.prisma",
     "db:studio": "dotenv -e ../../.env -- prisma studio --schema ./src/prisma/schema.prisma",
-    "postinstall": "prisma generate --schema ./src/prisma/schema.prisma",
+    "db:generate": "prisma generate --schema ./src/prisma/schema.prisma",
     "check-types": "tsc --noemit",
     "eslint": "eslint . --ext ts,tsx --fix",
     "lint": "yarn run eslint && yarn run check-types"

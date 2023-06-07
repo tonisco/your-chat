@@ -5,7 +5,9 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "rm -rf node_modules */*/node_modules"
+    "clean": "rm -rf node_modules */*/node_modules",
+    "generate": "turbo run db:generate",
+    "clean-install": "yarn clean && yarn && yarn generate"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",

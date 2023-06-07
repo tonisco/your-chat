@@ -17,6 +17,9 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "db:generate": {
+      "cache": false
     }
   }
 }
