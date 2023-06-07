@@ -17,6 +17,10 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type ConversationMemberId = {
+  id: Scalars['String']['input'];
+};
+
 export type FoundUsers = {
   __typename?: 'FoundUsers';
   id: Scalars['String']['output'];
@@ -31,8 +35,14 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createConversation: Message;
   createUsername: Message;
   loginUser: User;
+};
+
+
+export type MutationCreateConversationArgs = {
+  input: Array<ConversationMemberId>;
 };
 
 
@@ -140,6 +150,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  ConversationMemberId: ConversationMemberId;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   FoundUsers: ResolverTypeWrapper<FoundUsers>;
   Message: ResolverTypeWrapper<Message>;
@@ -152,6 +163,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  ConversationMemberId: ConversationMemberId;
   DateTime: Scalars['DateTime']['output'];
   FoundUsers: FoundUsers;
   Message: Message;
@@ -178,6 +190,7 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createConversation?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
 };
