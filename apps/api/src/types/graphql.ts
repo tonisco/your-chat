@@ -50,7 +50,7 @@ export type MutationLoginUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  findUsers?: Maybe<Array<Maybe<FoundUsers>>>;
+  findUsers: Array<FoundUsers>;
 };
 
 
@@ -183,7 +183,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  findUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['FoundUsers']>>>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
+  findUsers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {

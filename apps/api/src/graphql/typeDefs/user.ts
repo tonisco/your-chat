@@ -4,7 +4,7 @@ const typeDefs = gql`
   scalar DateTime
 
   type Query {
-    findUsers(username: String!): [FoundUsers]
+    findUsers(username: String!): [FoundUsers!]!
   }
 
   type Mutation {

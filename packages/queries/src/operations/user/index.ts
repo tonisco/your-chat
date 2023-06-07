@@ -27,7 +27,7 @@ export const loginUser = graphql(/* GraphQL */ `
   }
 `)
 
-export const findUsers = gql`
+export const findUsers = graphql(/* GraphQL */ `
   query findUsers($username: String!) {
     findUsers(username: $username) {
       id
@@ -35,4 +35,4 @@ export const findUsers = gql`
       image
     }
   }
-`
+`)
