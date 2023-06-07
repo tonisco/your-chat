@@ -18,6 +18,7 @@ import Toast from "../../Utils/Toast"
 const CreateUsername = () => {
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
   const color = useColorModeValue("brand.text", "brand.textDark")
+  const border = useColorModeValue("dark.500", "coolGray.500")
 
   const toast = useToast()
 
@@ -50,8 +51,8 @@ const CreateUsername = () => {
           </Text>
           <Input
             rounded="lg"
-            _focus={{ backgroundColor: bg, borderColor: color }}
-            borderColor={color}
+            _focus={{ backgroundColor: bg, borderColor: border }}
+            borderColor={border}
             color={color}
             value={username}
             onChangeText={(e) => setUsername(e)}
