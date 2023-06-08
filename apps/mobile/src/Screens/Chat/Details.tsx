@@ -1,7 +1,7 @@
-import { View, Text } from "react-native"
 import React from "react"
+import { View, Text } from "react-native"
 
-type Props = {}
+type Props = object
 
 const Details = (props: Props) => {
   return (

@@ -65,7 +65,7 @@ const resolvers: Resolvers = {
             },
           })
 
-          return await prim.message.create({
+          return prim.message.create({
             data: {
               body: "created chat",
               type: "bot",

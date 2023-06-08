@@ -11,3 +11,28 @@ const typeDefs = gql`
 `
 
 export default typeDefs
+
+// model Conversation {
+//     id
+//     admin
+//     adminId
+//     conversationMembers
+//     conversationMembersNumber
+//     messages
+//     latestMessage
+//     latestMessageId
+//     createdAt
+//     updatedAt
+// }
+
+// model ConversationMember {
+//     id
+//     hasReadlastMessage
+//     unreadMessageNumber
+//     user
+//     userId
+//     conversation
+//     conversationId
+//     createdAt
+//     updatedAt
+// }

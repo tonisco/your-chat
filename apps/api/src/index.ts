@@ -15,8 +15,7 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 
 import resolvers from "./graphql/resolvers"
 import typeDefs from "./graphql/typeDefs"
-import { Context } from "./utils/context"
-import context from "./utils/context"
+import context, { Context } from "./utils/context"
 import { env } from "./env"
 
 const main = async () => {
