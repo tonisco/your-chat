@@ -18,7 +18,6 @@ export const ToastSuccess = ({ message }: Props) => {
       _text={{
         fontSize: "md",
         color: "brand.textDark",
-        textTransform: "capitalize",
       }}
     >
       {message}
@@ -37,7 +36,6 @@ export const ToastError = ({ message }: Props) => {
       _text={{
         fontSize: "md",
         color: "brand.textDark",
-        textTransform: "capitalize",
       }}
     >
       {message}

@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client"
+import { useLazyQuery, useMutation } from "@apollo/client"
 import {
   Button,
   Center,
@@ -9,15 +9,30 @@ import {
   Toast,
   useColorModeValue,
 } from "native-base"
-import { findUsers } from "queries"
+import { createConversation, findUsers } from "queries"
+import { FoundUsers } from "queries/src/types"
 import React, { useState } from "react"
 
 import UserList from "./UserList"
-import { ToastError } from "../../../Utils/Toast"
+import UsersInChat from "./UsersInChat"
+import { useAuthContext } from "../../../Providers/AuthProvider"
+import { ToastError, ToastSuccess } from "../../../Utils/Toast"
 
 const CreateChat = () => {
+  const { user } = useAuthContext()
+
   const [showModal, setShowModal] = useState(false)
   const [username, setUsername] = useState("")
+  const [foundUsersData, setFoundUsersData] = useState<FoundUsers[] | null>(
+    null,
+  )
+  const [selectedUsers, setSelectedUsers] = useState<FoundUsers[]>([])
+
+  const addToChat = (user: FoundUsers) =>
+    setSelectedUsers([...selectedUsers, user])
+
+  const removeFromChat = (id: string) =>
+    setSelectedUsers(selectedUsers.filter((member) => member.id !== id))
 
   const color = useColorModeValue("brand.text", "brand.textDark")
   const colorScheme = useColorModeValue("dark", "coolGray")
@@ -25,16 +40,55 @@ const CreateChat = () => {
   const pressed = useColorModeValue("dark.700", "coolGray.700")
   const border = useColorModeValue("dark.500", "coolGray.500")
 
-  const [find, { data, loading }] = useLazyQuery(findUsers, {
+  const [find, { loading }] = useLazyQuery(findUsers, {
     onError(err) {
       Toast.show({
         render: () => <ToastError message={err.message} />,
         placement: "top",
       })
     },
+    onCompleted(data) {
+      setFoundUsersData(data.findUsers)
+    },
   })
 
   const search = () => find({ variables: { username } })
+
+  const clearData = () => {
+    setFoundUsersData(null)
+    setUsername("")
+    setSelectedUsers([])
+    setShowModal(false)
+  }
+
+  const [mutate, { loading: createLoading }] = useMutation(createConversation, {
+    onError(err) {
+      Toast.show({
+        render: () => <ToastError message={err.message} />,
+        placement: "top",
+      })
+    },
+    onCompleted(data) {
+      Toast.show({
+        render: () => (
+          <ToastSuccess message={data.createConversation.message} />
+        ),
+        placement: "top",
+      })
+      clearData()
+    },
+  })
+
+  const create = () => {
+    mutate({
+      variables: {
+        input: [
+          { id: user?.id ?? "" },
+          ...selectedUsers.map((members) => ({ id: members.id })),
+        ],
+      },
+    })
+  }
 
   return (
     <>
@@ -47,7 +101,7 @@ const CreateChat = () => {
         Create a New Chat
       </Button>
       <Center>
-        <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg">
+        <Modal isOpen={showModal} onClose={clearData} size="lg">
           <Modal.Content bgColor={bg} maxH="4/5">
             <Modal.CloseButton />
             <Modal.Header bgColor={bg} alignSelf="center">
@@ -79,7 +133,22 @@ const CreateChat = () => {
                 >
                   Find
                 </Button>
-                {data?.findUsers && <UserList users={data.findUsers} />}
+                {foundUsersData && (
+                  <UserList
+                    addToChat={addToChat}
+                    removeFromChat={removeFromChat}
+                    selectedUsers={selectedUsers}
+                    users={foundUsersData}
+                  />
+                )}
+                {selectedUsers.length > 0 && (
+                  <UsersInChat
+                    removeFromChat={removeFromChat}
+                    inChat={selectedUsers}
+                    create={create}
+                    loading={createLoading}
+                  />
+                )}
               </Stack>
             </Modal.Body>
           </Modal.Content>

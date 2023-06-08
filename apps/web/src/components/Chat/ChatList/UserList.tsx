@@ -6,14 +6,14 @@ import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react"
 type Props = {
   users: FoundUsers[]
   addToChat: (user: FoundUsers) => void
-  convoMembers: FoundUsers[]
+  selectedUsers: FoundUsers[]
   removeFromChat: (id: string) => void
 }
 
 const UserList = ({
   users,
   addToChat,
-  convoMembers,
+  selectedUsers,
   removeFromChat,
 }: Props) => {
   if (users.length === 0)
@@ -37,7 +37,7 @@ const UserList = ({
             <Avatar size={"sm"} src={user.image ?? undefined} />
             <Text textTransform={"capitalize"}>{user.username}</Text>
           </Flex>
-          {convoMembers.find((member) => member.id === user.id) ? (
+          {selectedUsers.find((member) => member.id === user.id) ? (
             <Button
               bgColor={"red.800"}
               _hover={{ bgColor: "red.800" }}

@@ -4,9 +4,17 @@ import React from "react"
 
 type Props = {
   users: FoundUsers[]
+  addToChat: (user: FoundUsers) => void
+  selectedUsers: FoundUsers[]
+  removeFromChat: (id: string) => void
 }
 
-const UserList = ({ users }: Props) => {
+const UserList = ({
+  users,
+  addToChat,
+  removeFromChat,
+  selectedUsers,
+}: Props) => {
   if (users.length === 0)
     return (
       <Stack mt={6} alignItems="center">
@@ -15,7 +23,7 @@ const UserList = ({ users }: Props) => {
     )
 
   return (
-    <Stack mt="4" space="4">
+    <Stack mt="6" space="4">
       {users.map((user) => (
         <HStack
           key={user.id}
@@ -30,7 +38,19 @@ const UserList = ({ users }: Props) => {
               {user.username}
             </Text>
           </HStack>
-          <Button size="sm">Select</Button>
+          {selectedUsers.find((member) => member.id === user.id) ? (
+            <Button
+              bgColor="red.800"
+              onPress={() => removeFromChat(user.id)}
+              size="sm"
+            >
+              Remove
+            </Button>
+          ) : (
+            <Button onPress={() => addToChat(user)} size="sm">
+              Select
+            </Button>
+          )}
         </HStack>
       ))}
     </Stack>

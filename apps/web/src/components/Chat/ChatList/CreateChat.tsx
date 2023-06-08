@@ -34,13 +34,13 @@ const CreateChat = () => {
   const [foundUsersData, setFoundUsersData] = useState<FoundUsers[] | null>(
     null,
   )
-  const [convoMembers, setConvoMembers] = useState<FoundUsers[]>([])
+  const [selectedUsers, setSelectedUsers] = useState<FoundUsers[]>([])
 
   const addToChat = (user: FoundUsers) =>
-    setConvoMembers([...convoMembers, user])
+    setSelectedUsers([...selectedUsers, user])
 
   const removeFromChat = (id: string) =>
-    setConvoMembers(convoMembers.filter((member) => member.id !== id))
+    setSelectedUsers(selectedUsers.filter((member) => member.id !== id))
 
   const [query, { loading }] = useLazyQuery(findUsers, {
     onError(err) {
@@ -60,7 +60,7 @@ const CreateChat = () => {
   const clearData = () => {
     setFoundUsersData(null)
     setUsername("")
-    setConvoMembers([])
+    setSelectedUsers([])
   }
 
   const [mutate, { loading: createLoading }] = useMutation(createConversation, {
@@ -79,7 +79,7 @@ const CreateChat = () => {
       variables: {
         input: [
           { id: userSession?.user.id ?? "" },
-          ...convoMembers.map((members) => ({ id: members.id })),
+          ...selectedUsers.map((members) => ({ id: members.id })),
         ],
       },
     })
@@ -116,16 +116,16 @@ const CreateChat = () => {
             {foundUsersData && (
               <UserList
                 users={foundUsersData}
-                convoMembers={convoMembers}
+                selectedUsers={selectedUsers}
                 addToChat={addToChat}
                 removeFromChat={removeFromChat}
               />
             )}
 
-            {convoMembers.length > 0 && (
+            {selectedUsers.length > 0 && (
               <UsersInChat
                 removeFromChat={removeFromChat}
-                inChat={convoMembers}
+                inChat={selectedUsers}
                 create={create}
                 loading={createLoading}
               />
