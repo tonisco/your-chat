@@ -1,6 +1,9 @@
-import { Stack, useColorModeValue } from "@chakra-ui/react"
-import { useSearchParams } from "next/navigation"
 import React from "react"
+import { useSearchParams } from "next/navigation"
+import { signOut } from "next-auth/react"
+
+import { Button, Stack, useColorModeValue } from "@chakra-ui/react"
+
 import CreateChat from "./CreateChat"
 
 const ChatList = () => {
@@ -15,9 +18,12 @@ const ChatList = () => {
       width={{ base: "full", md: "xs", lg: "md" }}
       display={{ base: id ? "none" : "flex", md: "flex" }}
       bgColor={bg}
+      justifyContent={"space-between"}
+      height="100vh"
       p={"6"}
     >
       <CreateChat />
+      <Button onClick={() => signOut()}>Sign Out</Button>
     </Stack>
   )
 }
