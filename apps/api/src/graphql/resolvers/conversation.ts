@@ -25,27 +25,27 @@ const resolvers: Resolvers = {
       }
 
       // prevent two users making multiple chat with only them in it
-      //   if (input.length === 2) {
-      //     const multiple = await prisma.conversation.findFirst({
-      //       where: {
-      //         OR: [
-      //           {
-      //             adminId: input[0].id,
-      //             conversationMembers: { some: { id: input[1].id } },
-      //           },
-      //           {
-      //             adminId: input[1].id,
-      //             conversationMembers: { some: { id: input[0].id } },
-      //           },
-      //         ],
-      //         AND: {
-      //           conversationMembersNumber: 2,
-      //         },
-      //       },
-      //     })
-      //     if (multiple)
-      //       throw new GraphQLError("You have chat with this user already")
-      //   }
+      if (input.length === 2) {
+        const multiple = await prisma.conversation.findFirst({
+          where: {
+            OR: [
+              {
+                adminId: input[0].id,
+                conversationMembers: { some: { userId: input[1].id } },
+              },
+              {
+                adminId: input[1].id,
+                conversationMembers: { some: { userId: input[0].id } },
+              },
+            ],
+            AND: {
+              conversationMembersNumber: 2,
+            },
+          },
+        })
+        if (multiple)
+          throw new GraphQLError("You have chat with this user already")
+      }
 
       try {
         await prisma.$transaction(async (prim) => {
