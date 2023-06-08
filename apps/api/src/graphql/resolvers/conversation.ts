@@ -2,8 +2,8 @@ import { GraphQLError } from "graphql"
 
 import { createId } from "@paralleldrive/cuid2"
 
-import { Context } from "../../types/context"
 import { MutationResolvers } from "../../types/graphql"
+import { Context } from "../../utils/context"
 
 type Resolvers = {
   Mutation: Pick<MutationResolvers<Context>, "createConversation">
@@ -16,9 +16,7 @@ const resolvers: Resolvers = {
 
       if (!session?.user) throw new GraphQLError("Not authorized")
 
-      //   const { id } = session.user
-
-      const id = ""
+      const { id } = session.user
 
       const chatId = createId()
 
@@ -50,25 +48,39 @@ const resolvers: Resolvers = {
       //   }
 
       try {
-        await prisma.conversation.create({
-          data: {
-            conversationMembersNumber: input.length,
-            adminId: id,
-            latestMessageId: chatId,
-            conversationMembers: {
-              create: input.map((val) => ({
-                hasReadlastMessage: val.id === id,
-                unreadMessageNumber: val.id === id ? 0 : 1,
-                userId: val.id,
-              })),
+        await prisma.$transaction(async (prim) => {
+          const conversation = await prim.conversation.create({
+            data: {
+              conversationMembersNumber: input.length,
+              adminId: id,
+              conversationMembers: {
+                createMany: {
+                  data: input.map((val) => ({
+                    hasReadlastMessage: val.id === id,
+                    unreadMessageNumber: val.id === id ? 0 : 1,
+                    userId: val.id,
+                  })),
+                },
+              },
             },
-          },
+          })
+
+          return await prim.message.create({
+            data: {
+              body: "created chat",
+              type: "bot",
+              id: chatId,
+              conversationId: conversation.id,
+              senderId: id,
+              isLatest: { connect: { id: conversation.id } },
+            },
+          })
         })
       } catch (error) {
         throw new GraphQLError("Failed to create Chat")
       }
 
-      return { message: "Chat has been created" }
+      return { message: "Chat created" }
     },
   },
 }

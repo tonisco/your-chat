@@ -1,14 +1,25 @@
-import { Session } from "next-auth"
 import { getSession } from "next-auth/react"
 import { Request } from "express"
 
 import { PrismaClient } from "@prisma/client"
 
-import { Context } from "../types/context"
-
 import { verifyToken } from "./jwt"
 
 const prisma = new PrismaClient()
+
+type Session = {
+  expires: string
+  user: {
+    email: string | null
+    id: string
+    image: string | null
+    name: string | null
+    username: string | null
+    emailVerified: Date | null
+  }
+}
+
+export type Context = { prisma: PrismaClient; session: Session | null }
 
 const context = async (req: Request): Promise<Context> => {
   let session: Session | null = null
@@ -33,7 +44,7 @@ const context = async (req: Request): Promise<Context> => {
       if (user) session = { expires: "", user }
     }
   } else {
-    session = await getSession({ req })
+    session = (await getSession({ req })) as Session | null
   }
 
   return { prisma, session }
