@@ -2,7 +2,10 @@ import {
   ApolloClient,
   ApolloProvider as Provider,
   InMemoryCache,
+  HttpLink,
+  from,
 } from "@apollo/client"
+import { onError } from "@apollo/client/link/error"
 import React from "react"
 
 import { useAuthContext } from "./AuthProvider"
@@ -13,12 +16,24 @@ type Props = {
 }
 
 const ApolloProvider = ({ children }: Props) => {
-  const { user } = useAuthContext()
+  const { user, logoutUser } = useAuthContext()
+
+  const errorLink = onError(({ graphQLErrors }) => {
+    if (graphQLErrors) {
+      graphQLErrors.forEach(({ message }) => {
+        if (message === "Not authorized") logoutUser()
+      })
+    }
+  })
+
+  const httpLink = new HttpLink({
+    uri: env.SERVER_URL,
+    headers: { authorization: `Bearer ${user?.token ?? ""}` },
+  })
 
   const client = new ApolloClient({
-    uri: env.SERVER_URL,
+    link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
-    headers: { authorization: `Bearer ${user?.token ?? ""}` },
   })
 
   return <Provider client={client}>{children}</Provider>
