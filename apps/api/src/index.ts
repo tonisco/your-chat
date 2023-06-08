@@ -12,10 +12,13 @@ import morgan from "morgan"
 import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
+import { WebSocketServer } from "ws"
+import { makeExecutableSchema } from "@graphql-tools/schema"
+import { useServer } from "graphql-ws/lib/use/ws"
 
 import resolvers from "./graphql/resolvers"
 import typeDefs from "./graphql/typeDefs"
-import context, { Context } from "./utils/context"
+import { context, Context, subCtx, subscriptionCtx } from "./utils/context"
 import { env } from "./env"
 
 const main = async () => {
@@ -25,10 +28,35 @@ const main = async () => {
 
   const httpServer = http.createServer(app)
 
+  const schema = makeExecutableSchema({ typeDefs, resolvers })
+
+  const wsServer = new WebSocketServer({
+    // This is the `httpServer` we created in a previous step.
+    server: httpServer,
+    // Pass a different path here if app.use
+    // serves expressMiddleware at a different path
+    path: "/subscription",
+  })
+
+  const serverCleanup = useServer(
+    { schema, context: subscriptionCtx },
+    wsServer,
+  )
+
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    schema,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose()
+            },
+          }
+        },
+      },
+    ],
   })
 
   await server.start()

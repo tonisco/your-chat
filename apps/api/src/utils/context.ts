@@ -1,11 +1,15 @@
 import { getSession } from "next-auth/react"
 import { Request } from "express"
+import { Context as ctx } from "graphql-ws/lib/server"
+import { PubSub } from "graphql-subscriptions"
 
 import { PrismaClient } from "@prisma/client"
 
 import { verifyToken } from "./jwt"
 
 const prisma = new PrismaClient()
+
+const pubsub = new PubSub()
 
 type Session = {
   expires: string
@@ -21,7 +25,7 @@ type Session = {
 
 export type Context = { prisma: PrismaClient; session: Session | null }
 
-const context = async (req: Request): Promise<Context> => {
+export const context = async (req: Request): Promise<Context> => {
   let session: Session | null = null
 
   if (req.headers.authorization?.startsWith("Bearer")) {
@@ -50,4 +54,20 @@ const context = async (req: Request): Promise<Context> => {
   return { prisma, session }
 }
 
-export default context
+export interface subCtx extends ctx {
+  connectionParams: {
+    session?: Session
+  }
+}
+
+export const subscriptionCtx = async (ctx: subCtx) => {
+  if (ctx.connectionParams?.session) {
+    const session = ctx.connectionParams.session
+    return { session, prisma, pubsub }
+  }
+  // Let the resolvers know we don't have a current user so they can
+  // throw the appropriate error
+  return { session: null, prisma, pubsub }
+}
+
+export type SubscriptionCtx = Awaited<ReturnType<typeof subscriptionCtx>>
