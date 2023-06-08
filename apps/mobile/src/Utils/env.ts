@@ -17,6 +17,7 @@ export const formatErrors = (
 const variables = z.object({
   MOBILE_CLIENT_ID: z.string(),
   SERVER_URL: z.string(),
+  WS_URL: z.string(),
 })
 
 const extra = Constants.manifest?.extra

@@ -1,5 +1,6 @@
 "use client"
 
+import { getSession } from "next-auth/react"
 import { createClient } from "graphql-ws"
 
 import {
@@ -31,6 +32,7 @@ const makeClient = () => {
       ? new GraphQLWsLink(
           createClient({
             url: process.env.NEXT_PUBLIC_WS_URL ?? "",
+            connectionParams: { session: getSession() },
           }),
         )
       : null

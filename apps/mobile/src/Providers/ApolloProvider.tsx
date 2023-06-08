@@ -4,8 +4,12 @@ import {
   InMemoryCache,
   HttpLink,
   from,
+  split,
 } from "@apollo/client"
 import { onError } from "@apollo/client/link/error"
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions"
+import { getMainDefinition } from "@apollo/client/utilities"
+import { createClient } from "graphql-ws"
 import React from "react"
 
 import { useAuthContext } from "./AuthProvider"
@@ -31,8 +35,29 @@ const ApolloProvider = ({ children }: Props) => {
     headers: { authorization: `Bearer ${user?.token ?? ""}` },
   })
 
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: env.WS_URL,
+      connectionParams: {
+        session: { expires: "", user },
+      },
+    }),
+  )
+
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === "OperationDefinition" &&
+        definition.operation === "subscription"
+      )
+    },
+    wsLink,
+    httpLink,
+  )
+
   const client = new ApolloClient({
-    link: from([errorLink, httpLink]),
+    link: from([errorLink, splitLink]),
     cache: new InMemoryCache(),
   })
 
