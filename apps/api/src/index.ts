@@ -6,19 +6,19 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env") })
 
 import cors from "cors"
 import express from "express"
+import { useServer } from "graphql-ws/lib/use/ws"
 import http from "http"
 import morgan from "morgan"
+import { WebSocketServer } from "ws"
 
 import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
-import { WebSocketServer } from "ws"
 import { makeExecutableSchema } from "@graphql-tools/schema"
-import { useServer } from "graphql-ws/lib/use/ws"
 
 import resolvers from "./graphql/resolvers"
 import typeDefs from "./graphql/typeDefs"
-import { context, Context, subCtx, subscriptionCtx } from "./utils/context"
+import { Context, context, subscriptionCtx } from "./utils/context"
 import { env } from "./env"
 
 const main = async () => {

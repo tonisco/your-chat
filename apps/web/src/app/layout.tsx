@@ -1,4 +1,4 @@
-import ApolloWrapper from "@/lib/ApolloProvider"
+import ApolloWrapper from "@/Providers/ApolloProvider"
 
 import ChakraProvider from "../Providers"
 

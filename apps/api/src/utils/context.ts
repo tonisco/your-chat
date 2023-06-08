@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react"
 import { Request } from "express"
-import { Context as ctx } from "graphql-ws/lib/server"
 import { PubSub } from "graphql-subscriptions"
+import { Context as ctx } from "graphql-ws/lib/server"
 
 import { PrismaClient } from "@prisma/client"
 
@@ -60,9 +60,9 @@ export interface subCtx extends ctx {
   }
 }
 
-export const subscriptionCtx = async (ctx: subCtx) => {
-  if (ctx.connectionParams?.session) {
-    const session = ctx.connectionParams.session
+export const subscriptionCtx = async (subContext: subCtx) => {
+  if (subContext.connectionParams?.session) {
+    const { session } = subContext.connectionParams
     return { session, prisma, pubsub }
   }
   // Let the resolvers know we don't have a current user so they can
