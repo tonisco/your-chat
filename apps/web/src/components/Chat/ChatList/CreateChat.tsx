@@ -1,31 +1,54 @@
 "use client"
-import { useQuery, useLazyQuery } from "@apollo/client"
+import React, { useRef, useState } from "react"
+import { useSession } from "next-auth/react"
+import { createConversation, findUsers } from "queries"
+import { FoundUsers } from "queries/src/types"
+import { toast } from "react-hot-toast"
+
+import { useLazyQuery, useMutation } from "@apollo/client"
 import {
   Button,
+  Input,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Stack,
-  Input,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react"
-import { findUsers } from "queries"
-import React, { useState } from "react"
-import { toast } from "react-hot-toast"
+
 import UserList from "./UserList"
+import UsersInChat from "./UsersInChat"
 
 const CreateChat = () => {
+  const { data: userSession } = useSession()
+
+  const modalCloseButton = useRef<HTMLButtonElement | null>(null)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [username, setUsername] = useState("")
+  const [foundUsersData, setFoundUsersData] = useState<FoundUsers[] | null>(
+    null,
+  )
+  const [convoMembers, setConvoMembers] = useState<FoundUsers[]>([])
 
-  const [query, { loading, data }] = useLazyQuery(findUsers, {
+  const addToChat = (user: FoundUsers) =>
+    setConvoMembers([...convoMembers, user])
+
+  const removeFromChat = (id: string) =>
+    setConvoMembers(convoMembers.filter((member) => member.id !== id))
+
+  const [query, { loading }] = useLazyQuery(findUsers, {
     onError(err) {
       toast.error(err.message)
+    },
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      setFoundUsersData(data.findUsers)
     },
   })
 
@@ -34,14 +57,42 @@ const CreateChat = () => {
     query({ variables: { username } })
   }
 
+  const clearData = () => {
+    setFoundUsersData(null)
+    setUsername("")
+    setConvoMembers([])
+  }
+
+  const [mutate, { loading: createLoading }] = useMutation(createConversation, {
+    onError(err) {
+      toast.error(err.message)
+    },
+    onCompleted(data) {
+      toast.success(data.createConversation.message)
+      clearData()
+      modalCloseButton.current?.click()
+    },
+  })
+
+  const create = () => {
+    mutate({
+      variables: {
+        input: [
+          { id: userSession?.user.id ?? "" },
+          ...convoMembers.map((members) => ({ id: members.id })),
+        ],
+      },
+    })
+  }
+
   return (
     <>
       <Button onClick={onOpen}>Create a New Chat</Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onCloseComplete={clearData} onClose={onClose}>
         <ModalOverlay />
         <ModalContent pb={4}>
           <ModalHeader textAlign={"center"}>Create a Chat</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton ref={modalCloseButton} />
           <ModalBody mt={"2"}>
             <form onSubmit={find}>
               <Stack spacing={4}>
@@ -62,7 +113,23 @@ const CreateChat = () => {
                 </Button>
               </Stack>
             </form>
-            {data?.findUsers && <UserList users={data.findUsers} />}
+            {foundUsersData && (
+              <UserList
+                users={foundUsersData}
+                convoMembers={convoMembers}
+                addToChat={addToChat}
+                removeFromChat={removeFromChat}
+              />
+            )}
+
+            {convoMembers.length > 0 && (
+              <UsersInChat
+                removeFromChat={removeFromChat}
+                inChat={convoMembers}
+                create={create}
+                loading={createLoading}
+              />
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

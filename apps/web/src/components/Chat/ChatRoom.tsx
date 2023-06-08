@@ -1,7 +1,8 @@
 "use client"
-import { Box, Text } from "@chakra-ui/react"
-import { useSearchParams } from "next/navigation"
 import React from "react"
+import { useSearchParams } from "next/navigation"
+
+import { Box, Text } from "@chakra-ui/react"
 
 const ChatRoom = () => {
   const searchParams = useSearchParams()
