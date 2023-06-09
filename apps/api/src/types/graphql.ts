@@ -18,8 +18,25 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Conversation = {
+  __typename?: 'Conversation';
+  conversationMembers: Array<ConversationMembers>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  latestMessage?: Maybe<LatestMessage>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type ConversationMemberId = {
   id: Scalars['String']['input'];
+};
+
+export type ConversationMembers = {
+  __typename?: 'ConversationMembers';
+  hasReadlastMessage: Scalars['Boolean']['output'];
+  id: Scalars['String']['output'];
+  unreadMessageNumber: Scalars['Int']['output'];
+  user: User;
 };
 
 export type FoundUsers = {
@@ -29,16 +46,30 @@ export type FoundUsers = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
+export type LatestMessage = {
+  __typename?: 'LatestMessage';
+  body?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  sender?: Maybe<User>;
+  type?: Maybe<MessageType>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type Message = {
   __typename?: 'Message';
   message: Scalars['String']['output'];
 };
 
+export type MessageType =
+  | 'bot'
+  | 'user';
+
 export type Mutation = {
   __typename?: 'Mutation';
   createConversation: Message;
   createUsername: Message;
-  loginUser: User;
+  loginUser: UserWithToken;
 };
 
 
@@ -61,6 +92,7 @@ export type MutationLoginUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  conversations: Array<Conversation>;
   findUsers: Array<FoundUsers>;
 };
 
@@ -71,6 +103,15 @@ export type QueryFindUsersArgs = {
 
 export type User = {
   __typename?: 'User';
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserWithToken = {
+  __typename?: 'UserWithToken';
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   image?: Maybe<Scalars['String']['output']>;
@@ -151,27 +192,55 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Conversation: ResolverTypeWrapper<Conversation>;
   ConversationMemberId: ConversationMemberId;
+  ConversationMembers: ResolverTypeWrapper<ConversationMembers>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   FoundUsers: ResolverTypeWrapper<FoundUsers>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  LatestMessage: ResolverTypeWrapper<LatestMessage>;
   Message: ResolverTypeWrapper<Message>;
+  MessageType: MessageType;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserWithToken: ResolverTypeWrapper<UserWithToken>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  Conversation: Conversation;
   ConversationMemberId: ConversationMemberId;
+  ConversationMembers: ConversationMembers;
   DateTime: Scalars['DateTime']['output'];
   FoundUsers: FoundUsers;
+  Int: Scalars['Int']['output'];
+  LatestMessage: LatestMessage;
   Message: Message;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   User: User;
+  UserWithToken: UserWithToken;
+};
+
+export type ConversationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Conversation'] = ResolversParentTypes['Conversation']> = {
+  conversationMembers?: Resolver<Array<ResolversTypes['ConversationMembers']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  latestMessage?: Resolver<Maybe<ResolversTypes['LatestMessage']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ConversationMembersResolvers<ContextType = any, ParentType extends ResolversParentTypes['ConversationMembers'] = ResolversParentTypes['ConversationMembers']> = {
+  hasReadlastMessage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  unreadMessageNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -185,6 +254,16 @@ export type FoundUsersResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LatestMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['LatestMessage'] = ResolversParentTypes['LatestMessage']> = {
+  body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['MessageType']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -193,14 +272,24 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createConversation?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
-  loginUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
+  loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  conversations?: Resolver<Array<ResolversTypes['Conversation']>, ParentType, ContextType>;
   findUsers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWithTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWithToken'] = ResolversParentTypes['UserWithToken']> = {
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -211,11 +300,15 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
+  Conversation?: ConversationResolvers<ContextType>;
+  ConversationMembers?: ConversationMembersResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   FoundUsers?: FoundUsersResolvers<ContextType>;
+  LatestMessage?: LatestMessageResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserWithToken?: UserWithTokenResolvers<ContextType>;
 };
 

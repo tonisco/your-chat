@@ -17,7 +17,7 @@ const typeDefs = gql`
       username: String
       name: String!
       image: String!
-    ): User!
+    ): UserWithToken!
   }
 
   type FoundUsers {
@@ -26,13 +26,21 @@ const typeDefs = gql`
     image: String
   }
 
-  type User {
+  type UserWithToken {
     id: String!
     email: String
     username: String
     name: String
     image: String
     token: String!
+  }
+
+  type User {
+    id: String!
+    email: String
+    username: String
+    name: String
+    image: String
   }
 
   type Message {

@@ -2,14 +2,35 @@ import { GraphQLError } from "graphql"
 
 import { createId } from "@paralleldrive/cuid2"
 
-import { MutationResolvers } from "../../types/graphql"
+import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 import { Context } from "../../utils/context"
 
 type Resolvers = {
   Mutation: Pick<MutationResolvers<Context>, "createConversation">
+  Query: Pick<QueryResolvers<Context>, "conversations">
 }
 
 const resolvers: Resolvers = {
+  Query: {
+    async conversations(_, arg, ctx) {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+      try {
+        const allConversations = await prisma.conversation.findMany({
+          where: { conversationMembers: { some: { userId: session.user.id } } },
+          include: {
+            conversationMembers: { include: { user: true } },
+            latestMessage: true,
+          },
+        })
+
+        return allConversations
+      } catch (error) {
+        throw new GraphQLError("Failed to find all conversations")
+      }
+    },
+  },
   Mutation: {
     async createConversation(_, { input }, ctx) {
       const { prisma, session } = ctx
