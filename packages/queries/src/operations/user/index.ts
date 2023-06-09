@@ -1,7 +1,6 @@
 import { graphql } from "../../types/gql/gql"
-import { gql } from "@apollo/client"
 
-export const createUsername = graphql(/* GraphQL */ `
+export const createUsername = graphql(`
   mutation createUsername($username: String!) {
     createUsername(username: $username) {
       message
@@ -9,7 +8,7 @@ export const createUsername = graphql(/* GraphQL */ `
   }
 `)
 
-export const loginUser = graphql(/* GraphQL */ `
+export const loginUser = graphql(`
   mutation loginUser(
     $email: String!
     $username: String
@@ -27,12 +26,25 @@ export const loginUser = graphql(/* GraphQL */ `
   }
 `)
 
-export const findUsers = graphql(/* GraphQL */ `
+export const findUsers = graphql(`
   query findUsers($username: String!) {
     findUsers(username: $username) {
       id
       username
       image
     }
+  }
+`)
+
+/**
+ * FRAGMENTS
+ */
+graphql(`
+  fragment UserFields on User {
+    id
+    email
+    username
+    name
+    image
   }
 `)
