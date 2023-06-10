@@ -9,6 +9,10 @@ const typeDefs = gql`
     createConversation(input: [ConversationMemberId!]!): Message!
   }
 
+  type Subscription {
+    conversationCreated: Conversation!
+  }
+
   input ConversationMemberId {
     id: String!
   }

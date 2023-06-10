@@ -23,7 +23,11 @@ type Session = {
   }
 }
 
-export type Context = { prisma: PrismaClient; session: Session | null }
+export type Context = {
+  prisma: PrismaClient
+  session: Session | null
+  pubsub: PubSub
+}
 
 export const context = async (req: Request): Promise<Context> => {
   let session: Session | null = null
@@ -51,7 +55,7 @@ export const context = async (req: Request): Promise<Context> => {
     session = (await getSession({ req })) as Session | null
   }
 
-  return { prisma, session }
+  return { prisma, session, pubsub }
 }
 
 export interface subCtx extends ctx {

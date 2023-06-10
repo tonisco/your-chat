@@ -1,7 +1,8 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.ts",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "server": "ts-node-dev src/index.ts",
@@ -59,6 +60,5 @@
     "prisma": "^4.15.0",
     "ws": "^8.13.0",
     "zod": "^3.21.4"
-  },
-  "private": true
+  }
 }

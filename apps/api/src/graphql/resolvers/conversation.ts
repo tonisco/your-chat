@@ -1,13 +1,24 @@
 import { GraphQLError } from "graphql"
+import { withFilter } from "graphql-subscriptions"
 
 import { createId } from "@paralleldrive/cuid2"
 
-import { MutationResolvers, QueryResolvers } from "../../types/graphql"
-import { Context } from "../../utils/context"
+import {
+  Conversation,
+  MutationResolvers,
+  QueryResolvers,
+} from "../../types/graphql"
+import { Context, SubscriptionCtx } from "../../utils/context"
+import { CONVERSATION_CREATED } from "../../utils/events"
 
 type Resolvers = {
   Mutation: Pick<MutationResolvers<Context>, "createConversation">
   Query: Pick<QueryResolvers<Context>, "conversations">
+  // Subscription: Pick<
+  //   SubscriptionResolvers<SubscriptionCtx>,
+  //   "conversationCreated"
+  // >
+  Subscription: any
 }
 
 const resolvers: Resolvers = {
@@ -33,7 +44,7 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     async createConversation(_, { input }, ctx) {
-      const { prisma, session } = ctx
+      const { prisma, session, pubsub } = ctx
 
       if (!session?.user) throw new GraphQLError("Not authorized")
 
@@ -67,10 +78,11 @@ const resolvers: Resolvers = {
         if (multiple)
           throw new GraphQLError("You have chat with this user already")
       }
+      let createdConversation
 
       try {
-        await prisma.$transaction(async (prim) => {
-          const conversation = await prim.conversation.create({
+        createdConversation = await prisma.$transaction(async (prim) => {
+          const newConversation = await prim.conversation.create({
             data: {
               conversationMembersNumber: input.length,
               adminId: id,
@@ -86,22 +98,52 @@ const resolvers: Resolvers = {
             },
           })
 
-          return prim.message.create({
+          await prim.message.create({
             data: {
               body: "created chat",
               type: "bot",
               id: chatId,
-              conversationId: conversation.id,
+              conversationId: newConversation.id,
               senderId: id,
-              isLatest: { connect: { id: conversation.id } },
+              isLatest: { connect: { id: newConversation.id } },
             },
           })
+          return newConversation
         })
       } catch (error) {
         throw new GraphQLError("Failed to create Chat")
       }
 
+      // fetched to so as to get latest message
+      const conversation: Conversation | null =
+        await prisma.conversation.findUnique({
+          where: { id: createdConversation.id },
+          include: {
+            conversationMembers: { include: { user: true } },
+            latestMessage: true,
+          },
+        })
+
+      if (conversation) {
+        await pubsub.publish(CONVERSATION_CREATED, { conversation })
+      }
+
       return { message: "Chat created" }
+    },
+  },
+  Subscription: {
+    conversationCreated: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator(CONVERSATION_CREATED),
+        (val: { conversation: Conversation }, args, ctx: SubscriptionCtx) => {
+          const { session } = ctx
+          if (!session) throw new GraphQLError("Not authorized")
+          return val.conversation.conversationMembers.some(
+            (member) => member.id === session.user.id,
+          )
+        },
+      ),
     },
   },
 }
