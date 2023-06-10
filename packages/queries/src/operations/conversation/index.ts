@@ -28,6 +28,26 @@ export const conversations = graphql(`
   }
 `)
 
+export const conversationCreated = graphql(`
+  subscription conversationCreated {
+    conversationCreated {
+      ...ConversationFields
+      conversationMembers {
+        ...ConversationMembersFields
+        user {
+          ...UserFields
+        }
+      }
+      latestMessage {
+        ...LatestMessageFields
+        sender {
+          ...UserFields
+        }
+      }
+    }
+  }
+`)
+
 /**
  *  FRAGMENTS
  */

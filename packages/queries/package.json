@@ -19,10 +19,14 @@
     "@types/react-dom": "18.2.4",
     "@typescript-eslint/parser": "^5.59.9",
     "eslint": "8.41.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "prisma": "^4.15.0",
     "typescript": "5.0.4"
   },
   "scripts": {
-    "codegen": "graphql-codegen --config src/types/codegen.ts"
+    "codegen": "graphql-codegen --config src/types/codegen.ts",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint . --ext ts,tsx --fix",
+    "lint": "yarn run eslint && yarn run check-types"
   }
 }
