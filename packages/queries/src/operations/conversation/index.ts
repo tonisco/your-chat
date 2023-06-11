@@ -1,4 +1,6 @@
 import { graphql } from "../../types/gql/gql"
+import { gql } from "@apollo/client"
+import fragments from "../fragments"
 
 export const createConversation = graphql(`
   mutation createConversation($input: [ConversationMemberId!]!) {
@@ -8,62 +10,23 @@ export const createConversation = graphql(`
   }
 `)
 
-export const conversations = graphql(`
+export const conversations = gql`
   query conversations {
     conversations {
       ...ConversationFields
-      conversationMembers {
-        ...ConversationMembersFields
-        user {
-          ...UserFields
-        }
-      }
-      latestMessage {
-        ...LatestMessageFields
-        sender {
-          ...UserFields
-        }
-      }
     }
   }
-`)
+  ${fragments}
+`
 
-export const conversationCreated = graphql(`
+export const conversationCreated = gql`
   subscription conversationCreated {
     conversationCreated {
       ...ConversationFields
-      conversationMembers {
-        ...ConversationMembersFields
-        user {
-          ...UserFields
-        }
-      }
-      latestMessage {
-        ...LatestMessageFields
-        sender {
-          ...UserFields
-        }
-      }
     }
   }
-`)
-
-/**
- *  FRAGMENTS
- */
-graphql(`
-  fragment ConversationMembersFields on ConversationMembers {
-    id
-    hasReadlastMessage
-    unreadMessageNumber
-  }
-
-  fragment ConversationFields on Conversation {
-    id
-    createdAt
-    updatedAt
-  }
-`)
+  ${fragments}
+`
 
 /**
  *  INPUTS

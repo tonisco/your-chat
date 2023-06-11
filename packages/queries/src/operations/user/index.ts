@@ -35,16 +35,3 @@ export const findUsers = graphql(`
     }
   }
 `)
-
-/**
- * FRAGMENTS
- */
-graphql(`
-  fragment UserFields on User {
-    id
-    email
-    username
-    name
-    image
-  }
-`)

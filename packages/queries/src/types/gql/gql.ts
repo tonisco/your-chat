@@ -13,11 +13,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...LatestMessageFields\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n": types.ConversationMembersFieldsFragmentDoc,
     "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n": types.CreateConversationDocument,
-    "\n  query conversations {\n    conversations {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n": types.ConversationsDocument,
-    "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n": types.ConversationCreatedDocument,
-    "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n  }\n": types.ConversationMembersFieldsFragmentDoc,
-    "\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n  }\n": types.LatestMessageFieldsFragmentDoc,
+    "\n  query conversations {\n    conversations {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationsDocument,
+    "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationCreatedDocument,
+    "\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n": types.LatestMessageFieldsFragmentDoc,
     "\n  mutation createUsername($username: String!) {\n    createUsername(username: $username) {\n      message\n    }\n  }\n": types.CreateUsernameDocument,
     "\n  mutation loginUser(\n    $email: String!\n    $username: String\n    $name: String!\n    $image: String!\n  ) {\n    loginUser(email: $email, username: $username, name: $name, image: $image) {\n      id\n      email\n      username\n      name\n      image\n      token\n    }\n  }\n": types.LoginUserDocument,
     "\n  query findUsers($username: String!) {\n    findUsers(username: $username) {\n      id\n      username\n      image\n    }\n  }\n": types.FindUsersDocument,
@@ -41,23 +41,23 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...LatestMessageFields\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"): (typeof documents)["\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...LatestMessageFields\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query conversations {\n    conversations {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query conversations {\n    conversations {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query conversations {\n    conversations {\n      ...ConversationFields\n    }\n  }\n  \n"): (typeof documents)["\n  query conversations {\n    conversations {\n      ...ConversationFields\n    }\n  }\n  \n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n      conversationMembers {\n        ...ConversationMembersFields\n        user {\n          ...UserFields\n        }\n      }\n      latestMessage {\n        ...LatestMessageFields\n        sender {\n          ...UserFields\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n    }\n  }\n  \n"): (typeof documents)["\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n    }\n  }\n  \n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n  }\n"];
+export function graphql(source: "\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"): (typeof documents)["\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
