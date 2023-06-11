@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 import { createConversation, findUsers } from "queries"
-import { FoundUsers } from "queries/src/types"
+import { FoundUsers, Query } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useLazyQuery, useMutation } from "@apollo/client"
@@ -42,7 +42,7 @@ const CreateChat = () => {
   const removeFromChat = (id: string) =>
     setSelectedUsers(selectedUsers.filter((member) => member.id !== id))
 
-  const [query, { loading }] = useLazyQuery(findUsers, {
+  const [query, { loading }] = useLazyQuery<Query>(findUsers, {
     onError(err) {
       toast.error(err.message)
     },

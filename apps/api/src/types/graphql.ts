@@ -48,12 +48,12 @@ export type FoundUsers = {
 
 export type LatestMessage = {
   __typename?: 'LatestMessage';
-  body?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  sender?: Maybe<User>;
-  type?: Maybe<MessageType>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  body: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  sender: User;
+  type: MessageType;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Message = {
@@ -262,12 +262,12 @@ export type FoundUsersResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type LatestMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['LatestMessage'] = ResolversParentTypes['LatestMessage']> = {
-  body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['MessageType']>, ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sender?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['MessageType'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -32,7 +32,7 @@ const resolvers: Resolvers = {
           where: { conversationMembers: { some: { userId: session.user.id } } },
           include: {
             conversationMembers: { include: { user: true } },
-            latestMessage: true,
+            latestMessage: { include: { sender: true } },
           },
         })
 
@@ -120,7 +120,7 @@ const resolvers: Resolvers = {
           where: { id: createdConversation.id },
           include: {
             conversationMembers: { include: { user: true } },
-            latestMessage: true,
+            latestMessage: { include: { sender: true } },
           },
         })
 

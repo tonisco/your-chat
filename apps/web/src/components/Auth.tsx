@@ -1,8 +1,10 @@
 "use client"
 import React, { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Session } from "next-auth"
 import { signIn } from "next-auth/react"
 import { createUsername } from "queries"
+import { Mutation } from "queries/src/types"
 import toast from "react-hot-toast"
 
 import { useMutation } from "@apollo/client"
@@ -24,7 +26,7 @@ type Props = {
 const Auth = ({ session }: Props) => {
   const [username, setUsername] = useState("")
 
-  // const { update } = useSession()
+  const router = useRouter()
 
   const bg = useColorModeValue("gray.bg", "brand.bgDark")
   const color = useColorModeValue("brand.text", "brand.textDark")
@@ -32,16 +34,13 @@ const Auth = ({ session }: Props) => {
   const buttonBg1 = useColorModeValue("gray.900", "whiteAlpha.400")
   const logo = useColorModeValue("brand.green", "brand.greenDark")
 
-  const [create, { loading }] = useMutation(createUsername, {
+  const [create, { loading }] = useMutation<Mutation>(createUsername, {
     onError(error) {
       toast.error(error.message)
     },
     onCompleted(data) {
       toast.success(data.createUsername.message)
-      // update()
-
-      // used due to session not updating
-      location.reload()
+      router.push("/")
     },
   })
 

@@ -124,26 +124,6 @@ export type UserWithToken = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
-export type ConversationMembersFieldsFragment = { __typename?: 'ConversationMembers', id: string, hasReadlastMessage: boolean, unreadMessageNumber: number, user: (
-    { __typename?: 'User' }
-    & { ' $fragmentRefs'?: { 'UserFieldsFragment': UserFieldsFragment } }
-  ) } & { ' $fragmentName'?: 'ConversationMembersFieldsFragment' };
-
-export type ConversationFieldsFragment = { __typename?: 'Conversation', id: string, createdAt: any, updatedAt: any, conversationMembers: Array<(
-    { __typename?: 'ConversationMembers' }
-    & { ' $fragmentRefs'?: { 'ConversationMembersFieldsFragment': ConversationMembersFieldsFragment } }
-  )>, latestMessage?: (
-    { __typename?: 'LatestMessage' }
-    & { ' $fragmentRefs'?: { 'LatestMessageFieldsFragment': LatestMessageFieldsFragment } }
-  ) | null } & { ' $fragmentName'?: 'ConversationFieldsFragment' };
-
-export type UserFieldsFragment = { __typename?: 'User', id: string, email?: string | null, username?: string | null, name?: string | null, image?: string | null } & { ' $fragmentName'?: 'UserFieldsFragment' };
-
-export type LatestMessageFieldsFragment = { __typename?: 'LatestMessage', id: string, body: string, type: MessageType, createdAt: any, updatedAt: any, sender: (
-    { __typename?: 'User' }
-    & { ' $fragmentRefs'?: { 'UserFieldsFragment': UserFieldsFragment } }
-  ) } & { ' $fragmentName'?: 'LatestMessageFieldsFragment' };
-
 export type CreateConversationMutationVariables = Exact<{
   input: Array<ConversationMemberId> | ConversationMemberId;
 }>;
@@ -166,6 +146,26 @@ export type ConversationCreatedSubscription = { __typename?: 'Subscription', con
     { __typename?: 'Conversation' }
     & { ' $fragmentRefs'?: { 'ConversationFieldsFragment': ConversationFieldsFragment } }
   ) };
+
+export type ConversationMembersFieldsFragment = { __typename?: 'ConversationMembers', id: string, hasReadlastMessage: boolean, unreadMessageNumber: number, user: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'UserFieldsFragment': UserFieldsFragment } }
+  ) } & { ' $fragmentName'?: 'ConversationMembersFieldsFragment' };
+
+export type ConversationFieldsFragment = { __typename?: 'Conversation', id: string, createdAt: any, updatedAt: any, conversationMembers: Array<(
+    { __typename?: 'ConversationMembers' }
+    & { ' $fragmentRefs'?: { 'ConversationMembersFieldsFragment': ConversationMembersFieldsFragment } }
+  )>, latestMessage?: (
+    { __typename?: 'LatestMessage' }
+    & { ' $fragmentRefs'?: { 'LatestMessageFieldsFragment': LatestMessageFieldsFragment } }
+  ) | null } & { ' $fragmentName'?: 'ConversationFieldsFragment' };
+
+export type UserFieldsFragment = { __typename?: 'User', id: string, email?: string | null, username?: string | null, name?: string | null, image?: string | null } & { ' $fragmentName'?: 'UserFieldsFragment' };
+
+export type LatestMessageFieldsFragment = { __typename?: 'LatestMessage', id: string, body: string, type: MessageType, createdAt: any, updatedAt: any, sender: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'UserFieldsFragment': UserFieldsFragment } }
+  ) } & { ' $fragmentName'?: 'LatestMessageFieldsFragment' };
 
 export type CreateUsernameMutationVariables = Exact<{
   username: Scalars['String']['input'];

@@ -7,12 +7,12 @@ const typeDefs = gql`
   }
 
   type LatestMessage {
-    id: String
-    body: String
-    sender: User
-    type: MessageType
-    createdAt: DateTime
-    updatedAt: DateTime
+    id: String!
+    body: String!
+    sender: User!
+    type: MessageType!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `
 

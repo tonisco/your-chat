@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "native-base"
 import { createConversation, findUsers } from "queries"
-import { FoundUsers } from "queries/src/types"
+import { FoundUsers, Mutation, Query } from "queries/src/types"
 import React, { useState } from "react"
 
 import UserList from "./UserList"
@@ -40,7 +40,7 @@ const CreateChat = () => {
   const pressed = useColorModeValue("dark.700", "coolGray.700")
   const border = useColorModeValue("dark.500", "coolGray.500")
 
-  const [find, { loading }] = useLazyQuery(findUsers, {
+  const [find, { loading }] = useLazyQuery<Query>(findUsers, {
     onError(err) {
       Toast.show({
         render: () => <ToastError message={err.message} />,
@@ -61,23 +61,26 @@ const CreateChat = () => {
     setShowModal(false)
   }
 
-  const [mutate, { loading: createLoading }] = useMutation(createConversation, {
-    onError(err) {
-      Toast.show({
-        render: () => <ToastError message={err.message} />,
-        placement: "top",
-      })
+  const [mutate, { loading: createLoading }] = useMutation<Mutation>(
+    createConversation,
+    {
+      onError(err) {
+        Toast.show({
+          render: () => <ToastError message={err.message} />,
+          placement: "top",
+        })
+      },
+      onCompleted(data) {
+        Toast.show({
+          render: () => (
+            <ToastSuccess message={data.createConversation.message} />
+          ),
+          placement: "top",
+        })
+        clearData()
+      },
     },
-    onCompleted(data) {
-      Toast.show({
-        render: () => (
-          <ToastSuccess message={data.createConversation.message} />
-        ),
-        placement: "top",
-      })
-      clearData()
-    },
-  })
+  )
 
   const create = () => {
     mutate({

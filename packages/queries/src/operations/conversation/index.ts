@@ -1,14 +1,13 @@
-import { graphql } from "../../types/gql/gql"
 import { gql } from "@apollo/client"
 import fragments from "../fragments"
 
-export const createConversation = graphql(`
+export const createConversation = gql`
   mutation createConversation($input: [ConversationMemberId!]!) {
     createConversation(input: $input) {
       message
     }
   }
-`)
+`
 
 export const conversations = gql`
   query conversations {
@@ -31,8 +30,8 @@ export const conversationCreated = gql`
 /**
  *  INPUTS
  */
-graphql(`
+gql`
   input ConversationMemberId {
     id: String!
   }
-`)
+`

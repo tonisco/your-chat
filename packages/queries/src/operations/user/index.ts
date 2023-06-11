@@ -1,14 +1,14 @@
-import { graphql } from "../../types/gql/gql"
+import { gql } from "@apollo/client"
 
-export const createUsername = graphql(`
+export const createUsername = gql`
   mutation createUsername($username: String!) {
     createUsername(username: $username) {
       message
     }
   }
-`)
+`
 
-export const loginUser = graphql(`
+export const loginUser = gql`
   mutation loginUser(
     $email: String!
     $username: String
@@ -24,9 +24,9 @@ export const loginUser = graphql(`
       token
     }
   }
-`)
+`
 
-export const findUsers = graphql(`
+export const findUsers = gql`
   query findUsers($username: String!) {
     findUsers(username: $username) {
       id
@@ -34,4 +34,4 @@ export const findUsers = graphql(`
       image
     }
   }
-`)
+`
