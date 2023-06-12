@@ -9,3 +9,17 @@
 .scale:active:not(:disabled) {
   scale: 0.95;
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: "4px" !important;
+}
+.scrollbar::-webkit-scrollbar-track {
+  width: "6px" !important;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: "100px" !important;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  visibility: visible !important;
+}
