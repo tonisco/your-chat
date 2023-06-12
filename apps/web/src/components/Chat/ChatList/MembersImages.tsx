@@ -17,7 +17,7 @@ const MembersImages = ({
 }: Props) => {
   console.log(hasReadlastMessage)
   return (
-    <Flex minW={"10"} maxWidth={"14"} pos={"relative"}>
+    <Flex pos={"relative"}>
       {conversationMembers
         .filter((member) => member.user.id !== session?.user.id)
         .slice(0, 3)
@@ -25,7 +25,7 @@ const MembersImages = ({
           <Avatar
             key={i}
             size={"sm"}
-            css={{ transform: `translateX(-${i * 50}%)` }}
+            ml={`-${i && 16}px`}
             src={conversationMembers[i].user.image ?? undefined}
           />
         ))}

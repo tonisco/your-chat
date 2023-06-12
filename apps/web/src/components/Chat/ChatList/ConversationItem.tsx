@@ -39,9 +39,9 @@ const ConversationItem = ({ conversation, session }: Props) => {
 
   return (
     <Flex
-      gap={4}
+      gap={2}
       py="3"
-      pl="1"
+      px="2"
       _hover={{ backgroundColor: activeBg }}
       rounded={"md"}
       cursor={"pointer"}
@@ -52,7 +52,7 @@ const ConversationItem = ({ conversation, session }: Props) => {
         session={session}
         hasReadlastMessage={member?.hasReadlastMessage}
       />
-      <Stack gap={2} flex={1} maxW={"76%"}>
+      <Stack gap={2} flex={1}>
         <Flex alignItems={"center"} gap={2}>
           <Text
             flex={"1"}
