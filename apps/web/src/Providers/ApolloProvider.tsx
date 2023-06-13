@@ -32,7 +32,7 @@ const makeClient = () => {
       ? new GraphQLWsLink(
           createClient({
             url: process.env.NEXT_PUBLIC_WS_URL ?? "",
-            connectionParams: { session: getSession() },
+            connectionParams: async () => ({ session: await getSession() }),
           }),
         )
       : null

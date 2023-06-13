@@ -41,7 +41,7 @@ const ConversationItem = ({ conversation, session }: Props) => {
     <Flex
       gap={2}
       py="3"
-      px="2"
+      px="3"
       _hover={{ backgroundColor: activeBg }}
       rounded={"md"}
       cursor={"pointer"}
@@ -67,7 +67,7 @@ const ConversationItem = ({ conversation, session }: Props) => {
               .join(", ")}
           </Text>
 
-          <Text fontSize={"sm"} color={subText}>
+          <Text fontSize={"xs"} color={subText}>
             {formatRelative(new Date(updatedAt), new Date(), {
               locale: {
                 ...enUS,
