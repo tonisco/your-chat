@@ -15,13 +15,12 @@ const MembersImages = ({
   session,
   hasReadlastMessage,
 }: Props) => {
-  console.log(hasReadlastMessage)
   return (
     <Flex gap={2} alignItems={"center"}>
       {!hasReadlastMessage && (
         <Box w={"2"} h="2" rounded={"full"} bgColor={"green"} />
       )}
-      <Flex pos={"relative"}>
+      <Flex>
         {conversationMembers
           .filter((member) => member.user.id !== session?.user.id)
           .slice(0, 3)

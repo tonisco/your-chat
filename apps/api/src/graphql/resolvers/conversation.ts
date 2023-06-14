@@ -34,6 +34,7 @@ const resolvers: Resolvers = {
             conversationMembers: { include: { user: true } },
             latestMessage: { include: { sender: true } },
           },
+          orderBy: { updatedAt: "desc" },
         })
 
         return allConversations

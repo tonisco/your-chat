@@ -25,9 +25,9 @@ const UsersInChat = ({ removeFromChat, inChat, create, loading }: Props) => {
 
   return (
     <VStack mt="4" space="5">
-      <HStack>
+      <HStack space={2} flexWrap="wrap">
         {inChat.map((val) => (
-          <Pressable key={val.id} onPress={() => removeFromChat(val.id)}>
+          <Pressable key={val.id} onPress={() => removeFromChat(val.id)} mb="2">
             <HStack
               rounded="md"
               bgColor={bg}

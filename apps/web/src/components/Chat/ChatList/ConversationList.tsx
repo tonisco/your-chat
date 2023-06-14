@@ -71,7 +71,6 @@ const ConversationList = () => {
           visibility: "hidden",
         },
       }}
-      bgColor={""}
       onMouseEnter={mouseEvents}
       onMouseLeave={mouseEvents}
     >
