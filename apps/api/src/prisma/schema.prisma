@@ -58,7 +58,7 @@ model VerificationToken {
 
 model Conversation {
     id                        String               @id @default(cuid())
-    admin                     User?                @relation(fields: [adminId], references: [id])
+    admin                     User?                @relation(fields: [adminId], references: [id], onDelete: Cascade)
     adminId                   String
     conversationMembers       ConversationMember[]
     conversationMembersNumber Int
