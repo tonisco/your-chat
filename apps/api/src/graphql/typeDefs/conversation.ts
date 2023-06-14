@@ -6,7 +6,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createConversation(input: [ConversationMemberId!]!): Message!
+    createConversation(
+      input: [ConversationMemberId!]!
+    ): createConversationReturn!
   }
 
   type Subscription {
@@ -15,6 +17,11 @@ const typeDefs = gql`
 
   input ConversationMemberId {
     id: String!
+  }
+
+  type createConversationReturn {
+    message: String!
+    conversationId: String
   }
 
   type Conversation {

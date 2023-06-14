@@ -6,6 +6,7 @@ export const createConversation = gql`
   mutation createConversation($input: [ConversationMemberId!]!) {
     createConversation(input: $input) {
       message
+      conversationId
     }
   }
 `

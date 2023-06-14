@@ -1,4 +1,5 @@
 import { useLazyQuery, useMutation } from "@apollo/client"
+import { useNavigation } from "@react-navigation/native"
 import {
   Button,
   Center,
@@ -17,8 +18,11 @@ import UserList from "./UserList"
 import UsersInChat from "./UsersInChat"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError, ToastSuccess } from "../../../Utils/Toast"
+import { HomeNavigator } from "../../../types/screen"
 
 const CreateChat = () => {
+  const { navigate } = useNavigation<HomeNavigator>()
+
   const { user } = useAuthContext()
 
   const [showModal, setShowModal] = useState(false)
@@ -71,13 +75,16 @@ const CreateChat = () => {
         })
       },
       onCompleted(data) {
+        const { message, conversationId } = data.createConversation
+
         Toast.show({
-          render: () => (
-            <ToastSuccess message={data.createConversation.message} />
-          ),
+          render: () => <ToastSuccess message={message} />,
           placement: "top",
         })
+
         clearData()
+
+        if (conversationId) navigate("Details", { id: conversationId })
       },
     },
   )

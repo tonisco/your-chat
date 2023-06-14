@@ -131,7 +131,7 @@ const resolvers: Resolvers = {
         })
       }
 
-      return { message: "Chat created" }
+      return { message: "Chat created", conversationId: conversation?.id }
     },
   },
   Subscription: {

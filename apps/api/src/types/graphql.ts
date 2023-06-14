@@ -67,7 +67,7 @@ export type MessageType =
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createConversation: Message;
+  createConversation: CreateConversationReturn;
   createUsername: Message;
   loginUser: UserWithToken;
 };
@@ -123,6 +123,12 @@ export type UserWithToken = {
   name?: Maybe<Scalars['String']['output']>;
   token: Scalars['String']['output'];
   username?: Maybe<Scalars['String']['output']>;
+};
+
+export type CreateConversationReturn = {
+  __typename?: 'createConversationReturn';
+  conversationId?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
 };
 
 
@@ -212,6 +218,7 @@ export type ResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   UserWithToken: ResolverTypeWrapper<UserWithToken>;
+  createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -231,6 +238,7 @@ export type ResolversParentTypes = {
   Subscription: {};
   User: User;
   UserWithToken: UserWithToken;
+  createConversationReturn: CreateConversationReturn;
 };
 
 export type ConversationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Conversation'] = ResolversParentTypes['Conversation']> = {
@@ -277,7 +285,7 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createConversation?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
+  createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
 };
@@ -310,6 +318,12 @@ export type UserWithTokenResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateConversationReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['createConversationReturn'] = ResolversParentTypes['createConversationReturn']> = {
+  conversationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Conversation?: ConversationResolvers<ContextType>;
   ConversationMembers?: ConversationMembersResolvers<ContextType>;
@@ -322,5 +336,6 @@ export type Resolvers<ContextType = any> = {
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserWithToken?: UserWithTokenResolvers<ContextType>;
+  createConversationReturn?: CreateConversationReturnResolvers<ContextType>;
 };
 

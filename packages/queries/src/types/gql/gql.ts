@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n": types.CreateConversationDocument,
+    "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n": types.CreateConversationDocument,
     "\n  query conversations {\n    conversations {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationsDocument,
     "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationCreatedDocument,
     "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...LatestMessageFields\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment LatestMessageFields on LatestMessage {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n": types.ConversationMembersFieldsFragmentDoc,
@@ -39,7 +39,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n    }\n  }\n"];
+export function graphql(source: "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n"): (typeof documents)["\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

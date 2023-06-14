@@ -1,8 +1,9 @@
 "use client"
 import React, { useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { createConversation, findUsers } from "queries"
-import { FoundUsers, Query } from "queries/src/types"
+import { FoundUsers, Mutation, Query } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useLazyQuery, useMutation } from "@apollo/client"
@@ -25,6 +26,8 @@ import UsersInChat from "./UsersInChat"
 
 const CreateChat = () => {
   const { data: userSession } = useSession()
+
+  const { push } = useRouter()
 
   const modalCloseButton = useRef<HTMLButtonElement | null>(null)
 
@@ -63,16 +66,23 @@ const CreateChat = () => {
     setSelectedUsers([])
   }
 
-  const [mutate, { loading: createLoading }] = useMutation(createConversation, {
-    onError(err) {
-      toast.error(err.message)
+  const [mutate, { loading: createLoading }] = useMutation<Mutation>(
+    createConversation,
+    {
+      onError(err) {
+        toast.error(err.message)
+      },
+      onCompleted(data) {
+        const { message, conversationId } = data.createConversation
+        toast.success(message)
+        clearData()
+        modalCloseButton.current?.click()
+        if (conversationId) {
+          push(`/?id:${conversationId}`)
+        }
+      },
     },
-    onCompleted(data) {
-      toast.success(data.createConversation.message)
-      clearData()
-      modalCloseButton.current?.click()
-    },
-  })
+  )
 
   const create = () => {
     mutate({
