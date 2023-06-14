@@ -18,6 +18,7 @@ const variables = z.object({
   MOBILE_CLIENT_ID: z.string(),
   SERVER_URL: z.string(),
   WS_URL: z.string(),
+  NODE_ENV: z.string().optional(),
 })
 
 const extra = Constants.manifest?.extra
@@ -33,4 +34,21 @@ if (!getVariables.success) {
   throw new Error("Invalid Environment Variables")
 }
 
-export const env = getVariables.data
+let { MOBILE_CLIENT_ID, NODE_ENV, SERVER_URL, WS_URL } = getVariables.data
+
+if (NODE_ENV === "development") {
+  if (Constants.manifest?.debuggerHost) {
+    const devHost = Constants.manifest.debuggerHost.split(":")[0]
+
+    SERVER_URL = SERVER_URL.split("localhost").join(devHost)
+
+    WS_URL = WS_URL.split("localhost").join(devHost)
+  } else {
+    console.error(
+      "Cannot get the development host, You will have to configure it manually",
+    )
+    throw new Error("Invalid host url")
+  }
+}
+
+export { MOBILE_CLIENT_ID, SERVER_URL, WS_URL }

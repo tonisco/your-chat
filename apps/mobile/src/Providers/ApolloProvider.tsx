@@ -13,7 +13,7 @@ import { createClient } from "graphql-ws"
 import React from "react"
 
 import { useAuthContext } from "./AuthProvider"
-import { env } from "../Utils/env"
+import { SERVER_URL, WS_URL } from "../Utils/env"
 
 type Props = {
   children: React.ReactNode
@@ -31,13 +31,13 @@ const ApolloProvider = ({ children }: Props) => {
   })
 
   const httpLink = new HttpLink({
-    uri: env.SERVER_URL,
+    uri: SERVER_URL,
     headers: { authorization: `Bearer ${user?.token ?? ""}` },
   })
 
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: env.WS_URL,
+      url: WS_URL,
       connectionParams: {
         session: { expires: "", user },
       },

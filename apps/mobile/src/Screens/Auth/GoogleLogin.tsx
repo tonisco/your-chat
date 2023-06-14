@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet, Image as Img, Alert } from "react-native"
 
 import { useAuthContext } from "../../Providers/AuthProvider"
-import { env } from "../../Utils/env"
+import { MOBILE_CLIENT_ID } from "../../Utils/env"
 
 type GetInfoResponse = {
   id: string
@@ -66,7 +66,7 @@ const GoogleLogin = () => {
   })
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: env.MOBILE_CLIENT_ID,
+    androidClientId: MOBILE_CLIENT_ID,
     redirectUri,
     scopes: ["profile", "email"],
   })

@@ -45,6 +45,8 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
     MOBILE_CLIENT_ID: process.env.MOBILE_CLIENT_ID,
     SERVER_URL: process.env.SERVER_URL,
+    WS_URL: process.env.WS_URL,
+    NODE_ENV: process.env.NODE_ENV,
   },
 })
 
