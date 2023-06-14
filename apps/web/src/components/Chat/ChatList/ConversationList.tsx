@@ -5,7 +5,7 @@ import { Query, Subscription } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useQuery } from "@apollo/client"
-import { Stack, useColorModeValue } from "@chakra-ui/react"
+import { Stack, Text, useColorModeValue } from "@chakra-ui/react"
 
 import ConversationItem from "./ConversationItem"
 import ConversationSkeleton from "./ConversationSkeleton"
@@ -74,15 +74,25 @@ const ConversationList = () => {
       onMouseEnter={mouseEvents}
       onMouseLeave={mouseEvents}
     >
-      {loading && <ConversationSkeleton />}
-      {data &&
-        data.conversations.map((conversation) => (
+      {loading &&
+        Array.from({ length: 4 }, (_, i) => (
+          <ConversationSkeleton key={i} length={4} index={i} />
+        ))}
+
+      {data?.conversations.length &&
+        data.conversations.map((conversation, i) => (
           <ConversationItem
             key={conversation.id}
             session={session}
             conversation={conversation}
+            index={i}
+            length={data.conversations.length}
           />
         ))}
+
+      {data?.conversations.length === 0 && (
+        <Text textAlign={"center"}>You have no open conversations</Text>
+      )}
     </Stack>
   )
 }

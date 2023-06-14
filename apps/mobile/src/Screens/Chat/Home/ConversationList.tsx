@@ -1,5 +1,12 @@
 import { useQuery } from "@apollo/client"
-import { Stack, Toast, FlatList, useColorModeValue, Divider } from "native-base"
+import {
+  Stack,
+  Toast,
+  FlatList,
+  useColorModeValue,
+  Divider,
+  Text,
+} from "native-base"
 import { conversationCreated, conversations } from "queries"
 import { Query, Subscription } from "queries/src/types"
 import React, { useCallback, useEffect } from "react"
@@ -48,8 +55,16 @@ const ConversationList = () => {
 
   return (
     <Stack overflowY="auto" mt="2" mb="14">
-      {loading && <ConversationSkeleton />}
-      {data?.conversations && (
+      {loading && (
+        <FlatList
+          data={Array.from({ length: 4 })}
+          renderItem={() => <ConversationSkeleton />}
+          keyExtractor={(_, i) => i.toString()}
+          ItemSeparatorComponent={() => <Divider bgColor={color} />}
+        />
+      )}
+
+      {data?.conversations.length && (
         <FlatList
           data={data.conversations}
           renderItem={({ item }) => (
@@ -58,6 +73,12 @@ const ConversationList = () => {
           keyExtractor={({ id }) => id}
           ItemSeparatorComponent={() => <Divider bgColor={color} />}
         />
+      )}
+
+      {data?.conversations.length === 0 && (
+        <Text textAlign="center" mt="4">
+          You have no open conversation
+        </Text>
       )}
     </Stack>
   )
