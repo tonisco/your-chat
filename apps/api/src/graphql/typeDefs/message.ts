@@ -1,12 +1,16 @@
 import { gql } from "graphql-tag"
 
 const typeDefs = gql`
+  type Query {
+    messages(conversationId: String!): [Message!]!
+  }
+
   enum MessageType {
     user
     bot
   }
 
-  type LatestMessage {
+  type Message {
     id: String!
     body: String!
     sender: User!

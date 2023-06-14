@@ -8,7 +8,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUsername(username: String!): Message!
+    createUsername(username: String!): MessageReturn!
   }
 
   type Mutation {
@@ -43,7 +43,7 @@ const typeDefs = gql`
     image: String
   }
 
-  type Message {
+  type MessageReturn {
     message: String!
   }
 `

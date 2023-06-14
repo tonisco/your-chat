@@ -26,7 +26,7 @@ const typeDefs = gql`
 
   type Conversation {
     id: String!
-    latestMessage: LatestMessage
+    latestMessage: Message
     conversationMembers: [ConversationMembers!]!
     createdAt: DateTime!
     updatedAt: DateTime!

@@ -23,7 +23,7 @@ export type Conversation = {
   conversationMembers: Array<ConversationMembers>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
-  latestMessage?: Maybe<LatestMessage>;
+  latestMessage?: Maybe<Message>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -46,8 +46,8 @@ export type FoundUsers = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
-export type LatestMessage = {
-  __typename?: 'LatestMessage';
+export type Message = {
+  __typename?: 'Message';
   body: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
@@ -56,8 +56,8 @@ export type LatestMessage = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type Message = {
-  __typename?: 'Message';
+export type MessageReturn = {
+  __typename?: 'MessageReturn';
   message: Scalars['String']['output'];
 };
 
@@ -68,7 +68,7 @@ export type MessageType =
 export type Mutation = {
   __typename?: 'Mutation';
   createConversation: CreateConversationReturn;
-  createUsername: Message;
+  createUsername: MessageReturn;
   loginUser: UserWithToken;
 };
 
@@ -94,11 +94,17 @@ export type Query = {
   __typename?: 'Query';
   conversations: Array<Conversation>;
   findUsers: Array<FoundUsers>;
+  messages: Array<Message>;
 };
 
 
 export type QueryFindUsersArgs = {
   username: Scalars['String']['input'];
+};
+
+
+export type QueryMessagesArgs = {
+  conversationId: Scalars['String']['input'];
 };
 
 export type Subscription = {
@@ -209,8 +215,8 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   FoundUsers: ResolverTypeWrapper<FoundUsers>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  LatestMessage: ResolverTypeWrapper<LatestMessage>;
   Message: ResolverTypeWrapper<Message>;
+  MessageReturn: ResolverTypeWrapper<MessageReturn>;
   MessageType: MessageType;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -230,8 +236,8 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   FoundUsers: FoundUsers;
   Int: Scalars['Int']['output'];
-  LatestMessage: LatestMessage;
   Message: Message;
+  MessageReturn: MessageReturn;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -245,7 +251,7 @@ export type ConversationResolvers<ContextType = any, ParentType extends Resolver
   conversationMembers?: Resolver<Array<ResolversTypes['ConversationMembers']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  latestMessage?: Resolver<Maybe<ResolversTypes['LatestMessage']>, ParentType, ContextType>;
+  latestMessage?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -269,7 +275,7 @@ export type FoundUsersResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LatestMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['LatestMessage'] = ResolversParentTypes['LatestMessage']> = {
+export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -279,20 +285,21 @@ export type LatestMessageResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
+export type MessageReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageReturn'] = ResolversParentTypes['MessageReturn']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
-  createUsername?: Resolver<ResolversTypes['Message'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
+  createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   conversations?: Resolver<Array<ResolversTypes['Conversation']>, ParentType, ContextType>;
   findUsers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
+  messages?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType, RequireFields<QueryMessagesArgs, 'conversationId'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -329,8 +336,8 @@ export type Resolvers<ContextType = any> = {
   ConversationMembers?: ConversationMembersResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   FoundUsers?: FoundUsersResolvers<ContextType>;
-  LatestMessage?: LatestMessageResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
+  MessageReturn?: MessageReturnResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
