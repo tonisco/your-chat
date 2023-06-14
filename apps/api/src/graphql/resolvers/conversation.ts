@@ -125,7 +125,9 @@ const resolvers: Resolvers = {
         })
 
       if (conversation) {
-        await pubsub.publish(CONVERSATION_CREATED, { conversation })
+        await pubsub.publish(CONVERSATION_CREATED, {
+          conversationCreated: conversation,
+        })
       }
 
       return { message: "Chat created" }
@@ -135,12 +137,18 @@ const resolvers: Resolvers = {
     conversationCreated: {
       subscribe: withFilter(
         (_, args, ctx: SubscriptionCtx) =>
-          ctx.pubsub.asyncIterator(CONVERSATION_CREATED),
-        (val: { conversation: Conversation }, args, ctx: SubscriptionCtx) => {
+          ctx.pubsub.asyncIterator([CONVERSATION_CREATED]),
+        (
+          val: { conversationCreated: Conversation },
+          args,
+          ctx: SubscriptionCtx,
+        ) => {
           const { session } = ctx
+
           if (!session) throw new GraphQLError("Not authorized")
-          return val.conversation.conversationMembers.some(
-            (member) => member.id === session.user.id,
+
+          return val.conversationCreated.conversationMembers.some(
+            (member) => member.user.id === session.user.id,
           )
         },
       ),

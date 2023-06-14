@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { conversations } from "queries"
-import { Query } from "queries/src/types"
+import { conversationCreated, conversations } from "queries"
+import { Query, Subscription } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useQuery } from "@apollo/client"
@@ -17,10 +17,11 @@ const ConversationList = () => {
     "rgba(255, 255, 255, 0.08)",
   )
 
-  const { data, loading } = useQuery<Query>(conversations, {
+  const { data, loading, subscribeToMore } = useQuery<Query>(conversations, {
     onError(error) {
       toast.error(error.message)
     },
+    fetchPolicy: "network-only",
   })
 
   const mouseEvents = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -29,6 +30,28 @@ const ConversationList = () => {
     else if (e.type === "mouseleave")
       e.currentTarget.classList.remove("scrollbar-visible")
   }
+
+  const subscribe = useCallback(
+    () =>
+      subscribeToMore<Subscription>({
+        document: conversationCreated,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+
+          return Object.assign({}, prev, {
+            conversations: [
+              subscriptionData.data.conversationCreated,
+              ...prev.conversations,
+            ],
+          })
+        },
+      }),
+    [subscribeToMore],
+  )
+
+  useEffect(() => {
+    subscribe()
+  }, [subscribe])
 
   return (
     <Stack

@@ -37,7 +37,6 @@ const makeClient = () => {
         )
       : null
 
-  // app router fix
   const apolloLink = ApolloLink.from([
     new SSRMultipartLink({ stripDefer: true }),
     httpLink,

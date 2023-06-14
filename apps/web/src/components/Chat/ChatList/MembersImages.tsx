@@ -17,29 +17,23 @@ const MembersImages = ({
 }: Props) => {
   console.log(hasReadlastMessage)
   return (
-    <Flex pos={"relative"}>
-      {conversationMembers
-        .filter((member) => member.user.id !== session?.user.id)
-        .slice(0, 3)
-        .map((_, i) => (
-          <Avatar
-            key={i}
-            size={"sm"}
-            ml={`-${i && 16}px`}
-            src={conversationMembers[i].user.image ?? undefined}
-          />
-        ))}
+    <Flex gap={2} alignItems={"center"}>
       {!hasReadlastMessage && (
-        <Box
-          position={"absolute"}
-          bottom={"1"}
-          left={"0"}
-          w={"2"}
-          h="2"
-          rounded={"full"}
-          bgColor={"green"}
-        />
+        <Box w={"2"} h="2" rounded={"full"} bgColor={"green"} />
       )}
+      <Flex pos={"relative"}>
+        {conversationMembers
+          .filter((member) => member.user.id !== session?.user.id)
+          .slice(0, 3)
+          .map((_, i) => (
+            <Avatar
+              key={i}
+              size={"sm"}
+              ml={`-${i && 16}px`}
+              src={conversationMembers[i].user.image ?? undefined}
+            />
+          ))}
+      </Flex>
     </Flex>
   )
 }

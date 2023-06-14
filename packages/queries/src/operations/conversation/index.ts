@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client"
 import fragments from "../fragments"
+import { graphql } from "../../types/gql"
 
 export const createConversation = gql`
   mutation createConversation($input: [ConversationMemberId!]!) {
