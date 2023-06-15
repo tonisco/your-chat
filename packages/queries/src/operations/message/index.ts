@@ -16,6 +16,15 @@ export const sendMessage = gql`
   }
 `
 
+export const messageSent = gql`
+  subscription messageSent($conversationId: String!) {
+    messageSent(conversationId: $conversationId) {
+      ...MessageField
+    }
+  }
+  ${fragments}
+`
+
 gql`
   input createMessageInput {
     body: String!

@@ -28,6 +28,14 @@ export const conversationCreated = gql`
   }
   ${fragments}
 `
+export const conversationUpdated = gql`
+  subscription conversationUpdated {
+    conversationUpdated {
+      ...ConversationFields
+    }
+  }
+  ${fragments}
+`
 
 /**
  *  INPUTS

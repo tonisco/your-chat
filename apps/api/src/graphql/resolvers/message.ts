@@ -103,7 +103,10 @@ const resolver: ResolverType = {
               },
             },
           },
-          include: { conversationMembers: { include: { user: true } } },
+          include: {
+            conversationMembers: { include: { user: true } },
+            latestMessage: { include: { sender: true } },
+          },
         })
 
         const messageSent: Message = newMessage

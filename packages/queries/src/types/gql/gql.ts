@@ -16,9 +16,11 @@ const documents = {
     "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n": types.CreateConversationDocument,
     "\n  query conversations {\n    conversations {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationsDocument,
     "\n  subscription conversationCreated {\n    conversationCreated {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationCreatedDocument,
+    "\n  subscription conversationUpdated {\n    conversationUpdated {\n      ...ConversationFields\n    }\n  }\n  \n": types.ConversationUpdatedDocument,
     "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...MessageField\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment MessageField on Message {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n": types.ConversationMembersFieldsFragmentDoc,
     "\n  query messages($conversationId: String!) {\n    messages(conversationId: $conversationId) {\n      ...MessageField\n    }\n  }\n  \n": types.MessagesDocument,
     "\n  mutation sendMessage($input: createMessageInput!) {\n    sendMessage(input: $input)\n  }\n": types.SendMessageDocument,
+    "\n  subscription messageSent($conversationId: String!) {\n    messageSent(conversationId: $conversationId) {\n      ...MessageField\n    }\n  }\n  \n": types.MessageSentDocument,
     "\n  mutation createUsername($username: String!) {\n    createUsername(username: $username) {\n      message\n    }\n  }\n": types.CreateUsernameDocument,
     "\n  mutation loginUser(\n    $email: String!\n    $username: String\n    $name: String!\n    $image: String!\n  ) {\n    loginUser(email: $email, username: $username, name: $name, image: $image) {\n      id\n      email\n      username\n      name\n      image\n      token\n    }\n  }\n": types.LoginUserDocument,
     "\n  query findUsers($username: String!) {\n    findUsers(username: $username) {\n      id\n      username\n      image\n    }\n  }\n": types.FindUsersDocument,
@@ -53,6 +55,10 @@ export function graphql(source: "\n  subscription conversationCreated {\n    con
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  subscription conversationUpdated {\n    conversationUpdated {\n      ...ConversationFields\n    }\n  }\n  \n"): (typeof documents)["\n  subscription conversationUpdated {\n    conversationUpdated {\n      ...ConversationFields\n    }\n  }\n  \n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...MessageField\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment MessageField on Message {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"): (typeof documents)["\n  fragment ConversationMembersFields on ConversationMembers {\n    id\n    hasReadlastMessage\n    unreadMessageNumber\n    user {\n      ...UserFields\n    }\n  }\n\n  fragment ConversationFields on Conversation {\n    id\n    createdAt\n    updatedAt\n    conversationMembers {\n      ...ConversationMembersFields\n    }\n    latestMessage {\n      ...MessageField\n    }\n  }\n\n  fragment UserFields on User {\n    id\n    email\n    username\n    name\n    image\n  }\n\n  fragment MessageField on Message {\n    id\n    body\n    type\n    createdAt\n    updatedAt\n    sender {\n      ...UserFields\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -62,6 +68,10 @@ export function graphql(source: "\n  query messages($conversationId: String!) {\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation sendMessage($input: createMessageInput!) {\n    sendMessage(input: $input)\n  }\n"): (typeof documents)["\n  mutation sendMessage($input: createMessageInput!) {\n    sendMessage(input: $input)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription messageSent($conversationId: String!) {\n    messageSent(conversationId: $conversationId) {\n      ...MessageField\n    }\n  }\n  \n"): (typeof documents)["\n  subscription messageSent($conversationId: String!) {\n    messageSent(conversationId: $conversationId) {\n      ...MessageField\n    }\n  }\n  \n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
