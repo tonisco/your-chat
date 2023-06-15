@@ -9,7 +9,7 @@ import {
   QueryResolvers,
 } from "../../types/graphql"
 import { Context, SubscriptionCtx } from "../../utils/context"
-import { CONVERSATION_CREATED } from "../../utils/events"
+import { CONVERSATION_CREATED, CONVERSATION_UPDATED } from "../../utils/events"
 import { isMember } from "../../utils/functions"
 
 type Resolvers = {
@@ -153,6 +153,21 @@ const resolvers: Resolvers = {
             val.conversationCreated.conversationMembers,
             session.user,
           )
+        },
+      ),
+    },
+    conversationUpdated: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator([CONVERSATION_UPDATED]),
+        (
+          _,
+          { conversationUpdated }: { conversationUpdated: Conversation },
+          { session }: SubscriptionCtx,
+        ) => {
+          if (!session?.user) throw new GraphQLError("Not authorized")
+
+          return isMember(conversationUpdated.conversationMembers, session.user)
         },
       ),
     },

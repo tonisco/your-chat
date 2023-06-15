@@ -1,12 +1,20 @@
 import { GraphQLError } from "graphql"
+import { withFilter } from "graphql-subscriptions"
 
-import { MutationResolvers, QueryResolvers } from "../../types/graphql"
-import { Context } from "../../utils/context"
+import {
+  Conversation,
+  Message,
+  MutationResolvers,
+  QueryResolvers,
+} from "../../types/graphql"
+import { Context, SubscriptionCtx } from "../../utils/context"
+import { CONVERSATION_UPDATED, MESSAGE_SENT } from "../../utils/events"
 import { isMember } from "../../utils/functions"
 
 type ResolverType = {
   Query: Pick<QueryResolvers<Context>, "messages">
   Mutation: Pick<MutationResolvers<Context>, "sendMessage">
+  Subscription: any
 }
 const resolver: ResolverType = {
   Query: {
@@ -46,7 +54,7 @@ const resolver: ResolverType = {
   },
   Mutation: {
     sendMessage: async (_, args, ctx) => {
-      const { prisma, session } = ctx
+      const { prisma, session, pubsub } = ctx
 
       if (!session?.user) throw new GraphQLError("Not authorized")
 
@@ -78,9 +86,10 @@ const resolver: ResolverType = {
             conversationId,
             senderId: session.user.id,
           },
+          include: { sender: true },
         })
 
-        await prisma.conversation.update({
+        const conversation = await prisma.conversation.update({
           where: { id: conversationId },
           data: {
             latestMessageId: newMessage.id,
@@ -94,13 +103,38 @@ const resolver: ResolverType = {
               },
             },
           },
+          include: { conversationMembers: { include: { user: true } } },
         })
+
+        const messageSent: Message = newMessage
+
+        const conversationUpdated: Conversation = conversation
+
+        pubsub.publish(MESSAGE_SENT, { messageSent })
+        pubsub.publish(CONVERSATION_UPDATED, { conversationUpdated })
       } catch (error: any) {
         throw new GraphQLError(error?.message)
       }
 
       return true
     },
+  },
+  Subscription: {
+    messageSent: withFilter(
+      (_, args, ctx: SubscriptionCtx) =>
+        ctx.pubsub.asyncIterator([MESSAGE_SENT]),
+      (
+        payload: { messageSent: Message },
+        args: { conversationId: string },
+        ctx: SubscriptionCtx,
+      ) => {
+        const { session } = ctx
+
+        if (!session?.user) throw new GraphQLError("Not authorized")
+
+        return payload.messageSent.conversationId === args.conversationId
+      },
+    ),
   },
 }
 

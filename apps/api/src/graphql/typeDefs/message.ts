@@ -9,6 +9,10 @@ const typeDefs = gql`
     sendMessage(input: createMessageInput!): Boolean
   }
 
+  type Subscription {
+    messageSent(conversationId: String!): Message!
+  }
+
   enum MessageType {
     user
     bot
@@ -19,6 +23,7 @@ const typeDefs = gql`
     body: String!
     sender: User!
     type: MessageType!
+    conversationId: String!
     createdAt: DateTime!
     updatedAt: DateTime!
   }

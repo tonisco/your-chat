@@ -15,6 +15,10 @@ const typeDefs = gql`
     conversationCreated: Conversation!
   }
 
+  type Subscription {
+    conversationUpdated: Conversation!
+  }
+
   input ConversationMemberId {
     id: String!
   }
