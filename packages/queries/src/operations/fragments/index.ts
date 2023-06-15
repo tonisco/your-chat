@@ -18,7 +18,7 @@ const fragments = gql`
       ...ConversationMembersFields
     }
     latestMessage {
-      ...LatestMessageFields
+      ...MessageField
     }
   }
 
@@ -30,7 +30,7 @@ const fragments = gql`
     image
   }
 
-  fragment LatestMessageFields on LatestMessage {
+  fragment MessageField on Message {
     id
     body
     type
