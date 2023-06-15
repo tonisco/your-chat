@@ -2,6 +2,7 @@ import { GraphQLError } from "graphql"
 
 import { MutationResolvers, QueryResolvers } from "../../types/graphql"
 import { Context } from "../../utils/context"
+import { isMember } from "../../utils/functions"
 
 type ResolverType = {
   Query: Pick<QueryResolvers<Context>, "messages">
@@ -24,11 +25,9 @@ const resolver: ResolverType = {
         if (!exist) throw new GraphQLError("Conversation was not found")
 
         // check if user is a member
-        const isMember = exist.conversationMembers.some(
-          (member) => member.user.id === session.user.id,
-        )
+        const checkMember = isMember(exist.conversationMembers, session.user)
 
-        if (!isMember)
+        if (!checkMember)
           throw new GraphQLError(
             "You are not allowed to send message to this conversation",
           )
@@ -65,11 +64,9 @@ const resolver: ResolverType = {
         if (!exist) throw new GraphQLError("Conversation does not exist")
 
         // check if user is a member
-        const isMember = exist.conversationMembers.some(
-          (member) => member.user.id === session.user.id,
-        )
+        const checkMember = isMember(exist.conversationMembers, session.user)
 
-        if (!isMember)
+        if (!checkMember)
           throw new GraphQLError(
             "You are not allowed to send message to this conversation",
           )

@@ -10,6 +10,7 @@ import {
 } from "../../types/graphql"
 import { Context, SubscriptionCtx } from "../../utils/context"
 import { CONVERSATION_CREATED } from "../../utils/events"
+import { isMember } from "../../utils/functions"
 
 type Resolvers = {
   Mutation: Pick<MutationResolvers<Context>, "createConversation">
@@ -148,8 +149,9 @@ const resolvers: Resolvers = {
 
           if (!session) throw new GraphQLError("Not authorized")
 
-          return val.conversationCreated.conversationMembers.some(
-            (member) => member.user.id === session.user.id,
+          return isMember(
+            val.conversationCreated.conversationMembers,
+            session.user,
           )
         },
       ),

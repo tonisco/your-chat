@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 
 const pubsub = new PubSub()
 
-type Session = {
+export type Session = {
   expires: string
   user: {
     email: string | null
