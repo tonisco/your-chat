@@ -5,6 +5,10 @@ const typeDefs = gql`
     messages(conversationId: String!): [Message!]!
   }
 
+  type Mutation {
+    sendMessage(input: createMessageInput!): Boolean
+  }
+
   enum MessageType {
     user
     bot
@@ -17,6 +21,11 @@ const typeDefs = gql`
     type: MessageType!
     createdAt: DateTime!
     updatedAt: DateTime!
+  }
+
+  input createMessageInput {
+    body: String!
+    conversationId: String!
   }
 `
 

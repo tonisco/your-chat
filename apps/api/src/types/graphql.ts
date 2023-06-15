@@ -70,6 +70,7 @@ export type Mutation = {
   createConversation: CreateConversationReturn;
   createUsername: MessageReturn;
   loginUser: UserWithToken;
+  sendMessage?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -88,6 +89,11 @@ export type MutationLoginUserArgs = {
   image: Scalars['String']['input'];
   name: Scalars['String']['input'];
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSendMessageArgs = {
+  input: CreateMessageInput;
 };
 
 export type Query = {
@@ -135,6 +141,11 @@ export type CreateConversationReturn = {
   __typename?: 'createConversationReturn';
   conversationId?: Maybe<Scalars['String']['output']>;
   message: Scalars['String']['output'];
+};
+
+export type CreateMessageInput = {
+  body: Scalars['String']['input'];
+  conversationId: Scalars['String']['input'];
 };
 
 
@@ -225,6 +236,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   UserWithToken: ResolverTypeWrapper<UserWithToken>;
   createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
+  createMessageInput: CreateMessageInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -245,6 +257,7 @@ export type ResolversParentTypes = {
   User: User;
   UserWithToken: UserWithToken;
   createConversationReturn: CreateConversationReturn;
+  createMessageInput: CreateMessageInput;
 };
 
 export type ConversationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Conversation'] = ResolversParentTypes['Conversation']> = {
@@ -294,6 +307,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
