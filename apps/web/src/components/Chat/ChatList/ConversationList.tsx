@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { conversationCreated, conversations } from "queries"
-import { Query, Subscription } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useQuery } from "@apollo/client"
@@ -17,7 +16,7 @@ const ConversationList = () => {
     "rgba(255, 255, 255, 0.08)",
   )
 
-  const { data, loading, subscribeToMore } = useQuery<Query>(conversations, {
+  const { data, loading, subscribeToMore } = useQuery(conversations, {
     onError(error) {
       toast.error(error.message)
     },
@@ -33,7 +32,7 @@ const ConversationList = () => {
 
   const subscribe = useCallback(
     () =>
-      subscribeToMore<Subscription>({
+      subscribeToMore({
         document: conversationCreated,
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev

@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { createConversation, findUsers } from "queries"
-import { FoundUsers, Mutation, Query } from "queries/src/types"
+import { FoundUsers } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
 import { useLazyQuery, useMutation } from "@apollo/client"
@@ -45,7 +45,7 @@ const CreateChat = () => {
   const removeFromChat = (id: string) =>
     setSelectedUsers(selectedUsers.filter((member) => member.id !== id))
 
-  const [query, { loading }] = useLazyQuery<Query>(findUsers, {
+  const [query, { loading }] = useLazyQuery(findUsers, {
     onError(err) {
       toast.error(err.message)
     },
@@ -66,23 +66,20 @@ const CreateChat = () => {
     setSelectedUsers([])
   }
 
-  const [mutate, { loading: createLoading }] = useMutation<Mutation>(
-    createConversation,
-    {
-      onError(err) {
-        toast.error(err.message)
-      },
-      onCompleted(data) {
-        const { message, conversationId } = data.createConversation
-        toast.success(message)
-        clearData()
-        modalCloseButton.current?.click()
-        if (conversationId) {
-          push(`/?id:${conversationId}`)
-        }
-      },
+  const [mutate, { loading: createLoading }] = useMutation(createConversation, {
+    onError(err) {
+      toast.error(err.message)
     },
-  )
+    onCompleted(data) {
+      const { message, conversationId } = data.createConversation
+      toast.success(message)
+      clearData()
+      modalCloseButton.current?.click()
+      if (conversationId) {
+        push(`/?id:${conversationId}`)
+      }
+    },
+  })
 
   const create = () => {
     mutate({

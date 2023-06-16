@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation"
 import { Session } from "next-auth"
 import { signIn } from "next-auth/react"
 import { createUsername } from "queries"
-import { Mutation } from "queries/src/types"
 import toast from "react-hot-toast"
 
 import { useMutation } from "@apollo/client"
@@ -34,7 +33,7 @@ const Auth = ({ session }: Props) => {
   const buttonBg1 = useColorModeValue("gray.900", "whiteAlpha.400")
   const logo = useColorModeValue("brand.green", "brand.greenDark")
 
-  const [create, { loading }] = useMutation<Mutation>(createUsername, {
+  const [create, { loading }] = useMutation(createUsername, {
     onError(error) {
       toast.error(error.message)
     },
