@@ -11,7 +11,6 @@ import {
   Button,
 } from "native-base"
 import { loginUser } from "queries"
-import { Mutation } from "queries/src/types"
 import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet, Image as Img, Alert } from "react-native"
 
@@ -38,7 +37,7 @@ const GoogleLogin = () => {
 
   const { saveUser } = useAuthContext()
 
-  const [userLogin] = useMutation<Mutation>(loginUser, {
+  const [userLogin] = useMutation(loginUser, {
     async onCompleted(data) {
       const { id, email, image, name, username, token } = data.loginUser
       await saveUser({

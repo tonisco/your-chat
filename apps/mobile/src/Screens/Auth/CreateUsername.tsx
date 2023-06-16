@@ -9,7 +9,6 @@ import {
   useToast,
 } from "native-base"
 import { createUsername } from "queries"
-import { Mutation } from "queries/src/types"
 import React, { useState } from "react"
 import { Alert, ScrollView } from "react-native"
 
@@ -27,7 +26,7 @@ const CreateUsername = () => {
 
   const { updateUsername } = useAuthContext()
 
-  const [create, { loading }] = useMutation<Mutation>(createUsername, {
+  const [create, { loading }] = useMutation(createUsername, {
     async onCompleted(data) {
       await updateUsername(username)
       toast.show({

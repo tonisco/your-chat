@@ -8,7 +8,6 @@ import {
   Text,
 } from "native-base"
 import { conversationCreated, conversations } from "queries"
-import { Query, Subscription } from "queries/src/types"
 import React, { useCallback, useEffect } from "react"
 
 import ConversationItem from "./ConversationItem"
@@ -21,7 +20,7 @@ const ConversationList = () => {
 
   const color = useColorModeValue("light.200", "dark.200")
 
-  const { data, loading, subscribeToMore } = useQuery<Query>(conversations, {
+  const { data, loading, subscribeToMore } = useQuery(conversations, {
     onError(error) {
       Toast.show({
         placement: "top",
@@ -33,7 +32,7 @@ const ConversationList = () => {
 
   const subscribe = useCallback(
     () =>
-      subscribeToMore<Subscription>({
+      subscribeToMore({
         document: conversationCreated,
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev

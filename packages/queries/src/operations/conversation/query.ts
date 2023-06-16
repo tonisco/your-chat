@@ -23,6 +23,7 @@ export const conversations = graphql(`
         body
         type
         createdAt
+        conversationId
         updatedAt
         sender {
           id
