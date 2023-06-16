@@ -58,9 +58,7 @@ const resolver: ResolverType = {
 
       if (!session?.user) throw new GraphQLError("Not authorized")
 
-      const {
-        input: { body, conversationId },
-      } = args
+      const { body, conversationId } = args
 
       try {
         //  check if conversation exist

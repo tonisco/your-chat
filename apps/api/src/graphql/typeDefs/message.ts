@@ -6,7 +6,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    sendMessage(input: createMessageInput!): Boolean
+    sendMessage(body: String!, conversationId: String!): Boolean
   }
 
   type Subscription {
