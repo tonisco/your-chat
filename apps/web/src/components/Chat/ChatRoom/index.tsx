@@ -1,8 +1,8 @@
 "use client"
 
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { messages } from "queries"
+import { messageSent, messages } from "queries"
 
 import { useQuery } from "@apollo/client"
 import { Stack } from "@chakra-ui/react"
@@ -18,13 +18,37 @@ const ChatRoom = () => {
 
   const id = searchParams.get("id")
 
-  const { data, loading } = useQuery(messages, {
+  const { data, loading, subscribeToMore } = useQuery(messages, {
     variables: { conversationId: id ?? "" },
     skip: id ? false : true,
     onError(error) {
       toast.error(error.message)
     },
   })
+
+  const newMessage = useCallback(
+    () =>
+      subscribeToMore({
+        document: messageSent,
+        variables: { conversationId: id ?? "" },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return prev
+          }
+
+          return Object.assign(
+            {},
+            { ...prev },
+            {
+              messages: [subscriptionData.data.messageSent, ...prev.messages],
+            },
+          )
+        },
+      }),
+    [],
+  )
+
+  useEffect(newMessage, [])
 
   return (
     <Stack

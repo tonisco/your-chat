@@ -121,21 +121,23 @@ const resolver: ResolverType = {
     },
   },
   Subscription: {
-    messageSent: withFilter(
-      (_, args, ctx: SubscriptionCtx) =>
-        ctx.pubsub.asyncIterator([MESSAGE_SENT]),
-      (
-        payload: { messageSent: Message },
-        args: { conversationId: string },
-        ctx: SubscriptionCtx,
-      ) => {
-        const { session } = ctx
+    messageSent: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator([MESSAGE_SENT]),
+        (
+          payload: { messageSent: Message },
+          args: { conversationId: string },
+          ctx: SubscriptionCtx,
+        ) => {
+          const { session } = ctx
 
-        if (!session?.user) throw new GraphQLError("Not authorized")
+          if (!session?.user) throw new GraphQLError("Not authorized")
 
-        return payload.messageSent.conversationId === args.conversationId
-      },
-    ),
+          return payload.messageSent.conversationId === args.conversationId
+        },
+      ),
+    },
   },
 }
 
