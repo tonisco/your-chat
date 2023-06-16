@@ -1,4 +1,5 @@
 import React from "react"
+import { useRouter } from "next/navigation"
 import { Session } from "next-auth"
 import { formatRelative } from "date-fns"
 import enUS from "date-fns/locale/en-US"
@@ -27,6 +28,8 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
   const readText = useColorModeValue("darkgray", "whiteAlpha.600")
   const activeBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
 
+  const { push } = useRouter()
+
   const member = conversationMembers.find(
     (member) => member.user.id === session?.user.id,
   )
@@ -49,6 +52,7 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
         rounded={"md"}
         cursor={"pointer"}
         alignItems={"center"}
+        onClick={() => push(`/?id=${conversation.id}`)}
       >
         <MembersImages
           conversationMembers={conversationMembers}
