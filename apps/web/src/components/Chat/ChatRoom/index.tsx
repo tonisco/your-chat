@@ -26,7 +26,7 @@ const ChatRoom = () => {
     },
   })
 
-  const newMessage = useCallback(
+  const newMessageSub = useCallback(
     () =>
       subscribeToMore({
         document: messageSent,
@@ -36,19 +36,15 @@ const ChatRoom = () => {
             return prev
           }
 
-          return Object.assign(
-            {},
-            { ...prev },
-            {
-              messages: [subscriptionData.data.messageSent, ...prev.messages],
-            },
-          )
+          return Object.assign({}, prev, {
+            messages: [subscriptionData.data.messageSent, ...prev.messages],
+          })
         },
       }),
     [],
   )
 
-  useEffect(newMessage, [])
+  useEffect(() => newMessageSub(), [])
 
   return (
     <Stack

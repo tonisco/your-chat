@@ -161,8 +161,8 @@ const resolvers: Resolvers = {
         (_, args, ctx: SubscriptionCtx) =>
           ctx.pubsub.asyncIterator([CONVERSATION_UPDATED]),
         (
-          _,
           { conversationUpdated }: { conversationUpdated: Conversation },
+          _,
           { session }: SubscriptionCtx,
         ) => {
           if (!session?.user) throw new GraphQLError("Not authorized")
