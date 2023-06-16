@@ -22,6 +22,7 @@ const ChatList = () => {
       height="100vh"
       p={"6"}
       position={"relative"}
+      flexShrink={0}
     >
       <CreateChat />
       <ConversationList />

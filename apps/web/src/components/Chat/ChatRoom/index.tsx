@@ -10,6 +10,7 @@ import { Stack } from "@chakra-ui/react"
 import Messages from "./Messages"
 import { useSession } from "next-auth/react"
 import { toast } from "react-hot-toast"
+import MessageInput from "./MessageInput"
 
 const ChatRoom = () => {
   const searchParams = useSearchParams()
@@ -27,16 +28,17 @@ const ChatRoom = () => {
 
   return (
     <Stack
-      p={"4"}
+      p={"6"}
       flexGrow={"1"}
-      display={{ base: id ? "flex" : "none", md: "flex" }}
+      display={id ? "flex" : "none"}
       height={"full"}
       justifyContent={"end"}
-      gap={4}
+      gap={8}
     >
       {data?.messages && (
         <Messages messages={data.messages} session={session} />
       )}
+      <MessageInput conversationId={id ?? ""} />
     </Stack>
   )
 }

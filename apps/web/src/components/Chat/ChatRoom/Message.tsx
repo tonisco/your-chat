@@ -27,32 +27,34 @@ const formatRelativeLocale = {
 const Message = ({ message, session }: Props) => {
   const othersBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
   const date = useColorModeValue("darkgray", "whiteAlpha.600")
+  const userText = useColorModeValue("brand.greenDark", "brand.green")
 
   const showUsername =
     message.sender.id === session?.user.id ? "you" : message.sender.username
 
-  // if (message.type === "bot")
-  //   return (
-  //     <Box
-  //       alignSelf={"center"}
-  //       py="2"
-  //       px="3"
-  //       bgColor={othersBg}
-  //       rounded={"2xl"}
-  //     >
-  //       <Text
-  //         _firstLetter={{ textTransform: "uppercase" }}
-  //         fontStyle={"italic"}
-  //          fontSize={"sm"}
-  //       >
-  //         {showUsername} {message.body}
-  //       </Text>
-  //     </Box>
-  //   )
+  if (message.type === "bot")
+    return (
+      <Box
+        alignSelf={"center"}
+        py="2"
+        px="3"
+        bgColor={othersBg}
+        rounded={"2xl"}
+        maxWidth={"65%"}
+      >
+        <Text
+          _firstLetter={{ textTransform: "uppercase" }}
+          fontStyle={"italic"}
+          fontSize={"sm"}
+        >
+          {showUsername} {message.body}
+        </Text>
+      </Box>
+    )
 
-  return (
-    <>
-      <Flex gap={2} alignItems={"end"}>
+  if (message.sender.id !== session?.user.id)
+    return (
+      <Flex gap={2} alignItems={"end"} maxWidth={"65%"}>
         <Avatar size={"sm"} src={message.sender.image ?? undefined} />
         <Stack gap={1}>
           <Flex gap={2} alignItems={"end"} textTransform={"capitalize"}>
@@ -80,7 +82,21 @@ const Message = ({ message, session }: Props) => {
           </Box>
         </Stack>
       </Flex>
-    </>
+    )
+
+  return (
+    <Box
+      alignSelf={"end"}
+      py="2"
+      px="3"
+      bgColor={userText}
+      rounded={"2xl"}
+      maxWidth={"65%"}
+    >
+      <Text color={"whitesmoke"} fontSize={"sm"}>
+        {message.body}
+      </Text>
+    </Box>
   )
 }
 
