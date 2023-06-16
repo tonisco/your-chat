@@ -1,14 +1,16 @@
+import React, { useState } from "react"
+import { sendMessage } from "queries"
+import { toast } from "react-hot-toast"
+import { BsSend } from "react-icons/bs"
+
 import { useMutation } from "@apollo/client"
 import {
+  Box,
   Input,
   InputGroup,
   InputRightElement,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { sendMessage } from "queries"
-import React, { useState } from "react"
-import { toast } from "react-hot-toast"
-import { BsSend } from "react-icons/bs"
 
 type Props = {
   conversationId: string
@@ -32,25 +34,27 @@ const MessageInput = ({ conversationId }: Props) => {
   }
 
   return (
-    <form onSubmit={reply}>
-      <InputGroup>
-        <Input
-          placeholder="New message"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          required
-        />
-        <InputRightElement
-          itemType="button"
-          cursor={"pointer"}
-          bgColor={othersBg}
-        >
-          <button type="submit">
-            <BsSend />
-          </button>
-        </InputRightElement>
-      </InputGroup>
-    </form>
+    <Box px={"6"} pb={"6"}>
+      <form onSubmit={reply}>
+        <InputGroup>
+          <Input
+            placeholder="New message"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            required
+          />
+          <InputRightElement
+            itemType="button"
+            cursor={"pointer"}
+            bgColor={othersBg}
+          >
+            <button type="submit">
+              <BsSend />
+            </button>
+          </InputRightElement>
+        </InputGroup>
+      </form>
+    </Box>
   )
 }
 

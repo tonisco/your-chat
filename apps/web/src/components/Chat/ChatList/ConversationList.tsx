@@ -53,9 +53,7 @@ const ConversationList = () => {
     [subscribeToMore],
   )
 
-  useEffect(() => {
-    conversationCreatedSub()
-  }, [conversationCreatedSub])
+  useEffect(() => conversationCreatedSub(), [conversationCreatedSub])
 
   const conversationUpdateSub = useCallback(
     () =>

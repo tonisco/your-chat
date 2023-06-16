@@ -1,3 +1,9 @@
+import React from "react"
+import { Session } from "next-auth"
+import { formatRelative } from "date-fns"
+import enUS from "date-fns/locale/en-US"
+import { Message as MessageType } from "queries/src/types"
+
 import {
   Avatar,
   Box,
@@ -6,11 +12,6 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { formatRelative } from "date-fns"
-import enUS from "date-fns/locale/en-US"
-import { Session } from "next-auth"
-import { Message as MessageType } from "queries/src/types"
-import React from "react"
 
 type Props = {
   message: MessageType

@@ -159,7 +159,7 @@ const resolvers: Resolvers = {
     conversationUpdated: {
       subscribe: withFilter(
         (_, args, ctx: SubscriptionCtx) =>
-          ctx.pubsub.asyncIterator([CONVERSATION_UPDATED]),
+          ctx.pubsub.asyncIterator(CONVERSATION_UPDATED),
         (
           { conversationUpdated }: { conversationUpdated: Conversation },
           _,

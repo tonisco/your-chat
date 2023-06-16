@@ -1,8 +1,10 @@
-import { Message as MessageType } from "queries/src/types"
 import React from "react"
-import Message from "./Message"
-import { Stack, useColorModeValue } from "@chakra-ui/react"
 import { Session } from "next-auth"
+import { Message as MessageType } from "queries/src/types"
+
+import { Stack, useColorModeValue } from "@chakra-ui/react"
+
+import Message from "./Message"
 
 type Props = {
   messages: MessageType[]
@@ -24,6 +26,7 @@ const Messages = ({ messages, session }: Props) => {
 
   return (
     <Stack
+      p={"6"}
       overflow={"auto"}
       css={{
         "&::-webkit-scrollbar": {
@@ -45,7 +48,7 @@ const Messages = ({ messages, session }: Props) => {
       onMouseLeave={mouseEvents}
     >
       {messages.map((message) => (
-        <Message message={message} session={session} />
+        <Message message={message} key={message.id} session={session} />
       ))}
     </Stack>
   )

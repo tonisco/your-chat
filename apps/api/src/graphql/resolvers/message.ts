@@ -111,8 +111,8 @@ const resolver: ResolverType = {
 
         const conversationUpdated: Conversation = conversation
 
-        pubsub.publish(MESSAGE_SENT, { messageSent })
-        pubsub.publish(CONVERSATION_UPDATED, { conversationUpdated })
+        await pubsub.publish(MESSAGE_SENT, { messageSent })
+        await pubsub.publish(CONVERSATION_UPDATED, { conversationUpdated })
       } catch (error: any) {
         throw new GraphQLError(error?.message)
       }

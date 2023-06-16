@@ -2,15 +2,15 @@
 
 import React, { useCallback, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { messageSent, messages } from "queries"
+import { useSession } from "next-auth/react"
+import { messages, messageSent } from "queries"
+import { toast } from "react-hot-toast"
 
 import { useQuery } from "@apollo/client"
 import { Stack } from "@chakra-ui/react"
 
-import Messages from "./Messages"
-import { useSession } from "next-auth/react"
-import { toast } from "react-hot-toast"
 import MessageInput from "./MessageInput"
+import Messages from "./Messages"
 
 const ChatRoom = () => {
   const searchParams = useSearchParams()
@@ -41,14 +41,13 @@ const ChatRoom = () => {
           })
         },
       }),
-    [],
+    [subscribeToMore, id],
   )
 
-  useEffect(() => newMessageSub(), [])
+  useEffect(() => newMessageSub(), [newMessageSub])
 
   return (
     <Stack
-      p={"6"}
       flexGrow={"1"}
       display={id ? "flex" : "none"}
       height={"full"}
