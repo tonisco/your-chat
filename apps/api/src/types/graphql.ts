@@ -71,6 +71,7 @@ export type Mutation = {
   createConversation: CreateConversationReturn;
   createUsername: MessageReturn;
   loginUser: UserWithToken;
+  markConversationAsRead?: Maybe<Scalars['Boolean']['output']>;
   sendMessage?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -90,6 +91,11 @@ export type MutationLoginUserArgs = {
   image: Scalars['String']['input'];
   name: Scalars['String']['input'];
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationMarkConversationAsReadArgs = {
+  conversationId: Scalars['String']['input'];
 };
 
 
@@ -317,6 +323,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
+  markConversationAsRead?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMarkConversationAsReadArgs, 'conversationId'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'body' | 'conversationId'>>;
 };
 

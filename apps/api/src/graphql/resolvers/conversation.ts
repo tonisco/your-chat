@@ -13,7 +13,10 @@ import { CONVERSATION_CREATED, CONVERSATION_UPDATED } from "../../utils/events"
 import { isMember } from "../../utils/functions"
 
 type Resolvers = {
-  Mutation: Pick<MutationResolvers<Context>, "createConversation">
+  Mutation: Pick<
+    MutationResolvers<Context>,
+    "createConversation" | "markConversationAsRead"
+  >
   Query: Pick<QueryResolvers<Context>, "conversations">
   // Subscription: Pick<
   //   SubscriptionResolvers<SubscriptionCtx>,
@@ -133,6 +136,42 @@ const resolvers: Resolvers = {
       }
 
       return { message: "Chat created", conversationId: conversation?.id }
+    },
+
+    async markConversationAsRead(_, { conversationId }, ctx) {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      try {
+        // Find conversation
+        const conversation = await prisma.conversation.findFirst({
+          where: { id: conversationId },
+          include: { conversationMembers: { include: { user: true } } },
+        })
+
+        if (!conversation) throw new Error("Conversation not found")
+
+        // check if member
+        const member = isMember(conversation.conversationMembers, session.user)
+
+        if (!member) throw new Error("Not a member of the conversation")
+
+        const convoMem = conversation.conversationMembers.find(
+          (user) => user.userId === session.user.id,
+        )
+
+        if (convoMem) {
+          await prisma.conversationMember.update({
+            where: { id: convoMem.id },
+            data: { unreadMessageNumber: 0, hasReadlastMessage: true },
+          })
+        }
+      } catch (error: any) {
+        throw new Error(error.message)
+      }
+
+      return true
     },
   },
   Subscription: {
