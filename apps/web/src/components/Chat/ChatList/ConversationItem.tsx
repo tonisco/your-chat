@@ -1,10 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Session } from "next-auth"
 import { formatRelative } from "date-fns"
 import enUS from "date-fns/locale/en-US"
-import { Conversation } from "queries/src/types"
+import { markConversationAsRead } from "queries"
+import { Conversation, ConversationMembers } from "queries/src/types"
 
+import { gql, useMutation } from "@apollo/client"
+import { cloneDeep } from "@apollo/client/utilities"
 import {
   Box,
   Divider,
@@ -55,7 +58,65 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
     .map((users) => users.user.username)
     .join(", ")
 
+  const [mark] = useMutation(markConversationAsRead, {})
+
+  const markMessage = useCallback(
+    () =>
+      mark({
+        variables: { conversationId: conversation.id },
+        update: (cache) => {
+          const currentData: {
+            conversationMembers: ConversationMembers[]
+          } | null = cache.readFragment({
+            id: `Conversation:${conversation.id}`,
+            fragment: gql`
+              fragment ConversationMembers on Conversation {
+                conversationMembers {
+                  user {
+                    id
+                    username
+                  }
+                  hasReadlastMessage
+                  unreadMessageNumber
+                }
+              }
+            `,
+          })
+
+          console.log(currentData)
+
+          if (!currentData) return
+
+          const conversationMembers = cloneDeep(currentData.conversationMembers)
+
+          const idx = conversationMembers.findIndex(
+            (data) => data.user.id === session?.user.id,
+          )
+
+          if (idx === -1) return
+
+          conversationMembers[idx].hasReadlastMessage = true
+          conversationMembers[idx].unreadMessageNumber = 0
+
+          console.log(conversationMembers[idx])
+
+          cache.writeFragment({
+            id: `Conversation:${conversation.id}`,
+            data: { conversationMembers },
+            fragment: gql`
+              fragment updateMembers on Conversation {
+                conversationMembers
+              }
+            `,
+          })
+        },
+      }),
+    [conversation.id, mark, session?.user.id],
+  )
+
   const goToChat = () => {
+    markMessage()
+
     const params = new URLSearchParams({
       id: conversation.id,
       members,

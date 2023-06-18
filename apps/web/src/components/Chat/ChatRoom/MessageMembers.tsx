@@ -10,7 +10,6 @@ const MessageMembers = () => {
 
   const router = useRouter()
 
-  console.log(members)
   return (
     <Stack pt={"6"} px="6" gap={"2"}>
       <Flex gap={"4"} alignItems={"center"}>

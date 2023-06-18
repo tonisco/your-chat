@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n\n  input ConversationMemberId {\n    id: String!\n  }\n": types.CreateConversationDocument,
+    "\n  mutation markConversationAsRead($conversationId: String!) {\n    markConversationAsRead(conversationId: $conversationId)\n  }\n": types.MarkConversationAsReadDocument,
     "\n  query conversations {\n    conversations {\n      id\n      createdAt\n      updatedAt\n      conversationMembers {\n        id\n        hasReadlastMessage\n        unreadMessageNumber\n        user {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n      latestMessage {\n        id\n        body\n        type\n        createdAt\n        conversationId\n        updatedAt\n        sender {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n    }\n  }\n": types.ConversationsDocument,
     "\n  subscription conversationCreated {\n    conversationCreated {\n      id\n      createdAt\n      updatedAt\n      conversationMembers {\n        id\n        hasReadlastMessage\n        unreadMessageNumber\n        user {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n      latestMessage {\n        id\n        body\n        type\n        createdAt\n        updatedAt\n        sender {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n    }\n  }\n": types.ConversationCreatedDocument,
     "\n  subscription conversationUpdated {\n    conversationUpdated {\n      id\n      createdAt\n      updatedAt\n      conversationMembers {\n        id\n        hasReadlastMessage\n        unreadMessageNumber\n        user {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n      latestMessage {\n        id\n        body\n        type\n        conversationId\n        createdAt\n        updatedAt\n        sender {\n          id\n          email\n          username\n          name\n          image\n        }\n      }\n    }\n  }\n": types.ConversationUpdatedDocument,
@@ -43,6 +44,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n\n  input ConversationMemberId {\n    id: String!\n  }\n"): (typeof documents)["\n  mutation createConversation($input: [ConversationMemberId!]!) {\n    createConversation(input: $input) {\n      message\n      conversationId\n    }\n  }\n\n  input ConversationMemberId {\n    id: String!\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation markConversationAsRead($conversationId: String!) {\n    markConversationAsRead(conversationId: $conversationId)\n  }\n"): (typeof documents)["\n  mutation markConversationAsRead($conversationId: String!) {\n    markConversationAsRead(conversationId: $conversationId)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -16,6 +16,7 @@ import ConversationSkeleton from "./ConversationSkeleton"
 
 const ConversationList = () => {
   const { data: session } = useSession()
+
   const scrollbarColor = useColorModeValue(
     "#EDF2F7",
     "rgba(255, 255, 255, 0.08)",

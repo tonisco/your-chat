@@ -12,3 +12,9 @@ export const createConversation = graphql(`
     id: String!
   }
 `)
+
+export const markConversationAsRead = graphql(`
+  mutation markConversationAsRead($conversationId: String!) {
+    markConversationAsRead(conversationId: $conversationId)
+  }
+`)
