@@ -10,6 +10,7 @@ import { useQuery } from "@apollo/client"
 import { Stack } from "@chakra-ui/react"
 
 import MessageInput from "./MessageInput"
+import MessageMembers from "./MessageMembers"
 import Messages from "./Messages"
 
 const ChatRoom = () => {
@@ -54,6 +55,7 @@ const ChatRoom = () => {
       justifyContent={"end"}
       gap={8}
     >
+      <MessageMembers />
       {data?.messages && (
         <Messages messages={data.messages} session={session} />
       )}

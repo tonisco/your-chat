@@ -5,7 +5,15 @@ import { formatRelative } from "date-fns"
 import enUS from "date-fns/locale/en-US"
 import { Conversation } from "queries/src/types"
 
-import { Divider, Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react"
+import {
+  Box,
+  Divider,
+  Flex,
+  Stack,
+  Tag,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react"
 
 import MembersImages from "./MembersImages"
 
@@ -42,6 +50,20 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
       ? "you"
       : latestMessage.sender.username)
 
+  const members = conversationMembers
+    .filter((user) => user.user.id !== session?.user.id)
+    .map((users) => users.user.username)
+    .join(", ")
+
+  const goToChat = () => {
+    const params = new URLSearchParams({
+      id: conversation.id,
+      members,
+    }).toString()
+
+    push(`/?${params}`)
+  }
+
   return (
     <>
       <Flex
@@ -52,15 +74,15 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
         rounded={"md"}
         cursor={"pointer"}
         alignItems={"center"}
-        onClick={() => push(`/?id=${conversation.id}`)}
+        onClick={goToChat}
       >
         <MembersImages
           conversationMembers={conversationMembers}
           session={session}
           hasReadlastMessage={member?.hasReadlastMessage}
         />
-        <Stack gap={2} flex={1}>
-          <Flex alignItems={"center"} gap={2}>
+        <Flex alignItems={"center"} gap={2} w="full">
+          <Stack gap={2} flex={1}>
             <Text
               flex={"1"}
               textOverflow={"ellipsis"}
@@ -68,12 +90,21 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
               whiteSpace={"nowrap"}
               textTransform={"capitalize"}
             >
-              {conversationMembers
-                .filter((user) => user.user.id !== session?.user.id)
-                .map((users) => users.user.username)
-                .join(", ")}
+              {members}
             </Text>
 
+            <Text
+              textOverflow={"ellipsis"}
+              overflowX={"hidden"}
+              whiteSpace={"nowrap"}
+              fontSize={"xs"}
+              _firstLetter={{ textTransform: "capitalize" }}
+              color={subText}
+            >
+              {showUsername} {latestMessage?.body}
+            </Text>
+          </Stack>
+          <Stack gap="2">
             <Text fontSize={"xs"} color={subText}>
               {formatRelative(new Date(updatedAt), new Date(), {
                 locale: {
@@ -83,19 +114,14 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
                 },
               })}
             </Text>
-          </Flex>
 
-          <Text
-            textOverflow={"ellipsis"}
-            overflowX={"hidden"}
-            whiteSpace={"nowrap"}
-            fontSize={"xs"}
-            _firstLetter={{ textTransform: "capitalize" }}
-            color={subText}
-          >
-            {showUsername} {latestMessage?.body}
-          </Text>
-        </Stack>
+            <Box>
+              {member && member.unreadMessageNumber > 0 && (
+                <Tag colorScheme="teal">{member.unreadMessageNumber}</Tag>
+              )}
+            </Box>
+          </Stack>
+        </Flex>
       </Flex>
       {length - 1 !== index && <Divider />}
     </>
