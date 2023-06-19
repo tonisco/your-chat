@@ -1,8 +1,10 @@
+import { useNavigation, NavigationProp } from "@react-navigation/native"
 import { formatRelative } from "date-fns"
 import enUS from "date-fns/locale/en-US"
 import {
   Box,
   HStack,
+  Pressable,
   Stack,
   Text,
   VStack,
@@ -13,6 +15,7 @@ import React from "react"
 
 import MembersImages from "./MembersImages"
 import { User } from "../../../Providers/AuthProvider"
+import { ChatNavigatorScreen } from "../../../types/screen"
 
 type Props = {
   conversation: Conversation
@@ -29,10 +32,23 @@ const formatRelativeLocale = {
 const ConversationItem = ({ conversation, user }: Props) => {
   const { conversationMembers, updatedAt, latestMessage } = conversation
   const readText = useColorModeValue("darkgray", "gray.400")
+  const unreadNumber = useColorModeValue(
+    "teal.100",
+    "rgba(129, 230, 217, 0.16)",
+  )
+  const unreadNumberText = useColorModeValue("teal.800", "teal.200")
+
+  const { navigate } =
+    useNavigation<NavigationProp<ChatNavigatorScreen, "Home">>()
 
   const member = conversationMembers.find(
     (member) => member.user.id === user?.id,
   )
+
+  const members = conversationMembers
+    .filter((user) => user.user.id !== user.id)
+    .map((users) => users.user.username)
+    .join(", ")
 
   const subText = member?.hasReadlastMessage ? readText : undefined
 
@@ -42,43 +58,55 @@ const ConversationItem = ({ conversation, user }: Props) => {
       ? "you"
       : latestMessage.sender.username)
 
+  const goToChat = () => navigate("Details", { id: conversation.id, members })
+
   return (
-    <HStack space={2} py="3" px="3" rounded="md" alignItems="center">
-      <MembersImages conversationMembers={conversationMembers} user={user} />
-      <Stack space={1} flex={1}>
-        <HStack alignItems="center" space={2}>
-          <Text flex="1" fontSize="md" isTruncated textTransform="capitalize">
-            {conversationMembers
-              .filter((member) => member.user.id !== user?.id)
-              .map((member) => member.user.username)
-              .join(", ")}
-          </Text>
-          <VStack justifyContent="space-between" alignItems="flex-end">
-            <Text fontSize="sm" color={subText}>
-              {formatRelative(new Date(updatedAt), new Date(), {
-                locale: {
-                  ...enUS,
-                  formatRelative: (token) =>
-                    formatRelativeLocale[token as keyof typeof formatRelative],
-                },
-              })}
+    <Pressable onPress={goToChat}>
+      <HStack space={2} py="3" px="3" rounded="md" alignItems="center">
+        <MembersImages conversationMembers={conversationMembers} user={user} />
+        <Stack space={1} flex={1}>
+          <HStack alignItems="center" space={2}>
+            <Text flex="1" fontSize="md" isTruncated textTransform="capitalize">
+              {conversationMembers
+                .filter((member) => member.user.id !== user?.id)
+                .map((member) => member.user.username)
+                .join(", ")}
             </Text>
-            {!member?.hasReadlastMessage && (
-              <Box w="2" h="2" rounded="full" bgColor="green.500" />
-            )}
-          </VStack>
-        </HStack>
-        <HStack>
-          <Text textTransform="capitalize" fontSize="sm" color={subText}>
-            {showUsername}
+          </HStack>
+          <HStack>
+            <Text textTransform="capitalize" fontSize="sm" color={subText}>
+              {showUsername}
+            </Text>
+            <Text isTruncated fontSize="sm" color={subText}>
+              {" "}
+              {latestMessage?.body}
+            </Text>
+          </HStack>
+        </Stack>
+        <VStack alignItems="flex-end" space="1">
+          <Text fontSize="sm" color={subText}>
+            {formatRelative(new Date(updatedAt), new Date(), {
+              locale: {
+                ...enUS,
+                formatRelative: (token) =>
+                  formatRelativeLocale[token as keyof typeof formatRelative],
+              },
+            })}
           </Text>
-          <Text isTruncated fontSize="sm" color={subText}>
-            {" "}
-            {latestMessage?.body}
-          </Text>
-        </HStack>
-      </Stack>
-    </HStack>
+          {member && member?.unreadMessageNumber > 0 && (
+            <Box
+              colorScheme="primary"
+              py="1"
+              px="2"
+              bgColor={unreadNumber}
+              rounded="full"
+            >
+              <Text color={unreadNumberText}>{member.unreadMessageNumber}</Text>
+            </Box>
+          )}
+        </VStack>
+      </HStack>
+    </Pressable>
   )
 }
 

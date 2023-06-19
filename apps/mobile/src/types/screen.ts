@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 
 export type ChatNavigatorScreen = {
   Home: undefined
-  Details: { id: string }
+  Details: { id: string; members: string }
 }
 
 export type HomeNavigator = StackNavigationProp<ChatNavigatorScreen, "Home">

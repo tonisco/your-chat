@@ -82,7 +82,8 @@ const CreateChat = () => {
 
       clearData()
 
-      if (conversationId) navigate("Details", { id: conversationId })
+      //  TODO:  find a way to add members for header
+      // if (conversationId) navigate("Details", { id: conversationId })
     },
   })
 
