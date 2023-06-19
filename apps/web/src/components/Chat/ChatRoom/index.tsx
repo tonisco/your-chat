@@ -24,6 +24,7 @@ const ChatRoom = () => {
   const { data, loading, subscribeToMore } = useQuery(messages, {
     variables: { conversationId: id ?? "" },
     skip: id ? false : true,
+    fetchPolicy: "network-only",
     onError(error) {
       toast.error(error.message)
     },
@@ -113,12 +114,12 @@ const ChatRoom = () => {
       display={id ? "flex" : "none"}
       height={"full"}
       justifyContent={"end"}
-      gap={8}
+      gap={4}
     >
       <MessageMembers />
-      {data?.messages && (
-        <Messages messages={data.messages} session={session} />
-      )}
+
+      <Messages messages={data?.messages} session={session} loading={loading} />
+
       <MessageInput conversationId={id ?? ""} />
     </Stack>
   )

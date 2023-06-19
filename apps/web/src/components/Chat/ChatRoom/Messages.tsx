@@ -5,13 +5,15 @@ import { Message as MessageType } from "queries/src/types"
 import { Stack, useColorModeValue } from "@chakra-ui/react"
 
 import Message from "./Message"
+import MessageLoading from "./MessageLoading"
 
 type Props = {
-  messages: MessageType[]
+  messages: MessageType[] | undefined
   session: Session | null
+  loading: Boolean
 }
 
-const Messages = ({ messages, session }: Props) => {
+const Messages = ({ messages, session, loading }: Props) => {
   const scrollbarColor = useColorModeValue(
     "#EDF2F7",
     "rgba(255, 255, 255, 0.08)",
@@ -47,7 +49,12 @@ const Messages = ({ messages, session }: Props) => {
       onMouseEnter={mouseEvents}
       onMouseLeave={mouseEvents}
     >
-      {messages.map((message) => (
+      {loading &&
+        Array.from({ length: 8 }).map((_, i) => (
+          <MessageLoading key={i} index={i} />
+        ))}
+
+      {messages?.map((message) => (
         <Message message={message} key={message.id} session={session} />
       ))}
     </Stack>

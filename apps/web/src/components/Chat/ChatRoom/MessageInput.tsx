@@ -9,6 +9,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   useColorModeValue,
 } from "@chakra-ui/react"
 
@@ -25,12 +26,14 @@ const MessageInput = ({ conversationId }: Props) => {
     onError(error) {
       toast.error(error.message)
     },
+    onCompleted() {
+      setBody("")
+    },
   })
 
   const reply = (e: React.FormEvent) => {
     e.preventDefault()
-    send({ variables: { body, conversationId } })
-    setBody("")
+    if (!loading) send({ variables: { body, conversationId } })
   }
 
   return (
@@ -48,9 +51,13 @@ const MessageInput = ({ conversationId }: Props) => {
             cursor={"pointer"}
             bgColor={othersBg}
           >
-            <button type="submit">
-              <BsSend />
-            </button>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <button type="submit">
+                <BsSend />
+              </button>
+            )}
           </InputRightElement>
         </InputGroup>
       </form>
