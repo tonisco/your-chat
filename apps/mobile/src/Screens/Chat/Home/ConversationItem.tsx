@@ -46,8 +46,14 @@ const ConversationItem = ({ conversation, user }: Props) => {
   )
 
   const members = conversationMembers
-    .filter((user) => user.user.id !== user.id)
-    .map((users) => users.user.username)
+    .filter((users) => users.user.id !== user?.id)
+    .map(
+      (users) =>
+        users.user.username &&
+        // capitalize first letter
+        users.user.username?.charAt(0).toUpperCase() +
+          users.user.username?.slice(1),
+    )
     .join(", ")
 
   const subText = member?.hasReadlastMessage ? readText : undefined

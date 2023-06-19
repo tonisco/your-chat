@@ -1,4 +1,5 @@
 import { NavigationProp } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 export type ChatNavigatorScreen = {
   Home: undefined
@@ -7,3 +8,7 @@ export type ChatNavigatorScreen = {
 
 export type HomeNavigator = NavigationProp<ChatNavigatorScreen, "Home">
 export type DetailsNavigator = NavigationProp<ChatNavigatorScreen, "Details">
+export type DetailsScreenProps = NativeStackScreenProps<
+  ChatNavigatorScreen,
+  "Details"
+>

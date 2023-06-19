@@ -13,7 +13,13 @@ const ChatNavigator = () => {
     <NavigationContainer>
       <Navigator.Navigator screenOptions={{ animation: "slide_from_right" }}>
         <Navigator.Screen name="Home" component={Home} />
-        <Navigator.Screen name="Details" component={Details} />
+        <Navigator.Screen
+          name="Details"
+          component={Details}
+          options={({ route }) => ({
+            headerTitle: route.params.members,
+          })}
+        />
       </Navigator.Navigator>
     </NavigationContainer>
   )
