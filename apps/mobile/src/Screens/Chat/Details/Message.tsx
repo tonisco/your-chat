@@ -53,7 +53,7 @@ const Message = ({ message, user }: Props) => {
         px="3"
         bgColor="warmGray.600"
         rounded="2xl"
-        maxWidth="80%"
+        maxWidth="70%"
       >
         <Text fontStyle="italic" fontSize="sm">
           {showUsername} {message.body}
@@ -63,7 +63,7 @@ const Message = ({ message, user }: Props) => {
 
   if (message.sender.id !== user?.id)
     return (
-      <HStack space={3} maxWidth="80%" flex={1} alignItems="flex-end">
+      <HStack space={3} maxWidth="70%" flex={1} alignItems="flex-end">
         <Avatar size="sm" source={{ uri: message.sender.image ?? undefined }} />
         <VStack space={2} alignItems="flex-start">
           <HStack space={2} alignItems="flex-end" textTransform="capitalize">
@@ -93,7 +93,7 @@ const Message = ({ message, user }: Props) => {
       px="3"
       bgColor={mineBg}
       rounded="2xl"
-      maxWidth="65%"
+      maxWidth="70%"
     >
       <Text color="#f5f5f5" fontSize="sm">
         {message.body}

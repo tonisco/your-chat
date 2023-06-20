@@ -3,7 +3,7 @@ import { Message as MessageType } from "queries/src/types"
 import React from "react"
 
 import Message from "./Message"
-// import MessageLoading from "./MessageLoading"
+import MessageLoading from "./MessageLoading"
 import { User } from "../../../Providers/AuthProvider"
 
 type Props = {
@@ -14,15 +14,16 @@ type Props = {
 
 const Messages = ({ messages, user, loading }: Props) => {
   return (
-    <VStack
-      flex={1}
-      space={4}
-      // direction="column-reverse"
-    >
-      {/* {loading &&
-        Array.from({ length: 8 }).map((_, i) => (
-          <MessageLoading key={i} index={i} />
-        ))} */}
+    <VStack flex={1} space={4}>
+      {loading && (
+        <FlatList
+          keyExtractor={(_, i) => i.toString()}
+          data={Array.from({ length: 8 })}
+          renderItem={({ index }) => <MessageLoading index={index} />}
+          inverted
+          contentContainerStyle={{ gap: 20 }}
+        />
+      )}
 
       {messages && (
         <FlatList
