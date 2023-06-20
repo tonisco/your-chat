@@ -143,11 +143,18 @@ export type Query = {
   __typename?: 'Query';
   conversations: Array<Conversation>;
   findUsers: Array<FoundUsers>;
+  findUsersNotInChat: Array<FoundUsers>;
   messages: Array<Message>;
 };
 
 
 export type QueryFindUsersArgs = {
+  username: Scalars['String']['input'];
+};
+
+
+export type QueryFindUsersNotInChatArgs = {
+  conversationId: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
@@ -409,6 +416,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   conversations?: Resolver<Array<ResolversTypes['Conversation']>, ParentType, ContextType>;
   findUsers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
+  findUsersNotInChat?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersNotInChatArgs, 'conversationId' | 'username'>>;
   messages?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType, RequireFields<QueryMessagesArgs, 'conversationId'>>;
 };
 

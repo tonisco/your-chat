@@ -5,7 +5,7 @@ import { Context } from "../../utils/context"
 import { createToken } from "../../utils/jwt"
 
 type Resolvers = {
-  Query: Pick<QueryResolvers<Context>, "findUsers">
+  Query: Pick<QueryResolvers<Context>, "findUsers" | "findUsersNotInChat">
   Mutation: Pick<MutationResolvers<Context>, "createUsername" | "loginUser">
 }
 
@@ -25,6 +25,41 @@ const resolvers: Resolvers = {
             },
             NOT: {
               name: session.user.name,
+            },
+          },
+          select: { id: true, username: true, image: true },
+        })
+
+        return users
+      } catch (error) {
+        throw new GraphQLError("Failed to find users")
+      }
+    },
+    findUsersNotInChat: async (_, { conversationId, username }, ctx) => {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      try {
+        const users = await prisma.user.findMany({
+          where: {
+            username: {
+              contains: username,
+              mode: "insensitive",
+            },
+            NOT: {
+              OR: [
+                {
+                  name: session.user.name,
+                },
+                {
+                  conversationMember: {
+                    some: {
+                      conversationId,
+                    },
+                  },
+                },
+              ],
             },
           },
           select: { id: true, username: true, image: true },

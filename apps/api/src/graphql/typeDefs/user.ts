@@ -11,6 +11,13 @@ const typeDefs = gql`
     createUsername(username: String!): MessageReturn!
   }
 
+  type Query {
+    findUsersNotInChat(
+      username: String!
+      conversationId: String!
+    ): [FoundUsers!]!
+  }
+
   type Mutation {
     loginUser(
       email: String!

@@ -9,3 +9,13 @@ export const findUsers = graphql(`
     }
   }
 `)
+
+export const findUsersNotInChat = graphql(`
+  query findUsersNotInChat($username: String!, $conversationId: String!) {
+    findUsersNotInChat(username: $username, conversationId: $conversationId) {
+      id
+      username
+      image
+    }
+  }
+`)
