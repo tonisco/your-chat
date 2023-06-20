@@ -85,6 +85,7 @@ model Message {
     id             String        @id @default(cuid())
     body           String
     isLatest       Conversation? @relation(name: "latestMessage")
+    isDeleted      Boolean       @default(false)
     sender         User          @relation(fields: [senderId], references: [id])
     senderId       String
     type           MessageType
