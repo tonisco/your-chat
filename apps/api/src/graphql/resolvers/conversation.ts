@@ -9,8 +9,17 @@ import {
   QueryResolvers,
 } from "../../types/graphql"
 import { Context, SubscriptionCtx } from "../../utils/context"
-import { CONVERSATION_CREATED, CONVERSATION_UPDATED } from "../../utils/events"
+import {
+  ADDED_TO_CONVERSATION,
+  CONVERSATION_CREATED,
+  CONVERSATION_UPDATED,
+} from "../../utils/events"
 import { isMember } from "../../utils/functions"
+
+type AddedToConversationProps = {
+  addedToConversation: Conversation
+  members: { id: string; username: string }[]
+}
 
 type Resolvers = {
   Mutation: Pick<
@@ -175,7 +184,7 @@ const resolvers: Resolvers = {
     },
 
     async addNewMembers(_, { conversationId, members }, ctx) {
-      const { prisma, session } = ctx
+      const { prisma, session, pubsub } = ctx
 
       if (!session?.user) throw new GraphQLError("Not authorized")
       try {
@@ -192,7 +201,7 @@ const resolvers: Resolvers = {
 
         const newUsers = members.map((membe) => membe.username).join(", ")
 
-        await prisma.conversation.update({
+        const updatedConversation = await prisma.conversation.update({
           where: { id: conversationId },
           data: {
             conversationMembers: {
@@ -217,6 +226,22 @@ const resolvers: Resolvers = {
               },
             },
           },
+          include: {
+            conversationMembers: { include: { user: true } },
+            latestMessage: { include: { sender: true } },
+          },
+        })
+
+        const conversationToSend = updatedConversation
+
+        const addedProps: AddedToConversationProps = {
+          members,
+          addedToConversation: conversationToSend,
+        }
+
+        await pubsub.publish(ADDED_TO_CONVERSATION, addedProps)
+        await pubsub.publish(CONVERSATION_UPDATED, {
+          conversationUpdated: conversationToSend,
         })
       } catch (error: any) {
         throw new GraphQLError(error?.message)
@@ -258,6 +283,19 @@ const resolvers: Resolvers = {
           if (!session?.user) throw new GraphQLError("Not authorized")
 
           return isMember(conversationUpdated.conversationMembers, session.user)
+        },
+      ),
+    },
+    addedToConversation: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator(ADDED_TO_CONVERSATION),
+        ({ members }: AddedToConversationProps, _, ctx: SubscriptionCtx) => {
+          const { session } = ctx
+
+          if (!session?.user) throw new GraphQLError("Not authorized")
+
+          return members.some((member) => member.id === session.user.id)
         },
       ),
     },

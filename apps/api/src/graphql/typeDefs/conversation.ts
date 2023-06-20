@@ -27,11 +27,21 @@ const typeDefs = gql`
     conversationUpdated: Conversation!
   }
 
+  type Subscription {
+    addedToConversation: Conversation!
+    members: [newMembersList!]!
+  }
+
   input ConversationMemberId {
     id: String!
   }
 
   input newMembers {
+    id: String!
+    username: String!
+  }
+
+  type newMembersList {
     id: String!
     username: String!
   }

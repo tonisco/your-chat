@@ -130,8 +130,10 @@ export type QueryMessagesArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  addedToConversation: Conversation;
   conversationCreated: Conversation;
   conversationUpdated: Conversation;
+  members: Array<NewMembersList>;
   messageSent: Message;
 };
 
@@ -173,6 +175,12 @@ export type CreateMessageInput = {
 export type NewMembers = {
   id: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type NewMembersList = {
+  __typename?: 'newMembersList';
+  id: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 
@@ -265,6 +273,7 @@ export type ResolversTypes = {
   createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
   createMessageInput: CreateMessageInput;
   newMembers: NewMembers;
+  newMembersList: ResolverTypeWrapper<NewMembersList>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -287,6 +296,7 @@ export type ResolversParentTypes = {
   createConversationReturn: CreateConversationReturn;
   createMessageInput: CreateMessageInput;
   newMembers: NewMembers;
+  newMembersList: NewMembersList;
 };
 
 export type ConversationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Conversation'] = ResolversParentTypes['Conversation']> = {
@@ -349,8 +359,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  addedToConversation?: SubscriptionResolver<ResolversTypes['Conversation'], "addedToConversation", ParentType, ContextType>;
   conversationCreated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationCreated", ParentType, ContextType>;
   conversationUpdated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationUpdated", ParentType, ContextType>;
+  members?: SubscriptionResolver<Array<ResolversTypes['newMembersList']>, "members", ParentType, ContextType>;
   messageSent?: SubscriptionResolver<ResolversTypes['Message'], "messageSent", ParentType, ContextType, RequireFields<SubscriptionMessageSentArgs, 'conversationId'>>;
 };
 
@@ -379,6 +391,12 @@ export type CreateConversationReturnResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type NewMembersListResolvers<ContextType = any, ParentType extends ResolversParentTypes['newMembersList'] = ResolversParentTypes['newMembersList']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Conversation?: ConversationResolvers<ContextType>;
   ConversationMembers?: ConversationMembersResolvers<ContextType>;
@@ -392,5 +410,6 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   UserWithToken?: UserWithTokenResolvers<ContextType>;
   createConversationReturn?: CreateConversationReturnResolvers<ContextType>;
+  newMembersList?: NewMembersListResolvers<ContextType>;
 };
 
