@@ -20,3 +20,75 @@ export const messageSent = graphql(`
     }
   }
 `)
+
+export const editedMessage = graphql(`
+  subscription editedMessage {
+    editedMessage {
+      changeMessage {
+        id
+        body
+        sender {
+          id
+          email
+          username
+          name
+          image
+        }
+        type
+        isDeleted
+        conversationId
+        createdAt
+        updatedAt
+      }
+      conversationId
+      members {
+        id
+        hasReadlastMessage
+        unreadMessageNumber
+        user {
+          id
+          email
+          username
+          name
+          image
+        }
+      }
+    }
+  }
+`)
+
+export const deletedMessage = graphql(`
+  subscription deletedMessage {
+    deletedMessage {
+      changeMessage {
+        id
+        body
+        sender {
+          id
+          email
+          username
+          name
+          image
+        }
+        type
+        isDeleted
+        conversationId
+        createdAt
+        updatedAt
+      }
+      conversationId
+      members {
+        id
+        hasReadlastMessage
+        unreadMessageNumber
+        user {
+          id
+          email
+          username
+          name
+          image
+        }
+      }
+    }
+  }
+`)
