@@ -7,13 +7,18 @@ import {
   Divider,
   Text,
 } from "native-base"
-import { conversationCreated, conversations } from "queries"
+import {
+  conversationCreated,
+  conversationUpdated,
+  conversations,
+} from "queries"
 import React, { useCallback, useEffect } from "react"
 
 import ConversationItem from "./ConversationItem"
 import ConversationSkeleton from "./ConversationSkeleton"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError } from "../../../Utils/Toast"
+import { cloneDeep } from "@apollo/client/utilities"
 
 const ConversationList = () => {
   const { user } = useAuthContext()
@@ -29,6 +34,33 @@ const ConversationList = () => {
     },
     fetchPolicy: "network-only",
   })
+
+  const conversationUpdateSub = useCallback(
+    () =>
+      subscribeToMore({
+        document: conversationUpdated,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+
+          const data = subscriptionData.data.conversationUpdated
+          const prevData = cloneDeep(prev.conversations)
+
+          const i = prevData.findIndex((item) => item.id === data.id)
+
+          prevData[i] = data
+
+          const sortedData = prevData.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+          )
+
+          return Object.assign({}, prev, { conversations: sortedData })
+        },
+      }),
+    [subscribeToMore],
+  )
+
+  useEffect(() => conversationUpdateSub(), [conversationUpdateSub])
 
   const subscribe = useCallback(
     () =>
@@ -48,9 +80,7 @@ const ConversationList = () => {
     [subscribeToMore],
   )
 
-  useEffect(() => {
-    subscribe()
-  }, [subscribe])
+  useEffect(() => subscribe(), [subscribe])
 
   return (
     <Stack overflowY="auto" mt="2" mb="14">
