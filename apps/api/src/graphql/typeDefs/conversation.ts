@@ -16,6 +16,10 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    removeMembers(conversationId: String!, members: [newMembers!]!): Boolean
+  }
+
+  type Mutation {
     markConversationAsRead(conversationId: String!): Boolean
   }
 

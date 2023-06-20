@@ -24,7 +24,10 @@ type AddedToConversationProps = {
 type Resolvers = {
   Mutation: Pick<
     MutationResolvers<Context>,
-    "createConversation" | "markConversationAsRead" | "addNewMembers"
+    | "createConversation"
+    | "markConversationAsRead"
+    | "addNewMembers"
+    | "removeMembers"
   >
   Query: Pick<QueryResolvers<Context>, "conversations">
   // Subscription: Pick<
@@ -242,6 +245,64 @@ const resolvers: Resolvers = {
         await pubsub.publish(ADDED_TO_CONVERSATION, addedProps)
         await pubsub.publish(CONVERSATION_UPDATED, {
           conversationUpdated: conversationToSend,
+        })
+      } catch (error: any) {
+        throw new GraphQLError(error?.message)
+      }
+
+      return true
+    },
+
+    async removeMembers(_, { conversationId, members }, ctx) {
+      const { prisma, session, pubsub } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      try {
+        const conversation = await prisma.conversation.findFirst({
+          where: { id: conversationId },
+          include: { conversationMembers: { include: { user: true } } },
+        })
+
+        if (!conversation) throw new GraphQLError("Conversation does not exist")
+
+        const member = isMember(conversation.conversationMembers, session.user)
+
+        if (!member) throw new GraphQLError("Not a member of the application")
+
+        const newUsers = members.map((membe) => membe.username).join(", ")
+        const membersIds = members.map((mem) => mem.id)
+
+        await prisma.conversationMember.deleteMany({
+          where: { userId: { in: membersIds }, conversationId },
+        })
+
+        const updatedConversation = await prisma.conversation.update({
+          where: { id: conversationId },
+          data: {
+            latestMessage: {
+              create: {
+                body: `removed ${newUsers} from chat`,
+                type: "bot",
+                conversation: {
+                  connect: { id: conversationId },
+                },
+                sender: {
+                  connect: { id: session.user.id },
+                },
+              },
+            },
+          },
+          include: {
+            conversationMembers: { include: { user: true } },
+            latestMessage: { include: { sender: true } },
+          },
+        })
+
+        const conversationUpdated: Conversation = updatedConversation
+
+        await pubsub.publish(CONVERSATION_UPDATED, {
+          conversationUpdated,
         })
       } catch (error: any) {
         throw new GraphQLError(error?.message)
