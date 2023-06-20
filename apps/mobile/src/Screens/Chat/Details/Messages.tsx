@@ -29,7 +29,7 @@ const Messages = ({ messages, user, loading }: Props) => {
           data={messages}
           inverted
           renderItem={({ item }) => <Message message={item} user={user} />}
-          contentContainerStyle={{ gap: 20 }}
+          contentContainerStyle={{ gap: 20, paddingBottom: 60 }}
           padding="6"
         />
       )}

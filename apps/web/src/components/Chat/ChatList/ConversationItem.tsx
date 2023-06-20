@@ -83,8 +83,6 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
             `,
           })
 
-          console.log(currentData)
-
           if (!currentData) return
 
           const conversationMembers = cloneDeep(currentData.conversationMembers)
@@ -97,8 +95,6 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
 
           conversationMembers[idx].hasReadlastMessage = true
           conversationMembers[idx].unreadMessageNumber = 0
-
-          console.log(conversationMembers[idx])
 
           cache.writeFragment({
             id: `Conversation:${conversation.id}`,
