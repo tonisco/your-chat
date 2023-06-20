@@ -1,6 +1,11 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { Stack, Toast, useColorModeValue } from "native-base"
-import { markConversationAsRead, messageSent, messages } from "queries"
+import {
+  markAsReadCache,
+  markConversationAsRead,
+  messageSent,
+  messages,
+} from "queries"
 import React, { useCallback, useEffect } from "react"
 
 import MessageInput from "./MessageInput"
@@ -8,8 +13,6 @@ import Messages from "./Messages"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError } from "../../../Utils/Toast"
 import { DetailsScreenProps } from "../../../types/screen"
-import { ConversationMembers } from "queries/src/types"
-import { cloneDeep } from "@apollo/client/utilities"
 
 type Props = DetailsScreenProps
 
@@ -26,46 +29,7 @@ const Details = ({ route }: Props) => {
       mark({
         variables: { conversationId: id },
         update: (cache) => {
-          const currentData: {
-            conversationMembers: ConversationMembers[]
-          } | null = cache.readFragment({
-            id: `Conversation:${id}`,
-            fragment: gql`
-              fragment ConversationMembers on Conversation {
-                conversationMembers {
-                  user {
-                    id
-                    username
-                  }
-                  hasReadlastMessage
-                  unreadMessageNumber
-                }
-              }
-            `,
-          })
-
-          if (!currentData) return
-
-          const conversationMembers = cloneDeep(currentData.conversationMembers)
-
-          const idx = conversationMembers.findIndex(
-            (data) => data.user.id === user?.id,
-          )
-
-          if (idx === -1) return
-
-          conversationMembers[idx].hasReadlastMessage = true
-          conversationMembers[idx].unreadMessageNumber = 0
-
-          cache.writeFragment({
-            id: `Conversation:${id}`,
-            data: { conversationMembers },
-            fragment: gql`
-              fragment updateMembers on Conversation {
-                conversationMembers
-              }
-            `,
-          })
+          markAsReadCache({ cache, conversationId: id, userId: user?.id })
         },
       }),
     [id, mark, user?.id],

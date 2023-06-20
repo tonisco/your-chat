@@ -56,6 +56,7 @@ const MessageInput = ({ conversationId }: Props) => {
           borderColor="gray.600"
           flex={1}
           _focus={{ backgroundColor: "transparent", borderColor: "gray.400" }}
+          onSubmitEditing={reply}
         />
         <Pressable _pressed={{ opacity: 0.5 }} onPress={reply}>
           <InputRightAddon

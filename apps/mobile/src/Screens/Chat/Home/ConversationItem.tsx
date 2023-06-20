@@ -10,15 +10,14 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base"
-import { Conversation, ConversationMembers } from "queries/src/types"
+import { Conversation } from "queries/src/types"
 import React, { useCallback } from "react"
 
 import MembersImages from "./MembersImages"
 import { User } from "../../../Providers/AuthProvider"
 import { ChatNavigatorScreen } from "../../../types/screen"
-import { gql, useMutation } from "@apollo/client"
-import { markConversationAsRead } from "queries"
-import { cloneDeep } from "@apollo/client/utilities"
+import { useMutation } from "@apollo/client"
+import { markAsReadCache, markConversationAsRead } from "queries"
 
 type Props = {
   conversation: Conversation
@@ -74,45 +73,10 @@ const ConversationItem = ({ conversation, user }: Props) => {
       mark({
         variables: { conversationId: conversation.id },
         update: (cache) => {
-          const currentData: {
-            conversationMembers: ConversationMembers[]
-          } | null = cache.readFragment({
-            id: `Conversation:${conversation.id}`,
-            fragment: gql`
-              fragment ConversationMembers on Conversation {
-                conversationMembers {
-                  user {
-                    id
-                    username
-                  }
-                  hasReadlastMessage
-                  unreadMessageNumber
-                }
-              }
-            `,
-          })
-
-          if (!currentData) return
-
-          const conversationMembers = cloneDeep(currentData.conversationMembers)
-
-          const idx = conversationMembers.findIndex(
-            (data) => data.user.id === user?.id,
-          )
-
-          if (idx === -1) return
-
-          conversationMembers[idx].hasReadlastMessage = true
-          conversationMembers[idx].unreadMessageNumber = 0
-
-          cache.writeFragment({
-            id: `Conversation:${conversation.id}`,
-            data: { conversationMembers },
-            fragment: gql`
-              fragment updateMembers on Conversation {
-                conversationMembers
-              }
-            `,
+          markAsReadCache({
+            cache,
+            conversationId: conversation.id,
+            userId: user?.id,
           })
         },
       }),

@@ -3,12 +3,15 @@
 import React, { useCallback, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { useSession } from "next-auth/react"
-import { markConversationAsRead, messages, messageSent } from "queries"
-import { ConversationMembers } from "queries/src/types"
+import {
+  markAsReadCache,
+  markConversationAsRead,
+  messages,
+  messageSent,
+} from "queries"
 import { toast } from "react-hot-toast"
 
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { cloneDeep } from "@apollo/client/utilities"
+import { useMutation, useQuery } from "@apollo/client"
 import { Stack } from "@chakra-ui/react"
 
 import MessageInput from "./MessageInput"
@@ -37,45 +40,10 @@ const ChatRoom = () => {
       mark({
         variables: { conversationId: id ?? "" },
         update: (cache) => {
-          const currentData: {
-            conversationMembers: ConversationMembers[]
-          } | null = cache.readFragment({
-            id: `Conversation:${id ?? ""}`,
-            fragment: gql`
-              fragment ConversationMembers on Conversation {
-                conversationMembers {
-                  user {
-                    id
-                    username
-                  }
-                  hasReadlastMessage
-                  unreadMessageNumber
-                }
-              }
-            `,
-          })
-
-          if (!currentData) return
-
-          const conversationMembers = cloneDeep(currentData.conversationMembers)
-
-          const idx = conversationMembers.findIndex(
-            (data) => data.user.id === session?.user.id,
-          )
-
-          if (idx === -1) return
-
-          conversationMembers[idx].hasReadlastMessage = true
-          conversationMembers[idx].unreadMessageNumber = 0
-
-          cache.writeFragment({
-            id: `Conversation:${id ?? ""}`,
-            data: { conversationMembers },
-            fragment: gql`
-              fragment updateMembers on Conversation {
-                conversationMembers
-              }
-            `,
+          markAsReadCache({
+            cache,
+            conversationId: id ?? "",
+            userId: session?.user.id,
           })
         },
       }),
