@@ -25,6 +25,10 @@ const typeDefs = gql`
     messageSent(conversationId: String!): Message!
   }
 
+  type Subscription {
+    editedMessage: SubMessageReturn!
+  }
+
   enum MessageType {
     user
     bot
@@ -44,6 +48,12 @@ const typeDefs = gql`
   input createMessageInput {
     body: String!
     conversationId: String!
+  }
+
+  type SubMessageReturn {
+    changeMessage: Message!
+    conversationId: String!
+    members: [ConversationMembers!]!
   }
 `
 

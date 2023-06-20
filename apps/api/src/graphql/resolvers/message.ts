@@ -6,9 +6,14 @@ import {
   Message,
   MutationResolvers,
   QueryResolvers,
+  SubMessageReturn,
 } from "../../types/graphql"
 import { Context, SubscriptionCtx } from "../../utils/context"
-import { CONVERSATION_UPDATED, MESSAGE_SENT } from "../../utils/events"
+import {
+  CONVERSATION_UPDATED,
+  MESSAGE_EDITED,
+  MESSAGE_SENT,
+} from "../../utils/events"
 import { isMember } from "../../utils/functions"
 
 type ResolverType = {
@@ -123,12 +128,38 @@ const resolver: ResolverType = {
       return true
     },
     editMessage: async (_, args, ctx) => {
-      const { prisma, session } = ctx
-      const { body, messageId } = args
+      const { prisma, pubsub, session } = ctx
+      const { body, conversationId, messageId } = args
 
       if (!session?.user) throw new GraphQLError("Not authorized")
+      try {
+        const isAuthor = await prisma.message.findFirst({
+          where: { senderId: session.user.id, conversationId, id: messageId },
+        })
 
-      await prisma.message.update({ where: { id: messageId }, data: { body } })
+        if (!isAuthor) throw new GraphQLError("Not the author")
+
+        const message = await prisma.message.update({
+          where: { id: messageId },
+          data: { body },
+          include: { sender: true },
+        })
+
+        const members = await prisma.conversationMember.findMany({
+          where: { conversationId },
+          include: { user: true },
+        })
+
+        const editedMessage: SubMessageReturn = {
+          conversationId,
+          changeMessage: message,
+          members,
+        }
+
+        await pubsub.publish(MESSAGE_EDITED, editedMessage)
+      } catch (error: any) {
+        throw new GraphQLError(error?.message)
+      }
 
       return true
     },
@@ -161,6 +192,19 @@ const resolver: ResolverType = {
           if (!session?.user) throw new GraphQLError("Not authorized")
 
           return payload.messageSent.conversationId === args.conversationId
+        },
+      ),
+    },
+    editedMessage: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator([MESSAGE_EDITED]),
+        (payload: SubMessageReturn, args, ctx: SubscriptionCtx) => {
+          const { session } = ctx
+
+          if (!session?.user) throw new GraphQLError("Not authorized")
+
+          return isMember(payload.members, session.user)
         },
       ),
     },
