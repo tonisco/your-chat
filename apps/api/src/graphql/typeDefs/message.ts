@@ -17,6 +17,10 @@ const typeDefs = gql`
     ): Boolean
   }
 
+  type Mutation {
+    deleteMessage(conversationId: String!, messageId: String!): Boolean
+  }
+
   type Subscription {
     messageSent(conversationId: String!): Message!
   }

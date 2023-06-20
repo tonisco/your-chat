@@ -13,7 +13,10 @@ import { isMember } from "../../utils/functions"
 
 type ResolverType = {
   Query: Pick<QueryResolvers<Context>, "messages">
-  Mutation: Pick<MutationResolvers<Context>, "sendMessage" | "editMessage">
+  Mutation: Pick<
+    MutationResolvers<Context>,
+    "sendMessage" | "editMessage" | "deleteMessage"
+  >
   Subscription: any
 }
 const resolver: ResolverType = {
@@ -126,6 +129,19 @@ const resolver: ResolverType = {
       if (!session?.user) throw new GraphQLError("Not authorized")
 
       await prisma.message.update({ where: { id: messageId }, data: { body } })
+
+      return true
+    },
+    deleteMessage: async (_, args, ctx) => {
+      const { prisma, session } = ctx
+      const { messageId } = args
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      await prisma.message.update({
+        where: { id: messageId },
+        data: { body: "This message was deleted", isDeleted: true },
+      })
 
       return true
     },

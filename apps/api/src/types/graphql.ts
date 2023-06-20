@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -77,6 +76,7 @@ export type Mutation = {
   addNewMembers?: Maybe<Scalars['Boolean']['output']>;
   createConversation: CreateConversationReturn;
   createUsername: MessageReturn;
+  deleteMessage?: Maybe<Scalars['Boolean']['output']>;
   editMessage?: Maybe<Scalars['Boolean']['output']>;
   loginUser: UserWithToken;
   markConversationAsRead?: Maybe<Scalars['Boolean']['output']>;
@@ -98,6 +98,12 @@ export type MutationCreateConversationArgs = {
 
 export type MutationCreateUsernameArgs = {
   username: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteMessageArgs = {
+  conversationId: Scalars['String']['input'];
+  messageId: Scalars['String']['input'];
 };
 
 
@@ -380,6 +386,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addNewMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNewMembersArgs, 'conversationId' | 'members'>>;
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
+  deleteMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'conversationId' | 'messageId'>>;
   editMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEditMessageArgs, 'body' | 'conversationId' | 'messageId'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
   markConversationAsRead?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMarkConversationAsReadArgs, 'conversationId'>>;
