@@ -46,6 +46,11 @@ export type FoundUsers = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
+export type Members = {
+  id: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export type Message = {
   __typename?: 'Message';
   body: Scalars['String']['output'];
@@ -80,7 +85,7 @@ export type Mutation = {
 
 export type MutationAddNewMembersArgs = {
   conversationId: Scalars['String']['input'];
-  members: Array<NewMembers>;
+  members: Array<Members>;
 };
 
 
@@ -109,7 +114,7 @@ export type MutationMarkConversationAsReadArgs = {
 
 export type MutationRemoveMembersArgs = {
   conversationId: Scalars['String']['input'];
-  members: Array<NewMembers>;
+  members: Array<Members>;
 };
 
 
@@ -189,11 +194,6 @@ export type CreateConversationReturn = {
 export type CreateMessageInput = {
   body: Scalars['String']['input'];
   conversationId: Scalars['String']['input'];
-};
-
-export type NewMembers = {
-  id: Scalars['String']['input'];
-  username: Scalars['String']['input'];
 };
 
 export type NewMembersList = {
@@ -280,6 +280,7 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   FoundUsers: ResolverTypeWrapper<FoundUsers>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Members: Members;
   Message: ResolverTypeWrapper<Message>;
   MessageReturn: ResolverTypeWrapper<MessageReturn>;
   MessageType: MessageType;
@@ -293,7 +294,6 @@ export type ResolversTypes = {
   addedToConversationReturn: ResolverTypeWrapper<AddedToConversationReturn>;
   createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
   createMessageInput: CreateMessageInput;
-  newMembers: NewMembers;
   newMembersList: ResolverTypeWrapper<NewMembersList>;
 };
 
@@ -306,6 +306,7 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   FoundUsers: FoundUsers;
   Int: Scalars['Int']['output'];
+  Members: Members;
   Message: Message;
   MessageReturn: MessageReturn;
   Mutation: {};
@@ -318,7 +319,6 @@ export type ResolversParentTypes = {
   addedToConversationReturn: AddedToConversationReturn;
   createConversationReturn: CreateConversationReturn;
   createMessageInput: CreateMessageInput;
-  newMembers: NewMembers;
   newMembersList: NewMembersList;
 };
 

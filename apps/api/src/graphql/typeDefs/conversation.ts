@@ -12,11 +12,11 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addNewMembers(conversationId: String!, members: [newMembers!]!): Boolean
+    addNewMembers(conversationId: String!, members: [Members!]!): Boolean
   }
 
   type Mutation {
-    removeMembers(conversationId: String!, members: [newMembers!]!): Boolean
+    removeMembers(conversationId: String!, members: [Members!]!): Boolean
   }
 
   type Mutation {
@@ -43,7 +43,7 @@ const typeDefs = gql`
     id: String!
   }
 
-  input newMembers {
+  input Members {
     id: String!
     username: String!
   }

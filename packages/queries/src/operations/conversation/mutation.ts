@@ -20,7 +20,23 @@ export const markConversationAsRead = graphql(`
 `)
 
 export const addNewMembers = graphql(`
-  mutation addNewMembers($conversationId: String!, $members: [newMembers!]!) {
+  mutation addNewMembers($conversationId: String!, $members: [Members!]!) {
     addNewMembers(conversationId: $conversationId, members: $members)
+  }
+
+  input Members {
+    id: String!
+    username: String!
+  }
+`)
+
+export const removeMembers = graphql(`
+  mutation removeMembers($conversationId: String!, $members: [Members!]!) {
+    removeMembers(conversationId: $conversationId, members: $members)
+  }
+
+  input Members {
+    id: String!
+    username: String!
   }
 `)

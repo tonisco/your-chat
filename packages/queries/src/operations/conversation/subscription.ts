@@ -76,36 +76,54 @@ export const conversationUpdated = graphql(`
 export const addedToConversation = graphql(`
   subscription addedToConversation {
     addedToConversation {
-      id
-      latestMessage {
+      conversation {
         id
-        body
-        sender {
+        latestMessage {
           id
-          email
-          username
-          name
-          image
+          body
+          sender {
+            id
+            email
+            username
+            name
+            image
+          }
+          type
+          conversationId
+          createdAt
+          updatedAt
         }
-        type
-        conversationId
+        conversationMembers {
+          id
+          hasReadlastMessage
+          unreadMessageNumber
+          user {
+            id
+            email
+            username
+            name
+            image
+          }
+        }
         createdAt
         updatedAt
       }
-      conversationMembers {
+      members {
         id
-        hasReadlastMessage
-        unreadMessageNumber
-        user {
-          id
-          email
-          username
-          name
-          image
-        }
+        username
       }
-      createdAt
-      updatedAt
+    }
+  }
+`)
+
+export const removeFromConversation = graphql(`
+  subscription removeFromConversation {
+    removeFromConversation {
+      conversationId
+      members {
+        id
+        username
+      }
     }
   }
 `)
