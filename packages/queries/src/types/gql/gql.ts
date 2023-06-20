@@ -23,6 +23,8 @@ const documents = {
     "\n  subscription addedToConversation {\n    addedToConversation {\n      conversation {\n        id\n        latestMessage {\n          id\n          body\n          sender {\n            id\n            email\n            username\n            name\n            image\n          }\n          type\n          isDeleted\n          conversationId\n          createdAt\n          updatedAt\n        }\n        conversationMembers {\n          id\n          hasReadlastMessage\n          unreadMessageNumber\n          user {\n            id\n            email\n            username\n            name\n            image\n          }\n        }\n        createdAt\n        updatedAt\n      }\n      members {\n        id\n        username\n      }\n    }\n  }\n": types.AddedToConversationDocument,
     "\n  subscription removeFromConversation {\n    removeFromConversation {\n      conversationId\n      members {\n        id\n        username\n      }\n    }\n  }\n": types.RemoveFromConversationDocument,
     "\n  mutation sendMessage($body: String!, $conversationId: String!) {\n    sendMessage(body: $body, conversationId: $conversationId)\n  }\n": types.SendMessageDocument,
+    "\n  mutation editMessage(\n    $body: String!\n    $conversationId: String!\n    $messageId: String!\n  ) {\n    editMessage(\n      body: $body\n      conversationId: $conversationId\n      messageId: $messageId\n    )\n  }\n": types.EditMessageDocument,
+    "\n  mutation deleteMessage($conversationId: String!, $messageId: String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId)\n  }\n": types.DeleteMessageDocument,
     "\n  query messages($conversationId: String!) {\n    messages(conversationId: $conversationId) {\n      id\n      body\n      type\n      isDeleted\n      conversationId\n      createdAt\n      updatedAt\n      sender {\n        id\n        email\n        username\n        name\n        image\n      }\n    }\n  }\n": types.MessagesDocument,
     "\n  subscription messageSent($conversationId: String!) {\n    messageSent(conversationId: $conversationId) {\n      id\n      body\n      type\n      isDeleted\n      conversationId\n      createdAt\n      updatedAt\n      sender {\n        id\n        email\n        username\n        name\n        image\n      }\n    }\n  }\n": types.MessageSentDocument,
     "\n  mutation createUsername($username: String!) {\n    createUsername(username: $username) {\n      message\n    }\n  }\n": types.CreateUsernameDocument,
@@ -84,6 +86,14 @@ export function graphql(source: "\n  subscription removeFromConversation {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation sendMessage($body: String!, $conversationId: String!) {\n    sendMessage(body: $body, conversationId: $conversationId)\n  }\n"): (typeof documents)["\n  mutation sendMessage($body: String!, $conversationId: String!) {\n    sendMessage(body: $body, conversationId: $conversationId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation editMessage(\n    $body: String!\n    $conversationId: String!\n    $messageId: String!\n  ) {\n    editMessage(\n      body: $body\n      conversationId: $conversationId\n      messageId: $messageId\n    )\n  }\n"): (typeof documents)["\n  mutation editMessage(\n    $body: String!\n    $conversationId: String!\n    $messageId: String!\n  ) {\n    editMessage(\n      body: $body\n      conversationId: $conversationId\n      messageId: $messageId\n    )\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation deleteMessage($conversationId: String!, $messageId: String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId)\n  }\n"): (typeof documents)["\n  mutation deleteMessage($conversationId: String!, $messageId: String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
