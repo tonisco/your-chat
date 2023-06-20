@@ -9,6 +9,14 @@ const typeDefs = gql`
     sendMessage(body: String!, conversationId: String!): Boolean
   }
 
+  type Mutation {
+    editMessage(
+      body: String!
+      conversationId: String!
+      messageId: String!
+    ): Boolean
+  }
+
   type Subscription {
     messageSent(conversationId: String!): Message!
   }

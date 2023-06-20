@@ -75,7 +75,9 @@ const ConversationItem = ({ conversation, session, index, length }: Props) => {
   )
 
   const goToChat = () => {
-    markMessage()
+    if (member?.hasReadlastMessage === false) {
+      markMessage()
+    }
 
     const params = new URLSearchParams({
       id: conversation.id,

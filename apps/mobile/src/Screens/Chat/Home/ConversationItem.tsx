@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client"
 import { useNavigation, NavigationProp } from "@react-navigation/native"
 import { formatRelative } from "date-fns"
 import enUS from "date-fns/locale/en-US"
@@ -10,14 +11,13 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base"
+import { markAsReadCache, markConversationAsRead } from "queries"
 import { Conversation } from "queries/src/types"
 import React, { useCallback } from "react"
 
 import MembersImages from "./MembersImages"
 import { User } from "../../../Providers/AuthProvider"
 import { ChatNavigatorScreen } from "../../../types/screen"
-import { useMutation } from "@apollo/client"
-import { markAsReadCache, markConversationAsRead } from "queries"
 
 type Props = {
   conversation: Conversation
@@ -84,7 +84,10 @@ const ConversationItem = ({ conversation, user }: Props) => {
   )
 
   const goToChat = () => {
-    markMessage()
+    if (member?.hasReadlastMessage === false) {
+      markMessage()
+    }
+
     navigate("Details", { id: conversation.id, members })
   }
 
