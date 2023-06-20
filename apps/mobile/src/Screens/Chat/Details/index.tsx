@@ -1,8 +1,9 @@
 import { useQuery } from "@apollo/client"
-import { Box, Toast, useColorModeValue } from "native-base"
+import { Stack, Toast, useColorModeValue } from "native-base"
 import { messages } from "queries"
 import React from "react"
 
+import MessageInput from "./MessageInput"
 import Messages from "./Messages"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError } from "../../../Utils/Toast"
@@ -28,9 +29,10 @@ const Details = ({ route }: Props) => {
   })
 
   return (
-    <Box bgColor={bg}>
+    <Stack bgColor={bg} h="full">
       <Messages loading={loading} messages={data?.messages} user={user} />
-    </Box>
+      <MessageInput conversationId={id} />
+    </Stack>
   )
 }
 

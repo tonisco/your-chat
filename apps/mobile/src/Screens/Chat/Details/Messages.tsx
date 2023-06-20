@@ -15,8 +15,7 @@ type Props = {
 const Messages = ({ messages, user, loading }: Props) => {
   return (
     <VStack
-      // flex={1}
-      height="full"
+      flex={1}
       space={4}
       // direction="column-reverse"
     >
@@ -30,10 +29,7 @@ const Messages = ({ messages, user, loading }: Props) => {
           data={messages}
           inverted
           renderItem={({ item }) => <Message message={item} user={user} />}
-          contentContainerStyle={{
-            gap: 20,
-            paddingBottom: 60,
-          }}
+          contentContainerStyle={{ gap: 20 }}
           padding="6"
         />
       )}

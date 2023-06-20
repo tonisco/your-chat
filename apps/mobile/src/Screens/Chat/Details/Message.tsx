@@ -79,14 +79,8 @@ const Message = ({ message, user }: Props) => {
               })}
             </Text>
           </HStack>
-          <Box
-            // alignSelf="start"
-            py="2"
-            px="3"
-            bgColor={othersBg}
-            rounded="2xl"
-          >
-            <Text color="white">{message.body}</Text>
+          <Box py="2" px="3" bgColor={othersBg} rounded="2xl">
+            <Text>{message.body}</Text>
           </Box>
         </VStack>
       </HStack>
@@ -94,7 +88,7 @@ const Message = ({ message, user }: Props) => {
 
   return (
     <Box
-      // alignSelf="end"
+      alignSelf="flex-end"
       py="2"
       px="3"
       bgColor={mineBg}
