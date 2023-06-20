@@ -29,6 +29,10 @@ const typeDefs = gql`
     editedMessage: SubMessageReturn!
   }
 
+  type Subscription {
+    deletedMessage: SubMessageReturn!
+  }
+
   enum MessageType {
     user
     bot

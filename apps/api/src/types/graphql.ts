@@ -174,6 +174,7 @@ export type Subscription = {
   addedToConversation: AddedToConversationReturn;
   conversationCreated: Conversation;
   conversationUpdated: Conversation;
+  deletedMessage: SubMessageReturn;
   editedMessage: SubMessageReturn;
   messageSent: Message;
   removeFromConversation: RemoveConversationReturn;
@@ -428,6 +429,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   addedToConversation?: SubscriptionResolver<ResolversTypes['addedToConversationReturn'], "addedToConversation", ParentType, ContextType>;
   conversationCreated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationCreated", ParentType, ContextType>;
   conversationUpdated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationUpdated", ParentType, ContextType>;
+  deletedMessage?: SubscriptionResolver<ResolversTypes['SubMessageReturn'], "deletedMessage", ParentType, ContextType>;
   editedMessage?: SubscriptionResolver<ResolversTypes['SubMessageReturn'], "editedMessage", ParentType, ContextType>;
   messageSent?: SubscriptionResolver<ResolversTypes['Message'], "messageSent", ParentType, ContextType, RequireFields<SubscriptionMessageSentArgs, 'conversationId'>>;
   removeFromConversation?: SubscriptionResolver<ResolversTypes['RemoveConversationReturn'], "removeFromConversation", ParentType, ContextType>;

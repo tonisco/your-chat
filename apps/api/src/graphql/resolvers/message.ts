@@ -11,6 +11,7 @@ import {
 import { Context, SubscriptionCtx } from "../../utils/context"
 import {
   CONVERSATION_UPDATED,
+  MESSAGE_DELETED,
   MESSAGE_EDITED,
   MESSAGE_SENT,
 } from "../../utils/events"
@@ -164,15 +165,39 @@ const resolver: ResolverType = {
       return true
     },
     deleteMessage: async (_, args, ctx) => {
-      const { prisma, session } = ctx
-      const { messageId } = args
+      const { prisma, session, pubsub } = ctx
+      const { messageId, conversationId } = args
 
       if (!session?.user) throw new GraphQLError("Not authorized")
 
-      await prisma.message.update({
-        where: { id: messageId },
-        data: { body: "This message was deleted", isDeleted: true },
-      })
+      try {
+        const isAuthor = await prisma.message.findFirst({
+          where: { senderId: session.user.id, conversationId, id: messageId },
+        })
+
+        if (!isAuthor) throw new GraphQLError("Not the author")
+
+        const message = await prisma.message.update({
+          where: { id: messageId },
+          data: { body: "This message was deleted", isDeleted: true },
+          include: { sender: true },
+        })
+
+        const members = await prisma.conversationMember.findMany({
+          where: { conversationId },
+          include: { user: true },
+        })
+
+        const deletedMessage: SubMessageReturn = {
+          conversationId,
+          changeMessage: message,
+          members,
+        }
+
+        await pubsub.publish(MESSAGE_DELETED, deletedMessage)
+      } catch (error: any) {
+        throw new GraphQLError(error?.message)
+      }
 
       return true
     },
@@ -199,6 +224,19 @@ const resolver: ResolverType = {
       subscribe: withFilter(
         (_, args, ctx: SubscriptionCtx) =>
           ctx.pubsub.asyncIterator([MESSAGE_EDITED]),
+        (payload: SubMessageReturn, args, ctx: SubscriptionCtx) => {
+          const { session } = ctx
+
+          if (!session?.user) throw new GraphQLError("Not authorized")
+
+          return isMember(payload.members, session.user)
+        },
+      ),
+    },
+    deletedMessage: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator([MESSAGE_DELETED]),
         (payload: SubMessageReturn, args, ctx: SubscriptionCtx) => {
           const { session } = ctx
 
