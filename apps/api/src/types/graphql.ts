@@ -135,13 +135,19 @@ export type QueryMessagesArgs = {
   conversationId: Scalars['String']['input'];
 };
 
+export type RemoveConversationReturn = {
+  __typename?: 'RemoveConversationReturn';
+  conversationId: Scalars['String']['output'];
+  members: Array<NewMembersList>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
-  addedToConversation: Conversation;
+  addedToConversation: AddedToConversationReturn;
   conversationCreated: Conversation;
   conversationUpdated: Conversation;
-  members: Array<NewMembersList>;
   messageSent: Message;
+  removeFromConversation: RemoveConversationReturn;
 };
 
 
@@ -166,6 +172,12 @@ export type UserWithToken = {
   name?: Maybe<Scalars['String']['output']>;
   token: Scalars['String']['output'];
   username?: Maybe<Scalars['String']['output']>;
+};
+
+export type AddedToConversationReturn = {
+  __typename?: 'addedToConversationReturn';
+  conversation: Conversation;
+  members: Array<NewMembersList>;
 };
 
 export type CreateConversationReturn = {
@@ -273,10 +285,12 @@ export type ResolversTypes = {
   MessageType: MessageType;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  RemoveConversationReturn: ResolverTypeWrapper<RemoveConversationReturn>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   UserWithToken: ResolverTypeWrapper<UserWithToken>;
+  addedToConversationReturn: ResolverTypeWrapper<AddedToConversationReturn>;
   createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
   createMessageInput: CreateMessageInput;
   newMembers: NewMembers;
@@ -296,10 +310,12 @@ export type ResolversParentTypes = {
   MessageReturn: MessageReturn;
   Mutation: {};
   Query: {};
+  RemoveConversationReturn: RemoveConversationReturn;
   String: Scalars['String']['output'];
   Subscription: {};
   User: User;
   UserWithToken: UserWithToken;
+  addedToConversationReturn: AddedToConversationReturn;
   createConversationReturn: CreateConversationReturn;
   createMessageInput: CreateMessageInput;
   newMembers: NewMembers;
@@ -366,12 +382,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   messages?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType, RequireFields<QueryMessagesArgs, 'conversationId'>>;
 };
 
+export type RemoveConversationReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['RemoveConversationReturn'] = ResolversParentTypes['RemoveConversationReturn']> = {
+  conversationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  members?: Resolver<Array<ResolversTypes['newMembersList']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  addedToConversation?: SubscriptionResolver<ResolversTypes['Conversation'], "addedToConversation", ParentType, ContextType>;
+  addedToConversation?: SubscriptionResolver<ResolversTypes['addedToConversationReturn'], "addedToConversation", ParentType, ContextType>;
   conversationCreated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationCreated", ParentType, ContextType>;
   conversationUpdated?: SubscriptionResolver<ResolversTypes['Conversation'], "conversationUpdated", ParentType, ContextType>;
-  members?: SubscriptionResolver<Array<ResolversTypes['newMembersList']>, "members", ParentType, ContextType>;
   messageSent?: SubscriptionResolver<ResolversTypes['Message'], "messageSent", ParentType, ContextType, RequireFields<SubscriptionMessageSentArgs, 'conversationId'>>;
+  removeFromConversation?: SubscriptionResolver<ResolversTypes['RemoveConversationReturn'], "removeFromConversation", ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -390,6 +412,12 @@ export type UserWithTokenResolvers<ContextType = any, ParentType extends Resolve
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AddedToConversationReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['addedToConversationReturn'] = ResolversParentTypes['addedToConversationReturn']> = {
+  conversation?: Resolver<ResolversTypes['Conversation'], ParentType, ContextType>;
+  members?: Resolver<Array<ResolversTypes['newMembersList']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -414,9 +442,11 @@ export type Resolvers<ContextType = any> = {
   MessageReturn?: MessageReturnResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RemoveConversationReturn?: RemoveConversationReturnResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserWithToken?: UserWithTokenResolvers<ContextType>;
+  addedToConversationReturn?: AddedToConversationReturnResolvers<ContextType>;
   createConversationReturn?: CreateConversationReturnResolvers<ContextType>;
   newMembersList?: NewMembersListResolvers<ContextType>;
 };

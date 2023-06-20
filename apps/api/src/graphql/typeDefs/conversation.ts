@@ -32,8 +32,11 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    addedToConversation: Conversation!
-    members: [newMembersList!]!
+    addedToConversation: addedToConversationReturn!
+  }
+
+  type Subscription {
+    removeFromConversation: RemoveConversationReturn!
   }
 
   input ConversationMemberId {
@@ -68,6 +71,16 @@ const typeDefs = gql`
     hasReadlastMessage: Boolean!
     unreadMessageNumber: Int!
     user: User!
+  }
+
+  type addedToConversationReturn {
+    conversation: Conversation!
+    members: [newMembersList!]!
+  }
+
+  type RemoveConversationReturn {
+    conversationId: String!
+    members: [newMembersList!]!
   }
 `
 

@@ -13,12 +13,21 @@ import {
   ADDED_TO_CONVERSATION,
   CONVERSATION_CREATED,
   CONVERSATION_UPDATED,
+  REMOVE_FROM_CONVERSATION,
 } from "../../utils/events"
 import { isMember } from "../../utils/functions"
 
+type Members = { id: string; username: string }[]
+
 type AddedToConversationProps = {
-  addedToConversation: Conversation
-  members: { id: string; username: string }[]
+  addedToConversation: {
+    conversation: Conversation
+    members: Members
+  }
+}
+
+type RemoveConversationProps = {
+  removeFromConversation: { conversationId: String; members: Members }
 }
 
 type Resolvers = {
@@ -238,8 +247,10 @@ const resolvers: Resolvers = {
         const conversationToSend = updatedConversation
 
         const addedProps: AddedToConversationProps = {
-          members,
-          addedToConversation: conversationToSend,
+          addedToConversation: {
+            conversation: conversationToSend,
+            members,
+          },
         }
 
         await pubsub.publish(ADDED_TO_CONVERSATION, addedProps)
@@ -351,7 +362,28 @@ const resolvers: Resolvers = {
       subscribe: withFilter(
         (_, args, ctx: SubscriptionCtx) =>
           ctx.pubsub.asyncIterator(ADDED_TO_CONVERSATION),
-        ({ members }: AddedToConversationProps, _, ctx: SubscriptionCtx) => {
+        (
+          { addedToConversation: { members } }: AddedToConversationProps,
+          _,
+          ctx: SubscriptionCtx,
+        ) => {
+          const { session } = ctx
+
+          if (!session?.user) throw new GraphQLError("Not authorized")
+
+          return members.some((member) => member.id === session.user.id)
+        },
+      ),
+    },
+    removeFromConversation: {
+      subscribe: withFilter(
+        (_, args, ctx: SubscriptionCtx) =>
+          ctx.pubsub.asyncIterator(REMOVE_FROM_CONVERSATION),
+        (
+          { removeFromConversation: { members } }: RemoveConversationProps,
+          _,
+          ctx: SubscriptionCtx,
+        ) => {
           const { session } = ctx
 
           if (!session?.user) throw new GraphQLError("Not authorized")
