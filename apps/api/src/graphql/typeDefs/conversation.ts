@@ -12,6 +12,10 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    addNewMembers(conversationId: String!, members: [newMembers!]!): Boolean
+  }
+
+  type Mutation {
     markConversationAsRead(conversationId: String!): Boolean
   }
 
@@ -25,6 +29,11 @@ const typeDefs = gql`
 
   input ConversationMemberId {
     id: String!
+  }
+
+  input newMembers {
+    id: String!
+    username: String!
   }
 
   type createConversationReturn {
@@ -49,28 +58,3 @@ const typeDefs = gql`
 `
 
 export default typeDefs
-
-// model Conversation {
-//     id
-//     admin
-//     adminId
-//     conversationMembers
-//     conversationMembersNumber
-//     messages
-//     latestMessage
-//     latestMessageId
-//     createdAt
-//     updatedAt
-// }
-
-// model ConversationMember {
-//     id
-//     hasReadlastMessage
-//     unreadMessageNumber
-//     user
-//     userId
-//     conversation
-//     conversationId
-//     createdAt
-//     updatedAt
-// }

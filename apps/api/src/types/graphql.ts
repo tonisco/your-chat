@@ -68,11 +68,18 @@ export type MessageType =
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addNewMembers?: Maybe<Scalars['Boolean']['output']>;
   createConversation: CreateConversationReturn;
   createUsername: MessageReturn;
   loginUser: UserWithToken;
   markConversationAsRead?: Maybe<Scalars['Boolean']['output']>;
   sendMessage?: Maybe<Scalars['Boolean']['output']>;
+};
+
+
+export type MutationAddNewMembersArgs = {
+  conversationId: Scalars['String']['input'];
+  members: Array<NewMembers>;
 };
 
 
@@ -161,6 +168,11 @@ export type CreateConversationReturn = {
 export type CreateMessageInput = {
   body: Scalars['String']['input'];
   conversationId: Scalars['String']['input'];
+};
+
+export type NewMembers = {
+  id: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 
@@ -252,6 +264,7 @@ export type ResolversTypes = {
   UserWithToken: ResolverTypeWrapper<UserWithToken>;
   createConversationReturn: ResolverTypeWrapper<CreateConversationReturn>;
   createMessageInput: CreateMessageInput;
+  newMembers: NewMembers;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -273,6 +286,7 @@ export type ResolversParentTypes = {
   UserWithToken: UserWithToken;
   createConversationReturn: CreateConversationReturn;
   createMessageInput: CreateMessageInput;
+  newMembers: NewMembers;
 };
 
 export type ConversationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Conversation'] = ResolversParentTypes['Conversation']> = {
@@ -320,6 +334,7 @@ export type MessageReturnResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addNewMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNewMembersArgs, 'conversationId' | 'members'>>;
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;

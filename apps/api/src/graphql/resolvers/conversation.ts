@@ -15,7 +15,7 @@ import { isMember } from "../../utils/functions"
 type Resolvers = {
   Mutation: Pick<
     MutationResolvers<Context>,
-    "createConversation" | "markConversationAsRead"
+    "createConversation" | "markConversationAsRead" | "addNewMembers"
   >
   Query: Pick<QueryResolvers<Context>, "conversations">
   // Subscription: Pick<
@@ -169,6 +169,57 @@ const resolvers: Resolvers = {
         }
       } catch (error: any) {
         throw new Error(error.message)
+      }
+
+      return true
+    },
+
+    async addNewMembers(_, { conversationId, members }, ctx) {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+      try {
+        const conversation = await prisma.conversation.findFirst({
+          where: { id: conversationId },
+          include: { conversationMembers: { include: { user: true } } },
+        })
+
+        if (!conversation) throw new GraphQLError("Conversation does not exist")
+
+        const member = isMember(conversation.conversationMembers, session.user)
+
+        if (!member) throw new GraphQLError("Not a member of the application")
+
+        const newUsers = members.map((membe) => membe.username).join(", ")
+
+        await prisma.conversation.update({
+          where: { id: conversationId },
+          data: {
+            conversationMembers: {
+              createMany: {
+                data: members.map((user) => ({
+                  hasReadlastMessage: false,
+                  unreadMessageNumber: 1,
+                  userId: user.id,
+                })),
+              },
+            },
+            latestMessage: {
+              create: {
+                body: `added ${newUsers} to chat`,
+                type: "bot",
+                conversation: {
+                  connect: { id: conversationId },
+                },
+                sender: {
+                  connect: { id: session.user.id },
+                },
+              },
+            },
+          },
+        })
+      } catch (error: any) {
+        throw new GraphQLError(error?.message)
       }
 
       return true
