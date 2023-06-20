@@ -6,6 +6,7 @@ export const messages = graphql(`
       id
       body
       type
+      isDeleted
       conversationId
       createdAt
       updatedAt

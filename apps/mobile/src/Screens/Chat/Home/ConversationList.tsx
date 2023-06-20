@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client"
+import { cloneDeep } from "@apollo/client/utilities"
 import {
   Stack,
   Toast,
@@ -18,7 +19,6 @@ import ConversationItem from "./ConversationItem"
 import ConversationSkeleton from "./ConversationSkeleton"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError } from "../../../Utils/Toast"
-import { cloneDeep } from "@apollo/client/utilities"
 
 const ConversationList = () => {
   const { user } = useAuthContext()

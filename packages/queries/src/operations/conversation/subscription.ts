@@ -22,6 +22,7 @@ export const conversationCreated = graphql(`
         id
         body
         type
+        isDeleted
         createdAt
         updatedAt
         sender {
@@ -58,6 +59,7 @@ export const conversationUpdated = graphql(`
         id
         body
         type
+        isDeleted
         conversationId
         createdAt
         updatedAt
@@ -89,6 +91,7 @@ export const addedToConversation = graphql(`
             image
           }
           type
+          isDeleted
           conversationId
           createdAt
           updatedAt

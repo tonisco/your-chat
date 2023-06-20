@@ -1,11 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useColorModeValue } from "native-base"
 import React from "react"
 
 import Details from "./Details"
 import Home from "./Home"
 import { ChatNavigatorScreen } from "../../types/screen"
-import { useColorModeValue } from "native-base"
 
 const Navigator = createNativeStackNavigator<ChatNavigatorScreen>()
 

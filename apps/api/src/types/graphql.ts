@@ -57,6 +57,7 @@ export type Message = {
   conversationId: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
+  isDeleted?: Maybe<Scalars['Boolean']['output']>;
   sender: User;
   type: MessageType;
   updatedAt: Scalars['DateTime']['output'];
@@ -363,6 +364,7 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
   conversationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isDeleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   sender?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['MessageType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;

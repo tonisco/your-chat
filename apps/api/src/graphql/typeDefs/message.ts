@@ -31,6 +31,7 @@ const typeDefs = gql`
     body: String!
     sender: User!
     type: MessageType!
+    isDeleted: Boolean
     conversationId: String!
     createdAt: DateTime!
     updatedAt: DateTime!
