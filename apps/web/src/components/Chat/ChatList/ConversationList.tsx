@@ -13,6 +13,7 @@ import { Stack, Text, useColorModeValue } from "@chakra-ui/react"
 
 import ConversationItem from "./ConversationItem"
 import ConversationSkeleton from "./ConversationSkeleton"
+import SubscriptionsWrapper from "./SubscriptionsWrapper"
 
 const ConversationList = () => {
   const { data: session } = useSession()
@@ -84,46 +85,48 @@ const ConversationList = () => {
   useEffect(() => conversationUpdateSub(), [conversationUpdateSub])
 
   return (
-    <Stack
-      overflowY={"auto"}
-      mt={"2"}
-      mb={"14"}
-      css={{
-        "&::-webkit-scrollbar": {
-          width: "4px",
-        },
-        "&::-webkit-scrollbar-track": {
-          width: "6px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: scrollbarColor,
-          borderRadius: "100px",
-          visibility: "hidden",
-        },
-      }}
-      onMouseEnter={mouseEvents}
-      onMouseLeave={mouseEvents}
-    >
-      {loading &&
-        Array.from({ length: 4 }, (_, i) => (
-          <ConversationSkeleton key={i} length={4} index={i} />
-        ))}
+    <SubscriptionsWrapper>
+      <Stack
+        overflowY={"auto"}
+        mt={"2"}
+        mb={"14"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: scrollbarColor,
+            borderRadius: "100px",
+            visibility: "hidden",
+          },
+        }}
+        onMouseEnter={mouseEvents}
+        onMouseLeave={mouseEvents}
+      >
+        {loading &&
+          Array.from({ length: 4 }, (_, i) => (
+            <ConversationSkeleton key={i} length={4} index={i} />
+          ))}
 
-      {data?.conversations.length &&
-        data.conversations.map((conversation, i) => (
-          <ConversationItem
-            key={conversation.id}
-            session={session}
-            conversation={conversation}
-            index={i}
-            length={data.conversations.length}
-          />
-        ))}
+        {data?.conversations.length &&
+          data.conversations.map((conversation, i) => (
+            <ConversationItem
+              key={conversation.id}
+              session={session}
+              conversation={conversation}
+              index={i}
+              length={data.conversations.length}
+            />
+          ))}
 
-      {data?.conversations.length === 0 && (
-        <Text textAlign={"center"}>You have no open conversations</Text>
-      )}
-    </Stack>
+        {data?.conversations.length === 0 && (
+          <Text textAlign={"center"}>You have no open conversations</Text>
+        )}
+      </Stack>
+    </SubscriptionsWrapper>
   )
 }
 
