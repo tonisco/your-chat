@@ -5,6 +5,7 @@ import { createId } from "@paralleldrive/cuid2"
 
 import {
   Conversation,
+  Message,
   MutationResolvers,
   QueryResolvers,
 } from "../../types/graphql"
@@ -13,6 +14,7 @@ import {
   ADDED_TO_CONVERSATION,
   CONVERSATION_CREATED,
   CONVERSATION_UPDATED,
+  MESSAGE_SENT,
   REMOVE_FROM_CONVERSATION,
 } from "../../utils/events"
 import { isMember } from "../../utils/functions"
@@ -38,7 +40,10 @@ type Resolvers = {
     | "addNewMembers"
     | "removeMembers"
   >
-  Query: Pick<QueryResolvers<Context>, "conversations">
+  Query: Pick<
+    QueryResolvers<Context>,
+    "conversations" | "getConversationsMembers"
+  >
   // Subscription: Pick<
   //   SubscriptionResolvers<SubscriptionCtx>,
   //   "conversationCreated"
@@ -63,6 +68,23 @@ const resolvers: Resolvers = {
         })
 
         return allConversations
+      } catch (error) {
+        throw new GraphQLError("Failed to find all conversations")
+      }
+    },
+
+    async getConversationsMembers(_, { conversationId }, ctx) {
+      const { prisma, session } = ctx
+
+      if (!session?.user) throw new GraphQLError("Not authorized")
+
+      try {
+        const allMembers = await prisma.user.findMany({
+          where: { conversationMember: { some: { conversationId } } },
+          select: { id: true, username: true, image: true },
+        })
+
+        return allMembers
       } catch (error) {
         throw new GraphQLError("Failed to find all conversations")
       }
@@ -253,6 +275,12 @@ const resolvers: Resolvers = {
           },
         }
 
+        if (updatedConversation.latestMessage) {
+          const messageSent: Message = updatedConversation.latestMessage
+
+          await pubsub.publish(MESSAGE_SENT, { messageSent })
+        }
+
         await pubsub.publish(ADDED_TO_CONVERSATION, addedProps)
         await pubsub.publish(CONVERSATION_UPDATED, {
           conversationUpdated: conversationToSend,
@@ -317,6 +345,12 @@ const resolvers: Resolvers = {
 
         const conversationUpdated: Conversation = updatedConversation
 
+        if (updatedConversation.latestMessage) {
+          const messageSent: Message = updatedConversation.latestMessage
+
+          await pubsub.publish(MESSAGE_SENT, { messageSent })
+        }
+
         await pubsub.publish(CONVERSATION_UPDATED, {
           conversationUpdated,
         })
@@ -324,7 +358,12 @@ const resolvers: Resolvers = {
         throw new GraphQLError(error?.message)
       }
 
-      return true
+      const message =
+        members.length > 1
+          ? "Users have been removed from chat"
+          : "User has been removed from chat"
+
+      return { message }
     },
   },
   Subscription: {

@@ -23,12 +23,17 @@ import {
 import UserList from "../ChatList/UserList"
 import UsersInChat from "../ChatList/UsersInChat"
 
+type NavigateProps = (
+  method: "remove" | "add",
+  memberUsername: string[],
+) => void
+
 type Props = {
-  title: string
   conversationId: string
+  navigate: NavigateProps
 }
 
-const MembersEdit = ({ title, conversationId }: Props) => {
+const AddMembers = ({ conversationId, navigate }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const modalCloseButton = useRef<HTMLButtonElement | null>(null)
@@ -74,6 +79,10 @@ const MembersEdit = ({ title, conversationId }: Props) => {
       toast.success(data.addNewMembers?.message)
       clearData()
       modalCloseButton.current?.click()
+      navigate(
+        "add",
+        selectedUsers.map((users) => users.username ?? ""),
+      )
     },
   })
 
@@ -88,11 +97,13 @@ const MembersEdit = ({ title, conversationId }: Props) => {
 
   return (
     <>
-      <Text onClick={onOpen}>{title}</Text>
+      <Text onClick={onOpen} flex={"1"}>
+        Add Members
+      </Text>
       <Modal isOpen={isOpen} onCloseComplete={clearData} onClose={onClose}>
         <ModalOverlay />
         <ModalContent pb={4}>
-          <ModalHeader textAlign={"center"}>{title}</ModalHeader>
+          <ModalHeader textAlign={"center"}>Add Members</ModalHeader>
           <ModalCloseButton ref={modalCloseButton} />
           <ModalBody mt={"2"}>
             <form onSubmit={find}>
@@ -139,4 +150,4 @@ const MembersEdit = ({ title, conversationId }: Props) => {
   )
 }
 
-export default MembersEdit
+export default AddMembers

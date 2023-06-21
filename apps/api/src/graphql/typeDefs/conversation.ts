@@ -5,6 +5,10 @@ const typeDefs = gql`
     conversations: [Conversation!]!
   }
 
+  type Query {
+    getConversationsMembers(conversationId: String!): [FoundUsers!]!
+  }
+
   type Mutation {
     createConversation(
       input: [ConversationMemberId!]!
@@ -16,7 +20,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    removeMembers(conversationId: String!, members: [Members!]!): Boolean
+    removeMembers(conversationId: String!, members: [Members!]!): MessageReturn!
   }
 
   type Mutation {

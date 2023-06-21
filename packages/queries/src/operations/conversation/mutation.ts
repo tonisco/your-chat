@@ -34,7 +34,9 @@ export const addNewMembers = graphql(`
 
 export const removeMembers = graphql(`
   mutation removeMembers($conversationId: String!, $members: [Members!]!) {
-    removeMembers(conversationId: $conversationId, members: $members)
+    removeMembers(conversationId: $conversationId, members: $members) {
+      message
+    }
   }
 
   input Members {

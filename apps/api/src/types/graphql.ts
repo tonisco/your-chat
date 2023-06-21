@@ -81,7 +81,7 @@ export type Mutation = {
   editMessage?: Maybe<Scalars['Boolean']['output']>;
   loginUser: UserWithToken;
   markConversationAsRead?: Maybe<Scalars['Boolean']['output']>;
-  removeMembers?: Maybe<Scalars['Boolean']['output']>;
+  removeMembers: MessageReturn;
   sendMessage?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -144,6 +144,7 @@ export type Query = {
   conversations: Array<Conversation>;
   findUsers: Array<FoundUsers>;
   findUsersNotInChat: Array<FoundUsers>;
+  getConversationsMembers: Array<FoundUsers>;
   messages: Array<Message>;
 };
 
@@ -156,6 +157,11 @@ export type QueryFindUsersArgs = {
 export type QueryFindUsersNotInChatArgs = {
   conversationId: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+
+export type QueryGetConversationsMembersArgs = {
+  conversationId: Scalars['String']['input'];
 };
 
 
@@ -409,7 +415,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   editMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEditMessageArgs, 'body' | 'conversationId' | 'messageId'>>;
   loginUser?: Resolver<ResolversTypes['UserWithToken'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'image' | 'name'>>;
   markConversationAsRead?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMarkConversationAsReadArgs, 'conversationId'>>;
-  removeMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveMembersArgs, 'conversationId' | 'members'>>;
+  removeMembers?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationRemoveMembersArgs, 'conversationId' | 'members'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'body' | 'conversationId'>>;
 };
 
@@ -417,6 +423,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   conversations?: Resolver<Array<ResolversTypes['Conversation']>, ParentType, ContextType>;
   findUsers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersArgs, 'username'>>;
   findUsersNotInChat?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryFindUsersNotInChatArgs, 'conversationId' | 'username'>>;
+  getConversationsMembers?: Resolver<Array<ResolversTypes['FoundUsers']>, ParentType, ContextType, RequireFields<QueryGetConversationsMembersArgs, 'conversationId'>>;
   messages?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType, RequireFields<QueryMessagesArgs, 'conversationId'>>;
 };
 

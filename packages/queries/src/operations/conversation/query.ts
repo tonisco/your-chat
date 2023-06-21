@@ -37,3 +37,13 @@ export const conversations = graphql(`
     }
   }
 `)
+
+export const getConversationsMembers = graphql(`
+  query getConversationsMembers($conversationId: String!) {
+    getConversationsMembers(conversationId: $conversationId) {
+      id
+      username
+      image
+    }
+  }
+`)
