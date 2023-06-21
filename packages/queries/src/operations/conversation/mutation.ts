@@ -21,7 +21,9 @@ export const markConversationAsRead = graphql(`
 
 export const addNewMembers = graphql(`
   mutation addNewMembers($conversationId: String!, $members: [Members!]!) {
-    addNewMembers(conversationId: $conversationId, members: $members)
+    addNewMembers(conversationId: $conversationId, members: $members) {
+      message
+    }
   }
 
   input Members {

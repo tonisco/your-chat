@@ -15,9 +15,16 @@ type Props = {
   inChat: FoundUsers[]
   create: () => void
   loading: boolean
+  buttonText?: string
 }
 
-const UsersInChat = ({ removeFromChat, inChat, create, loading }: Props) => {
+const UsersInChat = ({
+  removeFromChat,
+  inChat,
+  create,
+  loading,
+  buttonText,
+}: Props) => {
   return (
     <Stack mt="4" spacing="4">
       <Wrap>
@@ -34,7 +41,7 @@ const UsersInChat = ({ removeFromChat, inChat, create, loading }: Props) => {
         loadingText="Starting Chat"
         onClick={create}
       >
-        Start Chat
+        {buttonText ? buttonText : "Start Chat"}
       </Button>
     </Stack>
   )

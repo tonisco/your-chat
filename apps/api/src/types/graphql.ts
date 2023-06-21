@@ -74,7 +74,7 @@ export type MessageType =
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addNewMembers?: Maybe<Scalars['Boolean']['output']>;
+  addNewMembers: MessageReturn;
   createConversation: CreateConversationReturn;
   createUsername: MessageReturn;
   deleteMessage?: Maybe<Scalars['Boolean']['output']>;
@@ -402,7 +402,7 @@ export type MessageReturnResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addNewMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddNewMembersArgs, 'conversationId' | 'members'>>;
+  addNewMembers?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationAddNewMembersArgs, 'conversationId' | 'members'>>;
   createConversation?: Resolver<ResolversTypes['createConversationReturn'], ParentType, ContextType, RequireFields<MutationCreateConversationArgs, 'input'>>;
   createUsername?: Resolver<ResolversTypes['MessageReturn'], ParentType, ContextType, RequireFields<MutationCreateUsernameArgs, 'username'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'conversationId' | 'messageId'>>;

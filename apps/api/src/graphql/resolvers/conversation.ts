@@ -261,7 +261,12 @@ const resolvers: Resolvers = {
         throw new GraphQLError(error?.message)
       }
 
-      return true
+      const message =
+        members.length > 1
+          ? "Users have been added to chat"
+          : "User has been added to chat"
+
+      return { message }
     },
 
     async removeMembers(_, { conversationId, members }, ctx) {

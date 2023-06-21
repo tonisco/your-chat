@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addNewMembers(conversationId: String!, members: [Members!]!): Boolean
+    addNewMembers(conversationId: String!, members: [Members!]!): MessageReturn!
   }
 
   type Mutation {

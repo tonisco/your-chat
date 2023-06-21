@@ -1,12 +1,26 @@
 import React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BiArrowBack } from "react-icons/bi"
+import { BsThreeDotsVertical } from "react-icons/bs"
 
-import { Button, Divider, Flex, Stack, Text } from "@chakra-ui/react"
+import {
+  Button,
+  Divider,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
+
+import AddMembers from "./AddMembers"
 
 const MessageMembers = () => {
   const searchParams = useSearchParams()
   const members = searchParams.get("members")
+  const id = searchParams.get("id")
 
   const router = useRouter()
 
@@ -21,8 +35,24 @@ const MessageMembers = () => {
         >
           <BiArrowBack />
         </Button>
-        <Text>To :</Text>
-        <Text textTransform={"capitalize"}>{members}</Text>
+        <Flex gap={"2"} flex={"1"}>
+          <Text>To :</Text>
+          <Text isTruncated textTransform={"capitalize"}>
+            {members}
+          </Text>
+        </Flex>
+        <Menu>
+          <MenuButton as={Button}>
+            <BsThreeDotsVertical />
+          </MenuButton>
+          <MenuList>
+            <MenuItem>
+              <AddMembers conversationId={id ?? ""} title="Add Members" />
+            </MenuItem>
+            <MenuItem>Remove Members</MenuItem>
+            <MenuItem>Delete Chat</MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
       <Divider />
     </Stack>

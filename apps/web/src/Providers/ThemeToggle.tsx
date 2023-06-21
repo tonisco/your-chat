@@ -13,7 +13,7 @@ const ThemeToggle = () => {
       <Button
         pos={"fixed"}
         top={6}
-        right={{ base: 5, md: 20 }}
+        right={20}
         bg={"transparent"}
         cursor={"pointer"}
         onClick={toggleColorMode}
@@ -28,7 +28,7 @@ const ThemeToggle = () => {
       pos={"fixed"}
       zIndex={"modal"}
       top={6}
-      right={{ base: 5, md: 20 }}
+      right={20}
       bg={"transparent"}
       cursor={"pointer"}
       onClick={toggleColorMode}
