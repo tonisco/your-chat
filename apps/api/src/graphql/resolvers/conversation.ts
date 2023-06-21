@@ -8,6 +8,7 @@ import {
   Message,
   MutationResolvers,
   QueryResolvers,
+  RemoveConversationReturn,
 } from "../../types/graphql"
 import { Context, SubscriptionCtx } from "../../utils/context"
 import {
@@ -345,15 +346,24 @@ const resolvers: Resolvers = {
 
         const conversationUpdated: Conversation = updatedConversation
 
+        const removeFromConversation: RemoveConversationReturn = {
+          conversationId,
+          members,
+        }
+
+        await pubsub.publish(REMOVE_FROM_CONVERSATION, {
+          removeFromConversation,
+        })
+
+        await pubsub.publish(CONVERSATION_UPDATED, {
+          conversationUpdated,
+        })
+
         if (updatedConversation.latestMessage) {
           const messageSent: Message = updatedConversation.latestMessage
 
           await pubsub.publish(MESSAGE_SENT, { messageSent })
         }
-
-        await pubsub.publish(CONVERSATION_UPDATED, {
-          conversationUpdated,
-        })
       } catch (error: any) {
         throw new GraphQLError(error?.message)
       }
