@@ -13,6 +13,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react"
 
+import MessageMenu from "./MessageMenu"
+
 type Props = {
   message: MessageType
   session: Session | null
@@ -86,18 +88,16 @@ const Message = ({ message, session }: Props) => {
     )
 
   return (
-    <Box
-      alignSelf={"end"}
-      py="2"
-      px="3"
-      bgColor={userText}
-      rounded={"2xl"}
-      maxWidth={"65%"}
-    >
-      <Text color={"whitesmoke"} fontSize={"sm"}>
-        {message.body}
-      </Text>
-    </Box>
+    <Flex maxWidth={"65%"} alignSelf={"end"} gap="1">
+      <Box flex={"1"} py="2" px="3" bgColor={userText} rounded={"2xl"}>
+        <Text color={"whitesmoke"} fontSize={"sm"}>
+          {message.body}
+        </Text>
+      </Box>
+      <Box alignSelf="center" cursor="pointer">
+        <MessageMenu body={message.body} />
+      </Box>
+    </Flex>
   )
 }
 
