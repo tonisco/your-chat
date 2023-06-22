@@ -4,6 +4,7 @@ import { useColorModeValue } from "native-base"
 import React from "react"
 
 import Details from "./Details"
+import MessageMenu from "./Details/MessageMenu"
 import Home from "./Home"
 import { ChatNavigatorScreen } from "../../types/screen"
 
@@ -30,8 +31,14 @@ const ChatNavigator = () => {
         <Navigator.Screen
           name="Details"
           component={Details}
-          options={({ route }) => ({
+          options={({ route, navigation }) => ({
             headerTitle: route.params.members,
+            headerRight: () => (
+              <MessageMenu
+                conversationId={route.params.id}
+                members={route.params.members}
+              />
+            ),
           })}
         />
       </Navigator.Navigator>

@@ -15,9 +15,18 @@ type Props = {
   inChat: FoundUsers[]
   create: () => void
   loading: boolean
+  buttonText?: string
+  buttonTextLoading?: string
 }
 
-const UsersInChat = ({ removeFromChat, inChat, create, loading }: Props) => {
+const UsersInChat = ({
+  removeFromChat,
+  inChat,
+  create,
+  loading,
+  buttonText,
+  buttonTextLoading,
+}: Props) => {
   const color = useColorModeValue("brand.text", "brand.textDark")
   const colorScheme = useColorModeValue("dark", "coolGray")
   const pressed = useColorModeValue("dark.700", "coolGray.700")
@@ -47,13 +56,13 @@ const UsersInChat = ({ removeFromChat, inChat, create, loading }: Props) => {
       <Button
         isDisabled={inChat.length < 1}
         isLoading={loading}
-        isLoadingText="Starting Chat"
+        isLoadingText={buttonTextLoading ? buttonTextLoading : "Starting Chat"}
         onPress={create}
         colorScheme={colorScheme}
         _text={{ color }}
         _pressed={{ bgColor: pressed }}
       >
-        Start Chat
+        {buttonText ? buttonText : "Start Chat"}
       </Button>
     </VStack>
   )
