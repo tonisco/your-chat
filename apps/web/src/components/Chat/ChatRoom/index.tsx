@@ -86,7 +86,12 @@ const ChatRoom = () => {
     >
       <MessageMembers />
 
-      <Messages messages={data?.messages} session={session} loading={loading} />
+      <Messages
+        messages={data?.messages}
+        session={session}
+        loading={loading}
+        conversationId={id ?? ""}
+      />
 
       <MessageInput conversationId={id ?? ""} />
     </Stack>

@@ -15,9 +15,16 @@ import {
 
 import MessageMenu from "./MessageMenu"
 
+type FormProps = {
+  body: string
+  messageId: string
+}
+
 type Props = {
   message: MessageType
   session: Session | null
+  editLoading: boolean
+  saveNewMessage: (props: FormProps) => Promise<void>
 }
 
 const formatRelativeLocale = {
@@ -27,7 +34,7 @@ const formatRelativeLocale = {
   other: "MM/dd/yy",
 }
 
-const Message = ({ message, session }: Props) => {
+const Message = ({ message, session, editLoading, saveNewMessage }: Props) => {
   const othersBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
   const date = useColorModeValue("darkgray", "whiteAlpha.600")
   const userText = useColorModeValue("brand.greenDark", "brand.green")
@@ -95,7 +102,12 @@ const Message = ({ message, session }: Props) => {
         </Text>
       </Box>
       <Box alignSelf="center" cursor="pointer">
-        <MessageMenu body={message.body} />
+        <MessageMenu
+          loading={editLoading}
+          saveNewMessage={saveNewMessage}
+          body={message.body}
+          messageId={message.id}
+        />
       </Box>
     </Flex>
   )

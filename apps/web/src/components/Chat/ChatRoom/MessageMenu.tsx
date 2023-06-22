@@ -5,11 +5,19 @@ import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"
 
 import EditMessage from "./EditMessage"
 
-type Props = {
+type FormProps = {
   body: string
+  messageId: string
 }
 
-const MessageMenu = ({ body }: Props) => {
+type Props = {
+  body: string
+  loading: boolean
+  saveNewMessage: (props: FormProps) => Promise<void>
+  messageId: string
+}
+
+const MessageMenu = ({ body, loading, saveNewMessage, messageId }: Props) => {
   return (
     <Menu>
       <MenuButton>
@@ -17,7 +25,12 @@ const MessageMenu = ({ body }: Props) => {
       </MenuButton>
       <MenuList>
         <MenuItem>
-          <EditMessage message={body} />
+          <EditMessage
+            loading={loading}
+            saveNewMessage={saveNewMessage}
+            message={body}
+            messageId={messageId}
+          />
         </MenuItem>
         <MenuItem>Delete Message</MenuItem>
       </MenuList>

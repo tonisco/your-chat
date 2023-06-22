@@ -1,7 +1,10 @@
 import React from "react"
 import { Session } from "next-auth"
+import { editMessage } from "queries"
 import { Message as MessageType } from "queries/src/types"
+import { toast } from "react-hot-toast"
 
+import { useMutation } from "@apollo/client"
 import { Stack, useColorModeValue } from "@chakra-ui/react"
 
 import Message from "./Message"
@@ -11,9 +14,15 @@ type Props = {
   messages: MessageType[] | undefined
   session: Session | null
   loading: Boolean
+  conversationId: string
 }
 
-const Messages = ({ messages, session, loading }: Props) => {
+type FormProps = {
+  body: string
+  messageId: string
+}
+
+const Messages = ({ messages, session, loading, conversationId }: Props) => {
   const scrollbarColor = useColorModeValue(
     "#EDF2F7",
     "rgba(255, 255, 255, 0.08)",
@@ -24,6 +33,21 @@ const Messages = ({ messages, session, loading }: Props) => {
       e.currentTarget.classList.add("scrollbar-visible")
     else if (e.type === "mouseleave")
       e.currentTarget.classList.remove("scrollbar-visible")
+  }
+
+  const [edit, { loading: editLoading }] = useMutation(editMessage, {
+    onError(err) {
+      toast.error(err.message)
+    },
+    onCompleted() {
+      toast.success("Message has been successfully changed")
+    },
+  })
+
+  const saveNewMessage = async (props: FormProps) => {
+    const { body, messageId } = props
+
+    await edit({ variables: { body, conversationId, messageId } })
   }
 
   return (
@@ -55,7 +79,13 @@ const Messages = ({ messages, session, loading }: Props) => {
         ))}
 
       {messages?.map((message) => (
-        <Message message={message} key={message.id} session={session} />
+        <Message
+          message={message}
+          key={message.id}
+          session={session}
+          saveNewMessage={saveNewMessage}
+          editLoading={editLoading}
+        />
       ))}
     </Stack>
   )
