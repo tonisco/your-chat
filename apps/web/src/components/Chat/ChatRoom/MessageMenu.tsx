@@ -3,6 +3,7 @@ import { BsThreeDotsVertical } from "react-icons/bs"
 
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"
 
+import DeleteMessage from "./DeleteMessage"
 import EditMessage from "./EditMessage"
 
 type FormProps = {
@@ -15,9 +16,18 @@ type Props = {
   loading: boolean
   saveNewMessage: (props: FormProps) => Promise<void>
   messageId: string
+  cleanMessage: (messageId: string) => Promise<void>
+  deleteLoading: boolean
 }
 
-const MessageMenu = ({ body, loading, saveNewMessage, messageId }: Props) => {
+const MessageMenu = ({
+  body,
+  loading,
+  saveNewMessage,
+  messageId,
+  cleanMessage,
+  deleteLoading,
+}: Props) => {
   return (
     <Menu>
       <MenuButton>
@@ -32,7 +42,14 @@ const MessageMenu = ({ body, loading, saveNewMessage, messageId }: Props) => {
             messageId={messageId}
           />
         </MenuItem>
-        <MenuItem>Delete Message</MenuItem>
+        <MenuItem>
+          <DeleteMessage
+            deleteLoading={deleteLoading}
+            cleanMessage={cleanMessage}
+            messageId={messageId}
+            message={body}
+          />
+        </MenuItem>
       </MenuList>
     </Menu>
   )

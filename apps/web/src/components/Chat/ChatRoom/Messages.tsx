@@ -1,6 +1,6 @@
 import React from "react"
 import { Session } from "next-auth"
-import { editMessage } from "queries"
+import { deleteMessage, editMessage } from "queries"
 import { Message as MessageType } from "queries/src/types"
 import { toast } from "react-hot-toast"
 
@@ -50,6 +50,22 @@ const Messages = ({ messages, session, loading, conversationId }: Props) => {
     await edit({ variables: { body, conversationId, messageId } })
   }
 
+  const [removeMessage, { loading: deleteLoading }] = useMutation(
+    deleteMessage,
+    {
+      onError(err) {
+        toast.error(err.message)
+      },
+      onCompleted() {
+        toast.success("Message has been successfully changed")
+      },
+    },
+  )
+
+  const cleanMessage = async (messageId: string) => {
+    await removeMessage({ variables: { conversationId, messageId } })
+  }
+
   return (
     <Stack
       p={"6"}
@@ -85,6 +101,8 @@ const Messages = ({ messages, session, loading, conversationId }: Props) => {
           session={session}
           saveNewMessage={saveNewMessage}
           editLoading={editLoading}
+          deleteLoading={deleteLoading}
+          cleanMessage={cleanMessage}
         />
       ))}
     </Stack>

@@ -25,6 +25,8 @@ type Props = {
   session: Session | null
   editLoading: boolean
   saveNewMessage: (props: FormProps) => Promise<void>
+  cleanMessage: (messageId: string) => Promise<void>
+  deleteLoading: boolean
 }
 
 const formatRelativeLocale = {
@@ -34,7 +36,14 @@ const formatRelativeLocale = {
   other: "MM/dd/yy",
 }
 
-const Message = ({ message, session, editLoading, saveNewMessage }: Props) => {
+const Message = ({
+  message,
+  session,
+  editLoading,
+  saveNewMessage,
+  cleanMessage,
+  deleteLoading,
+}: Props) => {
   const othersBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
   const date = useColorModeValue("darkgray", "whiteAlpha.600")
   const userText = useColorModeValue("brand.greenDark", "brand.green")
@@ -107,6 +116,8 @@ const Message = ({ message, session, editLoading, saveNewMessage }: Props) => {
           saveNewMessage={saveNewMessage}
           body={message.body}
           messageId={message.id}
+          deleteLoading={deleteLoading}
+          cleanMessage={cleanMessage}
         />
       </Box>
     </Flex>

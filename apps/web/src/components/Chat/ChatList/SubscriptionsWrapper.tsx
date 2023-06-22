@@ -5,6 +5,9 @@ import {
   conversationCreated,
   conversations,
   conversationUpdated,
+  deletedMessage,
+  editedMessage,
+  messages,
   removeFromConversation,
 } from "queries"
 import {
@@ -117,6 +120,62 @@ const SubscriptionsWrapper = ({ children, subscribeToMore }: Props) => {
           ),
         },
         query: conversations,
+      })
+    },
+  })
+
+  useSubscription(editedMessage, {
+    onData({ client, data }) {
+      if (!data.data?.editedMessage) return
+
+      const { conversationId, changeMessage } = data.data.editedMessage
+
+      const cachedMessages = client.cache.readQuery({
+        query: messages,
+        variables: { conversationId },
+      })
+
+      if (!cachedMessages) return
+
+      const newMessage = cloneDeep(cachedMessages.messages)
+
+      const index = newMessage.findIndex((mess) => mess.id === changeMessage.id)
+
+      if (index === -1) return
+
+      newMessage[index] = changeMessage
+
+      client.writeQuery({
+        data: { messages: newMessage },
+        query: messages,
+      })
+    },
+  })
+
+  useSubscription(deletedMessage, {
+    onData({ client, data }) {
+      if (!data.data?.deletedMessage) return
+
+      const { conversationId, changeMessage } = data.data.deletedMessage
+
+      const cachedMessages = client.cache.readQuery({
+        query: messages,
+        variables: { conversationId },
+      })
+
+      if (!cachedMessages) return
+
+      const newMessage = cloneDeep(cachedMessages.messages)
+
+      const index = newMessage.findIndex((mess) => mess.id === changeMessage.id)
+
+      if (index === -1) return
+
+      newMessage[index] = changeMessage
+
+      client.writeQuery({
+        data: { messages: newMessage },
+        query: messages,
       })
     },
   })
