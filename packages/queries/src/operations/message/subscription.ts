@@ -3,19 +3,33 @@ import { graphql } from "../../types/gql"
 export const messageSent = graphql(`
   subscription messageSent($conversationId: String!) {
     messageSent(conversationId: $conversationId) {
-      id
-      body
-      type
-      isDeleted
-      conversationId
-      createdAt
-      updatedAt
-      sender {
+      message {
         id
-        email
-        username
-        name
-        image
+        body
+        sender {
+          id
+          email
+          username
+          name
+          image
+        }
+        type
+        isDeleted
+        conversationId
+        createdAt
+        updatedAt
+      }
+      members {
+        id
+        hasReadlastMessage
+        unreadMessageNumber
+        user {
+          id
+          email
+          username
+          name
+          image
+        }
       }
     }
   }

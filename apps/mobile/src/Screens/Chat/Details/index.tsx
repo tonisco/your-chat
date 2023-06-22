@@ -56,12 +56,14 @@ const Details = ({ route }: Props) => {
             return prev
           }
 
-          if (subscriptionData.data.messageSent.sender.id !== user?.id) {
+          const { message } = subscriptionData.data.messageSent
+
+          if (message.sender.id !== user?.id) {
             readMessage()
           }
 
           return Object.assign({}, prev, {
-            messages: [subscriptionData.data.messageSent, ...prev.messages],
+            messages: [message, ...prev.messages],
           })
         },
       }),

@@ -5,7 +5,7 @@ import { createId } from "@paralleldrive/cuid2"
 
 import {
   Conversation,
-  Message,
+  MessageSentReturn,
   MutationResolvers,
   QueryResolvers,
   RemoveConversationReturn,
@@ -277,7 +277,9 @@ const resolvers: Resolvers = {
         }
 
         if (updatedConversation.latestMessage) {
-          const messageSent: Message = updatedConversation.latestMessage
+          const messageSent: MessageSentReturn = {
+            message: updatedConversation.latestMessage,
+          }
 
           await pubsub.publish(MESSAGE_SENT, { messageSent })
         }
@@ -360,7 +362,10 @@ const resolvers: Resolvers = {
         })
 
         if (updatedConversation.latestMessage) {
-          const messageSent: Message = updatedConversation.latestMessage
+          const messageSent: MessageSentReturn = {
+            message: updatedConversation.latestMessage,
+            members: updatedConversation.conversationMembers,
+          }
 
           await pubsub.publish(MESSAGE_SENT, { messageSent })
         }

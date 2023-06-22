@@ -60,14 +60,14 @@ const ChatRoom = () => {
             return prev
           }
 
-          if (
-            subscriptionData.data.messageSent.sender.id !== session?.user.id
-          ) {
+          const { message } = subscriptionData.data.messageSent
+
+          if (message.sender.id !== session?.user.id) {
             readMessage()
           }
 
           return Object.assign({}, prev, {
-            messages: [subscriptionData.data.messageSent, ...prev.messages],
+            messages: [message, ...prev.messages],
           })
         },
       }),

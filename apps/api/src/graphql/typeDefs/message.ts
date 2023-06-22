@@ -22,7 +22,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    messageSent(conversationId: String!): Message!
+    messageSent(conversationId: String!): MessageSentReturn!
   }
 
   type Subscription {
@@ -58,6 +58,11 @@ const typeDefs = gql`
     changeMessage: Message!
     conversationId: String!
     members: [ConversationMembers!]!
+  }
+
+  type MessageSentReturn {
+    message: Message!
+    members: [ConversationMembers!]
   }
 `
 
