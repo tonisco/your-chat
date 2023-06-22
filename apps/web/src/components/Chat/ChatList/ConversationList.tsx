@@ -1,14 +1,9 @@
-import React, { useCallback, useEffect } from "react"
+import React from "react"
 import { useSession } from "next-auth/react"
-import {
-  conversationCreated,
-  conversations,
-  conversationUpdated,
-} from "queries"
+import { conversations } from "queries"
 import { toast } from "react-hot-toast"
 
 import { useQuery } from "@apollo/client"
-import { cloneDeep } from "@apollo/client/utilities"
 import { Stack, Text, useColorModeValue } from "@chakra-ui/react"
 
 import ConversationItem from "./ConversationItem"
@@ -37,55 +32,8 @@ const ConversationList = () => {
       e.currentTarget.classList.remove("scrollbar-visible")
   }
 
-  const conversationCreatedSub = useCallback(
-    () =>
-      subscribeToMore({
-        document: conversationCreated,
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev
-
-          return Object.assign({}, prev, {
-            conversations: [
-              subscriptionData.data.conversationCreated,
-              ...prev.conversations,
-            ],
-          })
-        },
-      }),
-    [subscribeToMore],
-  )
-
-  useEffect(() => conversationCreatedSub(), [conversationCreatedSub])
-
-  const conversationUpdateSub = useCallback(
-    () =>
-      subscribeToMore({
-        document: conversationUpdated,
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev
-
-          const data = subscriptionData.data.conversationUpdated
-          const prevData = cloneDeep(prev.conversations)
-
-          const i = prevData.findIndex((item) => item.id === data.id)
-
-          prevData[i] = data
-
-          const sortedData = prevData.sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-          )
-
-          return Object.assign({}, prev, { conversations: sortedData })
-        },
-      }),
-    [subscribeToMore],
-  )
-
-  useEffect(() => conversationUpdateSub(), [conversationUpdateSub])
-
   return (
-    <SubscriptionsWrapper>
+    <SubscriptionsWrapper subscribeToMore={subscribeToMore}>
       <Stack
         overflowY={"auto"}
         mt={"2"}

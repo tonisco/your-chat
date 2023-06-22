@@ -1,22 +1,82 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import {
   addedToConversation,
+  conversationCreated,
   conversations,
+  conversationUpdated,
   removeFromConversation,
 } from "queries"
+import {
+  ConversationsQuery,
+  ConversationsQueryVariables,
+} from "queries/src/types"
 
-import { useSubscription } from "@apollo/client"
+import { SubscribeToMoreFunction, useSubscription } from "@apollo/client"
+import { cloneDeep } from "@apollo/client/utilities"
+
+type SubToMore = SubscribeToMoreFunction<
+  ConversationsQuery,
+  ConversationsQueryVariables
+>
 
 type Props = {
   children: React.ReactNode
+  subscribeToMore: SubToMore
 }
 
-const SubscriptionsWrapper = ({ children }: Props) => {
+const SubscriptionsWrapper = ({ children, subscribeToMore }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
   const id = searchParams.get("id")
+
+  const conversationCreatedSub = useCallback(
+    () =>
+      subscribeToMore({
+        document: conversationCreated,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+
+          return Object.assign({}, prev, {
+            conversations: [
+              subscriptionData.data.conversationCreated,
+              ...prev.conversations,
+            ],
+          })
+        },
+      }),
+    [subscribeToMore],
+  )
+
+  useEffect(() => conversationCreatedSub(), [conversationCreatedSub])
+
+  const conversationUpdateSub = useCallback(
+    () =>
+      subscribeToMore({
+        document: conversationUpdated,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+
+          const data = subscriptionData.data.conversationUpdated
+          const prevData = cloneDeep(prev.conversations)
+
+          const i = prevData.findIndex((item) => item.id === data.id)
+
+          prevData[i] = data
+
+          const sortedData = prevData.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+          )
+
+          return Object.assign({}, prev, { conversations: sortedData })
+        },
+      }),
+    [subscribeToMore],
+  )
+
+  useEffect(() => conversationUpdateSub(), [conversationUpdateSub])
 
   useSubscription(addedToConversation, {
     onData({ client, data }) {
@@ -40,7 +100,6 @@ const SubscriptionsWrapper = ({ children }: Props) => {
 
   useSubscription(removeFromConversation, {
     onData({ client, data }) {
-      console.log("time")
       if (!data.data?.removeFromConversation) return
 
       const prevCon = client.cache.readQuery({ query: conversations })
@@ -50,8 +109,7 @@ const SubscriptionsWrapper = ({ children }: Props) => {
       const { conversationId } = data.data.removeFromConversation
 
       if (id && id === conversationId) router.replace("/")
-      console.log(id)
-      console.log(conversationId)
+
       client.cache.writeQuery({
         data: {
           conversations: prevCon.conversations.filter(
