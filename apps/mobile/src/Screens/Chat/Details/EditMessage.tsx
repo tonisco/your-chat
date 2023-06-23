@@ -19,6 +19,8 @@ type Props = {
   loading: boolean
   saveNewMessage: (props: FormProps) => Promise<void>
   messageId: string
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  showModal: boolean
 }
 
 const EditMessage = ({
@@ -26,9 +28,9 @@ const EditMessage = ({
   loading,
   messageId,
   saveNewMessage,
+  showModal,
+  setShowModal,
 }: Props) => {
-  const [showModal, setShowModal] = useState(false)
-
   const color = useColorModeValue("brand.text", "brand.textDark")
   const colorScheme = useColorModeValue("dark", "coolGray")
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
@@ -39,6 +41,7 @@ const EditMessage = ({
 
   const clearData = () => {
     setMessage("")
+    setShowModal(false)
   }
 
   const submit = async () => {
@@ -48,9 +51,6 @@ const EditMessage = ({
 
   return (
     <>
-      <Text onPress={() => setShowModal(true)} color={color} flex={1}>
-        Edit Message
-      </Text>
       <Center>
         <Modal isOpen={showModal} onClose={clearData} size="lg">
           <Modal.Content bgColor={bg} maxH="4/5">
