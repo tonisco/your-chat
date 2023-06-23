@@ -57,7 +57,7 @@ const Messages = ({ messages, session, loading, conversationId }: Props) => {
         toast.error(err.message)
       },
       onCompleted() {
-        toast.success("Message has been successfully changed")
+        toast.success("Message has been deleted")
       },
     },
   )

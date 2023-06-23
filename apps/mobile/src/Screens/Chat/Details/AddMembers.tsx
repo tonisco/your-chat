@@ -110,11 +110,7 @@ const AddMembers = ({ conversationId, members }: Props) => {
         Add Members
       </Text>
       <Center>
-        <Modal
-          isOpen={showModal}
-          // onClose={clearData}
-          size="lg"
-        >
+        <Modal isOpen={showModal} onClose={clearData} size="lg">
           <Modal.Content bgColor={bg} maxH="4/5">
             <Modal.CloseButton />
             <Modal.Header bgColor={bg} alignSelf="center">

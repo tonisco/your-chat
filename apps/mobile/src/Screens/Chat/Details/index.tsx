@@ -74,7 +74,12 @@ const Details = ({ route }: Props) => {
 
   return (
     <Stack bgColor={bg} h="full">
-      <Messages loading={loading} messages={data?.messages} user={user} />
+      <Messages
+        conversationId={id}
+        loading={loading}
+        messages={data?.messages}
+        user={user}
+      />
       <MessageInput conversationId={id} />
     </Stack>
   )

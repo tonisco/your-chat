@@ -1,31 +1,15 @@
 import { Box, Menu, Pressable, useColorModeValue } from "native-base"
 import React from "react"
 
-import EditMessage from "./EditMessage"
+import AddMembers from "./AddMembers"
 import ThreeDotsIcon from "../../../Utils/ThreeDotIcon"
 
-type FormProps = {
-  body: string
-  messageId: string
-}
-
 type Props = {
-  currMessage: string
-  editLoading: boolean
-  saveNewMessage: (props: FormProps) => Promise<void>
-  cleanMessage: (messageId: string) => Promise<void>
-  deleteLoading: boolean
-  messageId: string
+  conversationId: string
+  members: string
 }
 
-const MessageMenu = ({
-  currMessage,
-  cleanMessage,
-  deleteLoading,
-  editLoading,
-  saveNewMessage,
-  messageId,
-}: Props) => {
+const MembersMenu = ({ conversationId, members }: Props) => {
   const bg = useColorModeValue("brand.bg", "brand.bgDark")
   const icon = useColorModeValue("black", "white")
 
@@ -46,17 +30,12 @@ const MessageMenu = ({
         }}
       >
         <Menu.Item>
-          <EditMessage
-            saveNewMessage={saveNewMessage}
-            loading={editLoading}
-            currMessage={currMessage}
-            messageId={messageId}
-          />
+          <AddMembers members={members} conversationId={conversationId} />
         </Menu.Item>
-        <Menu.Item>Delete Message</Menu.Item>
+        <Menu.Item>Remove Members</Menu.Item>
       </Menu>
     </Box>
   )
 }
 
-export default MessageMenu
+export default MembersMenu

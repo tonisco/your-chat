@@ -11,11 +11,21 @@ import {
 import { Message as MessageType } from "queries/src/types"
 import React from "react"
 
+import MessageMenu from "./MessageMenu"
 import { User } from "../../../Providers/AuthProvider"
+
+type FormProps = {
+  body: string
+  messageId: string
+}
 
 type Props = {
   message: MessageType
   user: User | null
+  editLoading: boolean
+  saveNewMessage: (props: FormProps) => Promise<void>
+  cleanMessage: (messageId: string) => Promise<void>
+  deleteLoading: boolean
 }
 
 const formatRelativeLocale = {
@@ -25,7 +35,14 @@ const formatRelativeLocale = {
   other: "MM/dd/yy",
 }
 
-const Message = ({ message, user }: Props) => {
+const Message = ({
+  message,
+  user,
+  cleanMessage,
+  deleteLoading,
+  editLoading,
+  saveNewMessage,
+}: Props) => {
   const othersBg = useColorModeValue(
     "rgba(0, 0, 0, 0.08)",
     "rgba(255, 255, 255, 0.08)",
@@ -87,18 +104,21 @@ const Message = ({ message, user }: Props) => {
     )
 
   return (
-    <Box
-      alignSelf="flex-end"
-      py="2"
-      px="3"
-      bgColor={mineBg}
-      rounded="2xl"
-      maxWidth="70%"
-    >
-      <Text color="#f5f5f5" fontSize="sm">
-        {message.body}
-      </Text>
-    </Box>
+    <HStack alignSelf="flex-end" alignItems="center" maxWidth="70%" space="1">
+      <Box py="2" px="3" bgColor={mineBg} rounded="2xl">
+        <Text color="#f5f5f5" fontSize="sm">
+          {message.body}
+        </Text>
+      </Box>
+      <MessageMenu
+        currMessage={message.body}
+        saveNewMessage={saveNewMessage}
+        editLoading={editLoading}
+        deleteLoading={deleteLoading}
+        cleanMessage={cleanMessage}
+        messageId={message.id}
+      />
+    </HStack>
   )
 }
 
