@@ -239,6 +239,7 @@ const resolvers: Resolvers = {
         const updatedConversation = await prisma.conversation.update({
           where: { id: conversationId },
           data: {
+            conversationMembersNumber: { increment: members.length },
             conversationMembers: {
               createMany: {
                 data: members.map((user) => ({
@@ -327,6 +328,7 @@ const resolvers: Resolvers = {
         const updatedConversation = await prisma.conversation.update({
           where: { id: conversationId },
           data: {
+            conversationMembersNumber: { decrement: members.length },
             latestMessage: {
               create: {
                 body: `removed ${newUsers} from chat`,
