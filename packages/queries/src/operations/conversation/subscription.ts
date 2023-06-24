@@ -23,6 +23,7 @@ export const conversationCreated = graphql(`
         body
         type
         isDeleted
+        conversationId
         createdAt
         updatedAt
         sender {

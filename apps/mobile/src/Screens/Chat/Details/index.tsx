@@ -13,6 +13,7 @@ import Messages from "./Messages"
 import { useAuthContext } from "../../../Providers/AuthProvider"
 import { ToastError } from "../../../Utils/Toast"
 import { DetailsScreenProps } from "../../../types/screen"
+import SubscriptionsWrapper from "../SubscriptionsWrapper"
 
 type Props = DetailsScreenProps
 
@@ -73,15 +74,17 @@ const Details = ({ route }: Props) => {
   useEffect(() => newMessageSub(), [newMessageSub])
 
   return (
-    <Stack bgColor={bg} h="full">
-      <Messages
-        conversationId={id}
-        loading={loading}
-        messages={data?.messages}
-        user={user}
-      />
-      <MessageInput conversationId={id} />
-    </Stack>
+    <SubscriptionsWrapper>
+      <Stack bgColor={bg} h="full">
+        <Messages
+          conversationId={id}
+          loading={loading}
+          messages={data?.messages}
+          user={user}
+        />
+        <MessageInput conversationId={id} />
+      </Stack>
+    </SubscriptionsWrapper>
   )
 }
 

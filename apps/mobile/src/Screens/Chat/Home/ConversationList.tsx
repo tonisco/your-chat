@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client"
-import { cloneDeep } from "@apollo/client/utilities"
 import {
   Stack,
   Toast,
@@ -8,12 +7,8 @@ import {
   Divider,
   Text,
 } from "native-base"
-import {
-  conversationCreated,
-  conversationUpdated,
-  conversations,
-} from "queries"
-import React, { useCallback, useEffect } from "react"
+import { conversations } from "queries"
+import React from "react"
 
 import ConversationItem from "./ConversationItem"
 import ConversationSkeleton from "./ConversationSkeleton"
@@ -25,7 +20,7 @@ const ConversationList = () => {
 
   const color = useColorModeValue("light.200", "dark.200")
 
-  const { data, loading, subscribeToMore } = useQuery(conversations, {
+  const { data, loading } = useQuery(conversations, {
     onError(error) {
       Toast.show({
         placement: "top",
@@ -34,53 +29,6 @@ const ConversationList = () => {
     },
     fetchPolicy: "network-only",
   })
-
-  const conversationUpdateSub = useCallback(
-    () =>
-      subscribeToMore({
-        document: conversationUpdated,
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev
-
-          const data = subscriptionData.data.conversationUpdated
-          const prevData = cloneDeep(prev.conversations)
-
-          const i = prevData.findIndex((item) => item.id === data.id)
-
-          prevData[i] = data
-
-          const sortedData = prevData.sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-          )
-
-          return Object.assign({}, prev, { conversations: sortedData })
-        },
-      }),
-    [subscribeToMore],
-  )
-
-  useEffect(() => conversationUpdateSub(), [conversationUpdateSub])
-
-  const subscribe = useCallback(
-    () =>
-      subscribeToMore({
-        document: conversationCreated,
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev
-
-          return Object.assign({}, prev, {
-            conversations: [
-              subscriptionData.data.conversationCreated,
-              ...prev.conversations,
-            ],
-          })
-        },
-      }),
-    [subscribeToMore],
-  )
-
-  useEffect(() => subscribe(), [subscribe])
 
   return (
     <Stack overflowY="auto" mt="2" mb="14">
