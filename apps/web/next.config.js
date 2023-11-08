@@ -7,7 +7,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "*",
+        source: "/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
