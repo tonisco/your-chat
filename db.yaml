@@ -6,8 +6,9 @@ services:
     container_name: psql
     restart: always
     environment:
-      - POSTGRES_PASSWORD=4321
-      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=user
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=your_chat1
     ports:
       - 5432:5432
     volumes:
