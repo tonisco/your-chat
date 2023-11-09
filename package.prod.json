@@ -1,0 +1,14 @@
+{
+  "name": "apps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"yarn next\" \"yarn api\"",
+    "next": "node web/apps/web/server.js",
+    "api": "node api/dist/api.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
