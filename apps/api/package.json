@@ -13,7 +13,9 @@
     "db:generate": "prisma generate --schema ./src/prisma/schema.prisma",
     "check-types": "tsc --noemit",
     "eslint": "eslint . --ext ts,tsx --fix",
-    "lint": "yarn run eslint && yarn run check-types"
+    "lint": "yarn run eslint && yarn run check-types",
+    "build": "webpack",
+    "start": "node dist/api.js"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "4.0.0",
@@ -28,7 +30,9 @@
     "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^8.1.0",
+    "copy-webpack-plugin": "^11.0.0",
     "dotenv-cli": "^7.2.1",
     "eslint": "^8.0.1",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -38,8 +42,12 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "nodemon": "^2.0.22",
+    "ts-loader": "^9.5.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@apollo/server": "^4.7.1",
